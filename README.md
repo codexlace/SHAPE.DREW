@@ -46,3 +46,8 @@ All saved cards are stored locally in the browser with `localStorage`. OpenRoute
 - Added a Mood Remix Bar on the current card.
 - Presets now include Cuter, Weirder, Simpler, More dramatic, More me, More creative, and New tiny twist.
 - More Creative keeps the mascot simple while changing the idea logic, so it feels fresher without becoming a big scene.
+
+
+## V1.2 Tiny Spark Update
+
+Added Tiny Version / Oddlet Version so every prompt has an easy starter build and a stranger, still-simple version. Added Creature Commentary for a small entertaining observation on every rolled or remixed card.

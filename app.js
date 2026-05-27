@@ -191,6 +191,34 @@ const redrawSpins = [
   { title: 'Awkward pose', text: 'Tilt the mascot slightly, like it just noticed the viewer watching.' }
 ];
 
+
+const commentaryOpeners = [
+  'It looks like it was discovered in a drawer and immediately given responsibility.',
+  'This creature has the confidence of a sticker that was never asked to explain itself.',
+  'It is doing its best, which is concerning but visually useful.',
+  'There is exactly one thought behind those eyes, and it is holding a tiny sign.',
+  'This one feels like a notebook margin accidentally gained citizenship.',
+  'It has small-object drama, which is the easiest kind to draw and the funniest kind to witness.',
+  'The vibe is: found artifact, mild panic, surprisingly drawable.',
+  'It does not need a full scene. It already brought enough emotional furniture.'
+];
+
+const tinyVersionTemplates = [
+  'Draw only the {body}, one simple face, and the {extra}. Keep it almost sticker-flat.',
+  'Use three marks: {body}, face, {extra}. Stop before the creature starts filing taxes.',
+  'Make the mascot one readable silhouette with the {extra} beside it or tucked onto it.',
+  'Draw the simplest version first: big shape, tiny expression, one visible {extra}.',
+  'Turn it into a tiny icon: no background, no extra limbs unless they help the joke.'
+];
+
+const oddletVersionTemplates = [
+  'Now let the {extra} cause a tiny problem: it reacts, judges, hides, glows, or acts more important than the mascot.',
+  'Add one odd behavior: the {extra} is too confident, the mascot is unsure, or the symbol seems to know something.',
+  'Give it one tiny relationship: the mascot protects the {extra}, distrusts it, presents it, or pretends it is normal.',
+  'Make the same simple drawing stranger by changing the acting, not the amount of detail.',
+  'Promote the {extra} into the joke. It should feel like the second thing you notice and the first thing you remember.'
+];
+
 const moodRemixes = {
   cuter: {
     label: 'Cuter',
@@ -324,6 +352,9 @@ function rollCard({ fullSurprise = false, mutate = null } = {}) {
     poseCue: `${mood.pose}. Expression cue: ${mood.face}.`,
     guardrail: guardrailFor(lane, sparkKey, mutate),
     coach: choice(coachLines),
+    tinyVersion: makeTinyVersion({ lane, mascot, extra, mood: mood.label }),
+    oddletVersion: makeOddletVersion({ lane, mascot, extra, mood: mood.label, spark: spark.label }),
+    commentary: makeCommentary({ mascot, extra, spark: spark.label, mood: mood.label }),
     status: 'rolled',
     notes: ''
   };
@@ -332,6 +363,48 @@ function rollCard({ fullSurprise = false, mutate = null } = {}) {
   renderCard();
   renderBlueprint(currentCard);
   showToast('Oddlet rolled. It is small, strange, and employable.');
+}
+
+
+function bodyWordFor(lane, mascot) {
+  const words = {
+    object: 'object body',
+    food: 'snack body',
+    symbol: 'symbol shape',
+    ghost: 'soft ghost/blob shape',
+    stationery: 'desk-object shape',
+    weather: 'puffy weather shape',
+    plant: 'plant blob',
+    charm: 'charm body'
+  };
+  return words[lane] || `${mascot} shape`;
+}
+
+function makeTinyVersion({ lane, mascot, extra }) {
+  const body = bodyWordFor(lane, mascot);
+  return choice(tinyVersionTemplates).replaceAll('{body}', body).replaceAll('{extra}', extra);
+}
+
+function makeOddletVersion({ extra }) {
+  return choice(oddletVersionTemplates).replaceAll('{extra}', extra);
+}
+
+function makeCommentary({ mascot, extra, spark, mood }) {
+  const closer = [
+    `Keep the ${mascot} readable first; let the ${extra} be the tiny little narrator.`,
+    `The ${spark} part should feel like a side-eye, not a second assignment.`,
+    `Because it is ${mood}, the face and pose can do more work than extra details.`,
+    `Draw it like a sticker that escaped before quality control could ask questions.`,
+    `The whole charm is one simple body plus one suspicious little decision.`
+  ];
+  return `${choice(commentaryOpeners)} ${choice(closer)}`;
+}
+
+function refreshTinyOddlet(card) {
+  card.tinyVersion = makeTinyVersion(card);
+  card.oddletVersion = makeOddletVersion(card);
+  card.commentary = makeCommentary(card);
+  return card;
 }
 
 function guardrailFor(lane, spark, mutate) {
@@ -376,6 +449,9 @@ function renderCard() {
   $('#ideaTitle').textContent = currentCard.title;
   $('#ideaText').textContent = currentCard.idea;
   $('#oddThing').textContent = currentCard.oddThing;
+  $('#tinyVersion').textContent = currentCard.tinyVersion || makeTinyVersion(currentCard);
+  $('#oddletVersion').textContent = currentCard.oddletVersion || makeOddletVersion(currentCard);
+  $('#creatureCommentary').textContent = currentCard.commentary || makeCommentary(currentCard);
   $('#poseCue').textContent = currentCard.poseCue;
   $('#guardrail').textContent = currentCard.guardrail;
   $('#difficultyPill').textContent = currentCard.shapeLimit === 'loose' ? 'loose simple' : `${currentCard.shapeLimit} shapes`;
@@ -541,7 +617,7 @@ async function copyCard() {
 }
 
 function formatCard(card) {
-  return `${card.title}\n\n${card.idea}\n\nOdd little thing: ${card.oddThing}\n\nBuild it from:\n- ${card.build.join('\n- ')}\n\nPose + expression: ${card.poseCue}\n\nBeginner guardrail: ${card.guardrail}\n\nRedraw spin: ${choice(redrawSpins).text}`;
+  return `${card.title}\n\n${card.idea}\n\nTiny version: ${card.tinyVersion || makeTinyVersion(card)}\n\nOddlet version: ${card.oddletVersion || makeOddletVersion(card)}\n\nCreature commentary: ${card.commentary || makeCommentary(card)}\n\nOdd little thing: ${card.oddThing}\n\nBuild it from:\n- ${card.build.join('\n- ')}\n\nPose + expression: ${card.poseCue}\n\nBeginner guardrail: ${card.guardrail}\n\nRedraw spin: ${choice(redrawSpins).text}`;
 }
 
 function exportStash() {
@@ -615,7 +691,7 @@ function remixCurrent(mode) {
     nextBuild = [...new Set([...nextBuild.slice(0, 5), 'one exaggerated pose cue'])];
   }
 
-  currentCard = {
+  currentCard = refreshTinyOddlet({
     ...currentCard,
     id: crypto.randomUUID ? crypto.randomUUID() : String(Date.now()),
     createdAt: new Date().toISOString(),
@@ -627,7 +703,7 @@ function remixCurrent(mode) {
     guardrail: remix.guardrail,
     coach: choice(coachLines),
     status: 'remixed'
-  };
+  });
 
   renderCard();
   renderBlueprint(currentCard);
