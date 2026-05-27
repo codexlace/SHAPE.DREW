@@ -1,12 +1,11 @@
 {
-  "name": "SHAPE.drew",
-  "short_name": "SHAPE.drew",
-  "description": "A cozy mascot practice studio for learning character design through simple shapes, blueprint cards, and tiny drawing drills.",
-  "start_url": "./index.html",
-  "scope": "./",
+  "name": "Character Signal",
+  "short_name": "Signal",
+  "description": "A paper-doll oracle PWA for building character concepts, visual blueprints, and Procreate-friendly drawing plans.",
+  "start_url": "./",
   "display": "standalone",
-  "background_color": "#101822",
-  "theme_color": "#172536",
+  "background_color": "#f9ead5",
+  "theme_color": "#f6d6b8",
   "orientation": "portrait-primary",
   "icons": [
     {

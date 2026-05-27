@@ -1,40 +1,36 @@
-# SHAPE.drew
+# Character Signal
 
-SHAPE.drew is a static, GitHub Pages-ready PWA for beginner mascot design practice. It turns a subject, mood, material, purpose, and difficulty into one focused mascot card with shape logic, silhouette rules, practice drills, and a polish/layer guide.
+A single-page static PWA for generating character concepts, emotional archetypes, drawable blueprints, Procreate-friendly layer plans, and optional OpenRouter AI expansions.
 
 ## Files
 
-Place every file in the root of your GitHub Pages repository:
+- `index.html` — complete app
+- `manifest.json` — PWA manifest
+- `service-worker.js` — offline cache
+- `ICON-512x512.png` — app icon
+- `ICON-192x192.png` — app icon
+- `character-signal-logo.png` — header/logo image
 
-- `index.html`
-- `styles.css`
-- `app.js`
-- `manifest.json`
-- `service-worker.js`
-- `ICON-192x192.png`
-- `ICON-512x512.png`
+## OpenRouter
 
-No build step is required.
+The app intentionally leaves the model empty in the code:
 
-## Features
+```js
+const OPENROUTER_MODEL = "";
+```
 
-- Mascot card generator
-- Shape, mood, material, purpose, and difficulty logic
-- Practice drills
-- Drawn/redrawn tracking
-- Local Toybox saves with localStorage
-- JSON export
-- Light/dark mode
-- Optional OpenRouter AI coach
+You can add the model directly in `index.html`, or use the app's Settings tab to store your API key and model locally on your device.
 
-## OpenRouter note
+Do not commit your private API key into a public GitHub repository.
 
-The model field is intentionally empty. Add your own model name inside the app when using the optional AI coach.
+## Deploy
 
-## GitHub Pages
+Upload all files to GitHub Pages, Netlify, Cloudflare Pages, or Vercel as a static site.
 
-1. Upload the files to your repository root.
-2. Go to Settings → Pages.
-3. Choose your branch and root folder.
-4. Save and open the deployed URL.
 
+## V2 additions
+
+- Service worker cache bumped to `character-signal-v3-repair-practice`.
+- Added Repair Cards for your real drawing style: weird mascots, object pals, paper spirits, and icon creatures.
+- Added Practice Deck with short drills and seen tracking.
+- Added beginner-friendly redraw guidance that protects the weirdness while improving structure.
