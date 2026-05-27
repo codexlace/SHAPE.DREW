@@ -191,6 +191,51 @@ const redrawSpins = [
   { title: 'Awkward pose', text: 'Tilt the mascot slightly, like it just noticed the viewer watching.' }
 ];
 
+const moodRemixes = {
+  cuter: {
+    label: 'Cuter',
+    ideaLine: 'Soften the shapes, lower the face, and make the odd detail look like it wants to be adopted.',
+    oddLine: 'The tiny spark becomes sweeter, rounder, and less threatening, but still a little suspicious.',
+    guardrail: 'Make the body rounder before adding anything else. Cute comes from simple proportions, not extra decoration.'
+  },
+  weirder: {
+    label: 'Weirder',
+    ideaLine: 'Add one wrong little behavior, symbol, or expression that makes the mascot feel slightly found-in-a-drawer.',
+    oddLine: 'One detail becomes oddly awake, too confident, or emotionally incorrect.',
+    guardrail: 'Only one weird thing gets promoted. The rest of the drawing stays clean so the weird thing can sparkle loudly.'
+  },
+  simpler: {
+    label: 'Simpler',
+    ideaLine: 'Strip the idea down to the mascot, one face, and one tiny spark. No decorative confetti allowed.',
+    oddLine: 'The twist becomes a single readable mark, prop, or tiny behavior.',
+    guardrail: 'Draw it with three main shapes first. If the creature works there, details are optional little guests.'
+  },
+  dramatic: {
+    label: 'More dramatic',
+    ideaLine: 'Make the mascot treat its tiny spark like a grand personal crisis.',
+    oddLine: 'The tiny spark becomes emotionally oversized even if it is physically small.',
+    guardrail: 'Use pose and eyebrows for drama before adding props. Acting beats clutter.'
+  },
+  moreMe: {
+    label: 'More me',
+    ideaLine: 'Push it toward notebook-gremlin energy: uneven eyes, a sign, a symbol patch, or a slightly haunted object mood.',
+    oddLine: 'The twist gains a personal scribble-symbol flavor: X eye, question mark, arrow, sign, label, or strange patch.',
+    guardrail: 'Let the imperfection look intentional. One rough symbol can carry the whole personality.'
+  },
+  moreCreative: {
+    label: 'More creative',
+    ideaLine: 'Give the mascot an unexpected purpose, secret use, or clever visual contradiction without making the drawing bigger.',
+    oddLine: 'The spark becomes a fresh idea-hook: the object is used wrong, the symbol means something else, or the prop quietly changes the character logic.',
+    guardrail: 'Creative does not mean complicated. Change the meaning of one thing instead of adding five new things.'
+  },
+  newTwist: {
+    label: 'New tiny twist',
+    ideaLine: 'Keep the mascot, but swap the tiny spark so the same drawing suddenly has a different little problem.',
+    oddLine: 'A new micro-twist takes over while the main mascot stays the same.',
+    guardrail: 'Keep the body and pose. Only the tiny spark changes, like a sticker placed on a different emotional nerve.'
+  }
+};
+
 let currentCard = null;
 let biasOn = true;
 let deferredPrompt = null;
@@ -534,6 +579,62 @@ function handleSpin(event) {
   showToast('Redraw spin loaded. Same creature, new tiny headache.');
 }
 
+function handleMoodRemix(event) {
+  const button = event.target.closest('button[data-remix]');
+  if (!button) return;
+  remixCurrent(button.dataset.remix);
+}
+
+function remixCurrent(mode) {
+  if (!currentCard) {
+    rollCard({ fullSurprise: true });
+    return;
+  }
+
+  const remix = moodRemixes[mode];
+  if (!remix) return;
+
+  let nextExtra = currentCard.extra;
+  let nextOdd = remix.oddLine;
+  let nextBuild = [...currentCard.build];
+
+  if (mode === 'newTwist') {
+    nextExtra = choice(extras);
+    const sparkKey = pickValue('surprise', sparks);
+    const spark = sparkData[sparkKey];
+    nextOdd = capitalize(choice(spark.templates).replaceAll('{extra}', nextExtra));
+  }
+
+  if (mode === 'simpler') {
+    nextBuild = ['one big mascot body', 'one simple face', 'one tiny spark'];
+  } else if (mode === 'moreCreative') {
+    nextBuild = [...new Set([...nextBuild.slice(0, 4), 'one unexpected purpose or visual contradiction'])];
+  } else if (mode === 'moreMe') {
+    nextBuild = [...new Set([...nextBuild.slice(0, 5), 'one personal symbol: X eye, question mark, arrow, label, or sign'])];
+  } else if (mode === 'dramatic') {
+    nextBuild = [...new Set([...nextBuild.slice(0, 5), 'one exaggerated pose cue'])];
+  }
+
+  currentCard = {
+    ...currentCard,
+    id: crypto.randomUUID ? crypto.randomUUID() : String(Date.now()),
+    createdAt: new Date().toISOString(),
+    extra: nextExtra,
+    title: `${currentCard.title} · ${remix.label}`,
+    idea: `Draw a ${currentCard.mood} ${currentCard.mascot} mascot. ${remix.ideaLine}`,
+    oddThing: nextOdd,
+    build: nextBuild,
+    guardrail: remix.guardrail,
+    coach: choice(coachLines),
+    status: 'remixed'
+  };
+
+  renderCard();
+  renderBlueprint(currentCard);
+  animateRoll();
+  showToast(`${remix.label} remix applied.`);
+}
+
 function switchTab(tabId) {
   $$('.tab').forEach((button) => button.classList.toggle('active', button.dataset.tab === tabId));
   $$('.view').forEach((view) => view.classList.toggle('active', view.id === tabId));
@@ -620,8 +721,7 @@ function initEvents() {
   $$('.tab').forEach((button) => button.addEventListener('click', () => switchTab(button.dataset.tab)));
   $('#rollBtn').addEventListener('click', () => rollCard());
   $('#surpriseBtn').addEventListener('click', () => rollCard({ fullSurprise: true }));
-  $('#simplerBtn').addEventListener('click', () => rollCard({ mutate: 'simpler' }));
-  $('#weirderBtn').addEventListener('click', () => rollCard({ mutate: 'weirder' }));
+  $('#remixBar').addEventListener('click', handleMoodRemix);
   $('#saveBtn').addEventListener('click', saveCurrent);
   $('#copyBtn').addEventListener('click', copyCard);
   $('#exportBtn').addEventListener('click', exportStash);

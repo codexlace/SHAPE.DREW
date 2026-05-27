@@ -39,3 +39,10 @@ Upload all files to the root of your GitHub Pages repository:
 ## Notes
 
 All saved cards are stored locally in the browser with `localStorage`. OpenRouter settings are also stored locally if you choose to save them.
+
+
+## V1.1 update
+
+- Added a Mood Remix Bar on the current card.
+- Presets now include Cuter, Weirder, Simpler, More dramatic, More me, More creative, and New tiny twist.
+- More Creative keeps the mascot simple while changing the idea logic, so it feels fresher without becoming a big scene.
