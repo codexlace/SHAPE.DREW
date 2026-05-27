@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#172536" />
+  <meta name="description" content="SHAPE.drew is a cozy mascot practice studio for learning cute character design through shapes, blueprint cards, and tiny drawing drills." />
+  <title>SHAPE.drew</title>
+  <link rel="manifest" href="manifest.json" />
+  <link rel="apple-touch-icon" href="ICON-192x192.png" />
+  <link rel="icon" href="ICON-192x192.png" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <header class="hero glass-panel">
+      <div class="brand-lockup">
+        <img class="app-icon" src="ICON-192x192.png" alt="SHAPE.drew app icon" />
+        <div>
+          <p class="eyebrow">Mascot thinking studio</p>
+          <h1>SHAPE<span>.</span>drew</h1>
+          <p class="tagline">Turn simple shapes into readable little characters.</p>
+        </div>
+      </div>
+      <div class="hero-actions">
+        <button class="ghost-btn" id="themeToggle" type="button">Dark desk</button>
+        <button class="primary-btn" id="quickGenerate" type="button">Make a card</button>
+      </div>
+    </header>
+
+    <nav class="tabbar glass-panel" aria-label="Main sections">
+      <button class="tab-btn is-active" data-tab="make" type="button">Make</button>
+      <button class="tab-btn" data-tab="card" type="button">Card</button>
+      <button class="tab-btn" data-tab="practice" type="button">Practice</button>
+      <button class="tab-btn" data-tab="toybox" type="button">Toybox</button>
+      <button class="tab-btn" data-tab="coach" type="button">AI Coach</button>
+    </nav>
+
+    <main>
+      <section class="tab-panel is-active" id="make" aria-labelledby="Make">
+        <div class="grid two-col">
+          <form class="glass-panel control-card" id="makerForm">
+            <div class="section-head">
+              <p class="eyebrow">Ingredient machine</p>
+              <h2>Build the mascot seed</h2>
+              <p>Choose a few ingredients. SHAPE.drew turns them into a clear blueprint card, not a messy prompt pile.</p>
+            </div>
+
+            <label>
+              Subject family
+              <select id="subjectFamily"></select>
+            </label>
+
+            <label>
+              Specific subject
+              <input id="customSubject" type="text" placeholder="e.g. strawberry, lantern, cloud, letter B" />
+            </label>
+
+            <label>
+              Mood
+              <select id="mood"></select>
+            </label>
+
+            <label>
+              Material finish
+              <select id="material"></select>
+            </label>
+
+            <label>
+              Purpose
+              <select id="purpose"></select>
+            </label>
+
+            <label>
+              Difficulty
+              <select id="difficulty"></select>
+            </label>
+
+            <div class="button-row">
+              <button class="primary-btn" type="submit">Generate mascot card</button>
+              <button class="ghost-btn" id="surpriseBtn" type="button">Surprise me</button>
+            </div>
+          </form>
+
+          <aside class="glass-panel ritual-card">
+            <p class="eyebrow">The ritual</p>
+            <h2>One card. One creature. One useful lesson.</h2>
+            <ol class="ritual-list">
+              <li><strong>Seed:</strong> pick the character ingredients.</li>
+              <li><strong>Shape:</strong> get the construction recipe.</li>
+              <li><strong>Readability:</strong> test the silhouette.</li>
+              <li><strong>Practice:</strong> draw one tiny drill.</li>
+              <li><strong>Save:</strong> keep the card in your Toybox.</li>
+            </ol>
+            <div class="mini-oracle" id="tinyCoach">The face is the steering wheel. Place it low when you want cute, shy, or plushy.</div>
+          </aside>
+        </div>
+      </section>
+
+      <section class="tab-panel" id="card" aria-labelledby="Card">
+        <article class="mascot-card glass-panel" id="cardOutput"></article>
+      </section>
+
+      <section class="tab-panel" id="practice" aria-labelledby="Practice">
+        <div class="grid two-col">
+          <section class="glass-panel practice-panel">
+            <div class="section-head">
+              <p class="eyebrow">Tiny drills</p>
+              <h2>Practice without the doom fog</h2>
+              <p>Small exercises that train mascot readability, shape discipline, and redraw confidence.</p>
+            </div>
+            <div id="practiceList" class="stack"></div>
+          </section>
+          <section class="glass-panel practice-panel">
+            <div class="section-head">
+              <p class="eyebrow">Redraw tracker</p>
+              <h2>Mark the current card</h2>
+            </div>
+            <div class="tracker-grid">
+              <button class="status-btn" data-status="seen" type="button">I saw it</button>
+              <button class="status-btn" data-status="drawn" type="button">I drew version 1</button>
+              <button class="status-btn" data-status="redrawn" type="button">I redrew it</button>
+            </div>
+            <label>
+              Redraw note
+              <textarea id="redrawNote" rows="7" placeholder="What changed? Bigger eyes? Fewer details? Better silhouette?"></textarea>
+            </label>
+            <button class="primary-btn" id="saveNoteBtn" type="button">Save note to card</button>
+          </section>
+        </div>
+      </section>
+
+      <section class="tab-panel" id="toybox" aria-labelledby="Toybox">
+        <div class="glass-panel toybox-head">
+          <div>
+            <p class="eyebrow">Saved cards</p>
+            <h2>Toybox</h2>
+            <p>Your local mascot-card archive. It saves in this browser with localStorage.</p>
+          </div>
+          <div class="button-row">
+            <button class="ghost-btn" id="exportBtn" type="button">Export JSON</button>
+            <button class="danger-btn" id="clearToyboxBtn" type="button">Clear Toybox</button>
+          </div>
+        </div>
+        <div id="toyboxList" class="toybox-grid"></div>
+      </section>
+
+      <section class="tab-panel" id="coach" aria-labelledby="AI Coach">
+        <div class="grid two-col">
+          <section class="glass-panel control-card">
+            <div class="section-head">
+              <p class="eyebrow">Optional OpenRouter helper</p>
+              <h2>Ask for a sharper lesson</h2>
+              <p>This uses your own OpenRouter API key. The model field is intentionally blank so you can choose one yourself.</p>
+            </div>
+            <label>
+              OpenRouter API key
+              <input id="openrouterKey" type="password" placeholder="sk-or-..." autocomplete="off" />
+            </label>
+            <label>
+              Model
+              <input id="openrouterModel" type="text" placeholder="Leave blank until you choose your model" />
+            </label>
+            <label>
+              What do you want help with?
+              <textarea id="coachPrompt" rows="7" placeholder="Example: Explain how to make this mascot more readable for an app icon."></textarea>
+            </label>
+            <button class="primary-btn" id="askCoachBtn" type="button">Ask art coach</button>
+          </section>
+          <section class="glass-panel coach-output">
+            <p class="eyebrow">Coach response</p>
+            <div id="coachOutput" class="prose">Your answer will appear here.</div>
+          </section>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <template id="emptyCardTemplate">
+    <div class="empty-state">
+      <img src="ICON-192x192.png" alt="" />
+      <h2>No mascot card yet.</h2>
+      <p>Go to Make and generate your first tiny design creature.</p>
+      <button class="primary-btn" data-go-tab="make" type="button">Open Make</button>
+    </div>
+  </template>
+
+  <script type="module" src="app.js"></script>
+</body>
+</html>

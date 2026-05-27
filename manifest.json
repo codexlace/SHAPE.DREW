@@ -1,0 +1,25 @@
+{
+  "name": "SHAPE.drew",
+  "short_name": "SHAPE.drew",
+  "description": "A cozy mascot practice studio for learning character design through simple shapes, blueprint cards, and tiny drawing drills.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#101822",
+  "theme_color": "#172536",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "ICON-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "ICON-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
