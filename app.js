@@ -1,496 +1,660 @@
-const $ = (selector, parent = document) => parent.querySelector(selector);
-const $$ = (selector, parent = document) => [...parent.querySelectorAll(selector)];
+const $ = (selector) => document.querySelector(selector);
+const $$ = (selector) => [...document.querySelectorAll(selector)];
 
-const STORAGE_KEYS = {
-  current: 'shapeDrew.currentCard.v1',
-  toybox: 'shapeDrew.toybox.v1',
-  theme: 'shapeDrew.theme.v1',
-  openrouterKey: 'shapeDrew.openrouterKey.v1'
+const STORAGE_KEY = 'oddlet:v1:stash';
+const SETTINGS_KEY = 'oddlet:v1:settings';
+
+const lanes = [
+  { value: 'surprise', label: 'Surprise me' },
+  { value: 'object', label: 'Object gremlin' },
+  { value: 'food', label: 'Snack creature' },
+  { value: 'symbol', label: 'Symbol creature' },
+  { value: 'ghost', label: 'Soft monster' },
+  { value: 'stationery', label: 'Stationery oddball' },
+  { value: 'weather', label: 'Weather blob' },
+  { value: 'plant', label: 'Plant sprout' },
+  { value: 'charm', label: 'Tiny charm' }
+];
+
+const moods = [
+  { value: 'surprise', label: 'Surprise me' },
+  { value: 'bashful', label: 'bashful' },
+  { value: 'dramatic', label: 'dramatic' },
+  { value: 'sleepy', label: 'sleepy' },
+  { value: 'suspicious', label: 'suspicious' },
+  { value: 'proud', label: 'proud but tiny' },
+  { value: 'confused', label: 'deeply confused' },
+  { value: 'grumpy', label: 'grumpy-soft' },
+  { value: 'hopeful', label: 'hopeful' },
+  { value: 'blank', label: 'blank-faced' },
+  { value: 'secret', label: 'secretly powerful' }
+];
+
+const sparks = [
+  { value: 'surprise', label: 'Surprise me' },
+  { value: 'livingDetail', label: 'Living detail' },
+  { value: 'tinyJob', label: 'Tiny job' },
+  { value: 'secretSymbol', label: 'Secret symbol' },
+  { value: 'wrongScale', label: 'Wrong scale' },
+  { value: 'microProblem', label: 'Mini problem' },
+  { value: 'costumeLogic', label: 'Costume logic' },
+  { value: 'quietMagic', label: 'Almost magic' },
+  { value: 'attachedOddity', label: 'Attached oddity' },
+  { value: 'tinyCompanion', label: 'Tiny companion' },
+  { value: 'fakeImportance', label: 'Fake importance' }
+];
+
+const shapes = [
+  { value: '3', label: '3-shape easy' },
+  { value: '5', label: '5-shape cute' },
+  { value: '7', label: '7-shape playful' },
+  { value: 'loose', label: 'loose but simple' }
+];
+
+const mascotDeck = {
+  object: ['paint palette', 'tiny mailbox', 'teacup', 'button', 'sock', 'candle', 'mirror', 'key', 'paper bag', 'bottle cap', 'little clock', 'spoon', 'tiny door'],
+  food: ['toast slice', 'lemon wedge', 'mushroom', 'jellybean', 'strawberry', 'pancake stack', 'dumpling', 'cupcake liner', 'blueberry', 'marshmallow', 'noodle cup', 'tiny pickle'],
+  symbol: ['question mark', 'star sticker', 'map pin', 'X mark', 'arrow sign', 'tiny moon', 'warning triangle', 'sparkle', 'heart stamp', 'speech bubble', 'exclamation point'],
+  ghost: ['sheet ghost', 'fluffy monster', 'dust bunny', 'mask blob', 'soft cryptid', 'pillow goblin', 'fog puff', 'blanket creature', 'tiny shadow', 'cloudy gremlin'],
+  stationery: ['pencil stub', 'eraser', 'notebook page', 'sticky note', 'paint brush', 'crayon', 'ink bottle', 'paperclip', 'ruler', 'tape roll', 'marker cap'],
+  weather: ['rain cloud', 'tiny storm', 'moon puddle', 'sun drop', 'fog bean', 'snow puff', 'wind swirl', 'raindrop', 'misty star', 'thunder button'],
+  plant: ['sprout', 'cactus nub', 'leaf pile', 'flower bud', 'acorn', 'moss blob', 'tiny fern', 'seed packet', 'mushroom cap', 'berry twig'],
+  charm: ['lucky charm', 'tiny bell', 'ribbon charm', 'locket', 'glass bead', 'mini crown', 'toy mask', 'pocket talisman', 'button badge', 'little relic']
 };
 
-const DATA = {
-  subjectFamily: {
-    blob: {
-      label: 'Blob creature',
-      icon: 'B',
-      subjects: ['moon blob', 'puddle sprite', 'gumdrop ghost', 'tiny cloud', 'mystery bean'],
-      shape: ['Start with one squashed circle or bean shape.', 'Keep the body readable before adding any decorations.', 'Use one asymmetrical bump so it feels alive, not like a plain ball.'],
-      readability: 'The silhouette should read as one strong soft lump with one memorable bump.',
-      danger: 'Too many tiny bumps can turn the mascot into visual oatmeal.'
-    },
-    food: {
-      label: 'Food mascot',
-      icon: 'F',
-      subjects: ['strawberry', 'toast slice', 'dumpling', 'cupcake', 'melon soda'],
-      shape: ['Use the food shape as the body first.', 'Group texture details into one neat area.', 'Keep the face below the middle so the food identity stays clear.'],
-      readability: 'The viewer should recognize the food even if the face disappears.',
-      danger: 'Scattered sprinkles, seeds, or toppings can eat the silhouette alive.'
-    },
-    object: {
-      label: 'Object mascot',
-      icon: 'O',
-      subjects: ['pencil', 'lantern', 'key', 'teacup', 'paint tube'],
-      shape: ['Preserve the object function before adding limbs.', 'Turn one functional part into personality.', 'Place limbs where they do not hide the object outline.'],
-      readability: 'The object must still work as an icon shape from far away.',
-      danger: 'Arms and accessories can disguise the object if they cross the main contour.'
-    },
-    letter: {
-      label: 'Letter mascot',
-      icon: 'L',
-      subjects: ['letter A', 'letter B', 'letter S', 'letter M', 'letter R'],
-      shape: ['Keep the letter readable first.', 'Place the face in the counterspace or lower thick stroke.', 'Use limbs that follow the letter direction.'],
-      readability: 'It should still read as a letter when shrunk to app-icon size.',
-      danger: 'Overdecorating the strokes can make the letter turn into alphabet soup.'
-    },
-    icon: {
-      label: 'Icon companion',
-      icon: 'I',
-      subjects: ['star badge', 'heart badge', 'mask icon', 'spark button', 'tiny shield'],
-      shape: ['Begin with one bold emblem silhouette.', 'Use one inner face zone and one outer charm detail.', 'Make the border slightly thicker than you think.'],
-      readability: 'The mascot must work as a sticker, badge, or tiny app helper.',
-      danger: 'Thin details vanish first. Make important parts chunky.'
-    },
-    creature: {
-      label: 'Little creature',
-      icon: 'C',
-      subjects: ['moth cat', 'snail bun', 'star puppy', 'frog charm', 'bat bean'],
-      shape: ['Pick one animal clue only: ears, tail, wings, shell, or antennae.', 'Build the body from a simple oval or rounded square.', 'Let the chosen animal clue carry the identity.'],
-      readability: 'One creature clue should be obvious without needing realism.',
-      danger: 'Mixing too many animal traits makes the design noisy instead of magical.'
-    },
-    mask: {
-      label: 'Mask mascot',
-      icon: 'M',
-      subjects: ['soft theater mask', 'sticker mask', 'moon mask', 'tiny monster mask', 'button mask'],
-      shape: ['Use a strong face silhouette: oval, squircle, shield, or moon slice.', 'Make eye shapes the personality engine.', 'Keep the mouth extremely simple.'],
-      readability: 'The mask should be recognizable from eye placement and outer contour alone.',
-      danger: 'Too much facial detail can make it uncanny instead of charming.'
-    },
-    plant: {
-      label: 'Plant mascot',
-      icon: 'P',
-      subjects: ['sprout', 'mushroom', 'cactus charm', 'flower bud', 'leaf ghost'],
-      shape: ['Use stem, leaf, cap, or petal as the main identity.', 'Repeat one simple leaf/petal shape instead of inventing many.', 'Keep the face anchored to the largest mass.'],
-      readability: 'The plant clue should be visible as a clean top or side silhouette.',
-      danger: 'Leaves can become confetti. Use fewer, larger shapes.'
-    }
+const oddBiasMascots = ['paint palette', 'paper bag', 'question mark', 'mask blob', 'ink bottle', 'warning triangle', 'X mark', 'sticky note', 'tiny shadow', 'map pin', 'paint brush', 'arrow sign'];
+
+const extras = ['heart', 'star', 'key', 'note', 'tiny sign', 'moon', 'spoon', 'flower', 'button', 'ribbon', 'spark', 'mini crown', 'glow dot', 'sealed envelope', 'paint drop', 'crumb', 'question mark patch', 'sticker scar'];
+
+const moodData = {
+  bashful: { label: 'bashful', face: 'low eyes, tiny mouth, cheeks doing most of the talking', pose: 'tilted inward, like it is trying to occupy less space' },
+  dramatic: { label: 'dramatic', face: 'arched brows, open mouth, one detail treated like a catastrophe', pose: 'leaning back or presenting the prop like evidence' },
+  sleepy: { label: 'sleepy', face: 'half-lidded eyes, relaxed mouth, soft sagging posture', pose: 'slouched with one part drooping' },
+  suspicious: { label: 'suspicious', face: 'one narrowed eye, one dot eye, mouth held hostage by doubt', pose: 'leaning toward the odd thing, inspecting it' },
+  proud: { label: 'proud but tiny', face: 'small smile, lifted brow, face sitting a bit high', pose: 'chest forward, prop displayed like a trophy' },
+  confused: { label: 'deeply confused', face: 'uneven eyes, question energy, mouth slightly open', pose: 'body tilted away from the thing it is holding' },
+  grumpy: { label: 'grumpy-soft', face: 'heavy brows, tiny frown, round cheeks betraying the grumpiness', pose: 'arms close to body, prop held too tightly' },
+  hopeful: { label: 'hopeful', face: 'wide eyes, tiny smile, one sparkle or soft cheek mark', pose: 'reaching forward just a little' },
+  blank: { label: 'blank-faced', face: 'simple dots or one dot plus one X, expression painfully unreadable', pose: 'standing still while something absurd happens nearby' },
+  secret: { label: 'secretly powerful', face: 'small calm smile, one strange eye symbol, quiet confidence', pose: 'still body, odd thing floating or glowing nearby' }
+};
+
+const sparkData = {
+  livingDetail: {
+    label: 'living detail',
+    templates: [
+      'one detail on it has a tiny face and is reacting more than the mascot is',
+      'its {extra} is awake, opinionated, and clearly judging the mascot',
+      'one small mark on its body looks like it is trying to crawl away'
+    ]
   },
-  mood: {
-    curious: { label: 'Curious', face: 'one eyebrow lift, wide eyes, small open mouth', posture: 'slight lean forward', exaggerate: 'tilt the head or top shape', simplify: 'keep the mouth tiny so the eyes do the question-asking' },
-    shy: { label: 'Shy', face: 'low eyes, tiny mouth, soft blush', posture: 'inward limbs, tucked shape', exaggerate: 'lower the face and round the body', simplify: 'remove big gestures' },
-    proud: { label: 'Proud', face: 'small smile, lifted cheeks, confident eyes', posture: 'upright body, tiny chest-forward stance', exaggerate: 'make the top silhouette taller', simplify: 'avoid too many sparkles' },
-    sleepy: { label: 'Sleepy', face: 'droopy eyelids, soft mouth, low cheeks', posture: 'heavy rounded lean', exaggerate: 'sag the shape gently', simplify: 'remove sharp corners' },
-    dramatic: { label: 'Dramatic', face: 'bold eyes, tiny theatrical mouth', posture: 'one big angle or sweeping accessory', exaggerate: 'one oversized feature', simplify: 'only one drama detail gets the spotlight' },
-    grumpy: { label: 'Grumpy-cute', face: 'flat mouth, low brows, squished cheeks', posture: 'stubby planted stance', exaggerate: 'compress the body wider', simplify: 'keep the face readable, not mean' },
-    hauntedCute: { label: 'Haunted-cute', face: 'tiny uneasy mouth, mismatched eyes', posture: 'floating or slightly tilted', exaggerate: 'one strange asymmetrical detail', simplify: 'stay cute through roundness' },
-    sparkly: { label: 'Sparkly', face: 'starry eye highlight, delighted mouth', posture: 'open and bouncy', exaggerate: 'one shine mark or charm', simplify: 'do not cover the mascot in glitter confetti' },
-    focused: { label: 'Focused', face: 'small determined eyes, simple mouth', posture: 'forward-pointing tool or stance', exaggerate: 'make the working tool clear', simplify: 'use fewer decorative details' }
+  tinyJob: {
+    label: 'tiny job',
+    templates: [
+      'it has appointed itself the official guardian of a single {extra}',
+      'it is working as a tiny inspector for something nobody asked to be inspected',
+      'it takes a very small job painfully seriously'
+    ]
   },
-  material: {
-    plush: { label: 'Soft plush', finish: 'rounded edges, seam hints, soft side shadow', brush: 'soft airbrush, 6B pencil seam, gentle smudge', layer: ['Base shape', 'soft side shadow', 'tiny seam or stitch', 'face', 'warm blush'] },
-    gummy: { label: 'Gummy candy', finish: 'translucent edges, juicy highlight, saturated shadow', brush: 'soft round brush, glossy highlight brush', layer: ['Base candy color', 'inner glow', 'edge shadow', 'white highlight', 'face on top'] },
-    clay: { label: 'Clay charm', finish: 'matte body, thumbprint texture, chunky bevel', brush: 'clay/noise brush, soft shadow', layer: ['Base clay blob', 'bevel shadow', 'texture speckles', 'face pieces', 'rim light'] },
-    paper: { label: 'Paper cutout', finish: 'flat color, lifted paper shadow, crisp edge', brush: 'monoline, dry paper texture', layer: ['Paper silhouette', 'drop shadow', 'paper texture', 'face stickers', 'edge accent'] },
-    sticker: { label: 'Glossy sticker', finish: 'thick outline, shiny top streak, bold rim', brush: 'monoline, airbrush highlight', layer: ['Sticker base', 'thick border', 'face', 'top gloss', 'cast shadow'] },
-    glass: { label: 'Soft glass', finish: 'transparent tint, bright rim, inner reflection', brush: 'soft airbrush, fine white highlight', layer: ['Tinted base', 'inner shadow', 'rim glow', 'reflected shine', 'face with strong contrast'] },
-    velvet: { label: 'Velvet toy', finish: 'deep soft color, fuzzy edge, low-gloss shadow', brush: 'noise brush, soft grain, velvet shading', layer: ['Deep base', 'nap texture', 'soft shadow', 'muted highlight', 'face'] },
-    crayon: { label: 'Crayon doodle', finish: 'grainy fills, uneven edges, sketch warmth', brush: '6B pencil, crayon brush, grain texture', layer: ['Loose sketch', 'crayon fill', 'extra dark contour', 'face scribble', 'one color pop'] },
-    pearl: { label: 'Pearl charm', finish: 'milky gradient, colored rim, tiny shine dots', brush: 'soft round, sparkle highlight', layer: ['Milky base', 'cool rim', 'warm shadow', 'shine dots', 'face'] }
+  secretSymbol: {
+    label: 'secret symbol',
+    templates: [
+      'it has a mysterious {extra} symbol on it and refuses to explain why',
+      'its little sign says “you are here,” but points to the wrong part of itself',
+      'one symbol on its body seems more confident than the mascot'
+    ]
   },
-  purpose: {
-    sticker: { label: 'Sticker', rule: 'Use a bold outer contour and a tiny cast shadow. Make the expression readable first.', output: 'Export-ready sticker creature' },
-    appIcon: { label: 'App icon', rule: 'Center the shape, enlarge the face, and keep the silhouette chunky at 192px.', output: 'Tiny icon mascot' },
-    logoBuddy: { label: 'Logo buddy', rule: 'Make the mascot simple enough to sit beside text without stealing the whole room.', output: 'Brand companion' },
-    plushToy: { label: 'Plush toy', rule: 'Prioritize rounded seams, stubby limbs, and one exaggerated soft feature.', output: 'Toy-like character' },
-    badge: { label: 'Badge', rule: 'Use a strong circular or shield-like container and make the center symbol clear.', output: 'Badge mascot' },
-    practice: { label: 'Practice sketch', rule: 'Keep it fast: three shapes, one face, one redraw decision.', output: 'Learning sketch' }
+  wrongScale: {
+    label: 'wrong scale',
+    templates: [
+      'its {extra} is way too big, but it insists this is normal',
+      'it carries a tiny object like it weighs as much as a planet',
+      'one accessory is hilariously oversized and stealing the composition'
+    ]
   },
-  difficulty: {
-    tiny: { label: 'Tiny beginner', steps: 4, constraint: 'Use only three main shapes and one detail.' },
-    cozy: { label: 'Cozy learner', steps: 5, constraint: 'Use four to six shapes and one polish idea.' },
-    brave: { label: 'Brave redraw', steps: 6, constraint: 'Add one asymmetry, one material cue, and one silhouette check.' }
+  microProblem: {
+    label: 'mini problem',
+    templates: [
+      'it is having one small inconvenience and making it everyone’s concern',
+      'its {extra} keeps slipping, wobbling, or leaning the wrong way',
+      'it is trying very hard to look fine while obviously not being fine'
+    ]
+  },
+  costumeLogic: {
+    label: 'costume logic',
+    templates: [
+      'it is dressed like a tiny official, but only one costume piece fits',
+      'it wears a costume that makes sense only to itself',
+      'one accessory is pretending to be a costume and doing a bad job'
+    ]
+  },
+  quietMagic: {
+    label: 'almost magic',
+    templates: [
+      'a tiny bit of magic is happening, but only around the {extra}',
+      'something small floats near it like a shy spell',
+      'its symbol glows softly, but the mascot looks unsure about being magical'
+    ]
+  },
+  attachedOddity: {
+    label: 'attached oddity',
+    templates: [
+      'one attached part is acting like a separate creature',
+      'its handle, ribbon, tag, or corner has more personality than expected',
+      'the {extra} is attached to it but seems emotionally independent'
+    ]
+  },
+  tinyCompanion: {
+    label: 'tiny companion',
+    templates: [
+      'a tiny {extra} companion follows it and copies its expression',
+      'it has a small sidekick that thinks it is in charge',
+      'a tiny buddy hides behind it but keeps peeking out'
+    ]
+  },
+  fakeImportance: {
+    label: 'fake importance',
+    templates: [
+      'it is guarding something completely ordinary as if it is sacred',
+      'it has a label that makes the situation sound more official than it is',
+      'it is presenting the {extra} like a rare museum artifact'
+    ]
   }
+};
+
+const shapeRecipes = {
+  '3': ['one big body shape', 'one face zone', 'one prop or symbol'],
+  '5': ['big body shape', 'face zone', 'two simple limbs or corners', 'one prop', 'one symbol mark'],
+  '7': ['big body silhouette', 'face zone', 'two limbs', 'prop shape', 'tiny extra', 'one symbol', 'one grounding shadow'],
+  loose: ['big silhouette first', 'face second', 'one focal odd thing third', 'scribbles last, if at all']
 };
 
 const coachLines = [
-  'Lower the face and the mascot becomes instantly more adoptable.',
-  'One charm detail is a design choice. Five charm details is a tiny parade in traffic.',
-  'If the silhouette works as a black blob, the mascot has bones.',
-  'Make the big shapes calmer, then let one tiny detail sing.',
-  'A cute mascot is usually a readable shape wearing a feeling.'
+  'Big shape first. Details are dessert, not breakfast.',
+  'Give it one weird thing. Twelve weird things becomes paperwork.',
+  'If the silhouette reads, the creature has bones. Tiny weird bones.',
+  'Lower the face for cute. Tilt the body for attitude.',
+  'One prop can carry the whole joke. Let it do its little job.',
+  'Scribbles are seasoning. Do not pour the whole cabinet in.',
+  'The drawing does not need to be perfect. It needs a readable little problem.',
+  'Make the biggest shape boring on purpose, then let the tiny detail be rude.'
 ];
 
-const drills = [
-  { title: 'Three-shape pass', text: 'Draw the mascot using only three shapes. No texture. No accessories. Just the bones.' },
-  { title: 'Black blob test', text: 'Fill the outer shape with black. Can you still tell what it is? Fix the silhouette before details.' },
-  { title: 'Face elevator', text: 'Draw three tiny versions with the face high, middle, and low. Circle the cutest one.' },
-  { title: 'Detail diet', text: 'Remove one decoration and make one remaining shape bigger. See if it gets stronger.' },
-  { title: 'Sticker shrink', text: 'Squint or zoom out. Redraw the mascot so it still reads at thumbnail size.' },
-  { title: 'Material whisper', text: 'Show the material with only one shadow and one highlight. No rendering storm allowed.' }
+const redrawSpins = [
+  { title: 'Sticker simple', text: 'Redraw it with one clean outline, no texture, and only the most important prop.' },
+  { title: 'More suspicious', text: 'Change only the eyes and eyebrow angle so the mascot distrusts its own accessory.' },
+  { title: 'Tiny official', text: 'Give it one fake job marker: badge, sign, clipboard, crown, or ribbon. Keep the body unchanged.' },
+  { title: 'Prop betrayal', text: 'Make the prop look more alive than the mascot. Add eyes to the prop or tilt it dramatically.' },
+  { title: 'Lower face', text: 'Redraw with the face lower on the body. Watch it become softer, smaller, and more adoptable.' },
+  { title: 'One less detail', text: 'Remove one detail you like. If the idea still works, the design got stronger.' },
+  { title: 'Bigger weird thing', text: 'Make the tiny spark 40% bigger and simplify everything else around it.' },
+  { title: 'Awkward pose', text: 'Tilt the mascot slightly, like it just noticed the viewer watching.' }
 ];
 
-let currentCard = readJSON(STORAGE_KEYS.current, null);
-let toybox = readJSON(STORAGE_KEYS.toybox, []);
+let currentCard = null;
+let biasOn = true;
+let deferredPrompt = null;
 
-function readJSON(key, fallback) {
-  try { return JSON.parse(localStorage.getItem(key)) ?? fallback; } catch { return fallback; }
-}
-function writeJSON(key, value) { localStorage.setItem(key, JSON.stringify(value)); }
-function uid() { return `sd-${Date.now()}-${Math.random().toString(16).slice(2)}`; }
-function pick(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
-function titleCase(text) { return text.replace(/\b\w/g, c => c.toUpperCase()); }
-function escapeHTML(value = '') {
-  return String(value).replace(/[&<>'"]/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[char]));
+function choice(list) {
+  return list[Math.floor(Math.random() * list.length)];
 }
 
-function init() {
-  hydrateSelects();
-  bindTabs();
-  bindControls();
-  renderPractice();
-  applyTheme(localStorage.getItem(STORAGE_KEYS.theme) || 'light');
-  $('#openrouterKey').value = localStorage.getItem(STORAGE_KEYS.openrouterKey) || '';
-  renderCard();
-  renderToybox();
-  if (!currentCard) generateCard({ random: true, silent: true });
-  if ('serviceWorker' in navigator) navigator.serviceWorker.register('./service-worker.js').catch(() => {});
+function pickValue(selectValue, dataList) {
+  if (selectValue && selectValue !== 'surprise') return selectValue;
+  const real = dataList.filter((item) => item.value !== 'surprise');
+  return choice(real).value;
 }
 
-function hydrateSelects() {
-  fillSelect('#subjectFamily', DATA.subjectFamily);
-  fillSelect('#mood', DATA.mood);
-  fillSelect('#material', DATA.material);
-  fillSelect('#purpose', DATA.purpose);
-  fillSelect('#difficulty', DATA.difficulty);
+function fillSelect(id, list) {
+  const select = $(id);
+  select.innerHTML = list.map((item) => `<option value="${item.value}">${item.label}</option>`).join('');
 }
 
-function fillSelect(selector, map) {
-  const select = $(selector);
-  select.innerHTML = Object.entries(map).map(([key, item]) => `<option value="${key}">${item.label}</option>`).join('');
+function titleCase(text) {
+  return text.split(' ').map((part) => part ? part[0].toUpperCase() + part.slice(1) : part).join(' ');
 }
 
-function bindTabs() {
-  $$('.tab-btn').forEach(btn => btn.addEventListener('click', () => openTab(btn.dataset.tab)));
-  document.addEventListener('click', event => {
-    const go = event.target.closest('[data-go-tab]');
-    if (go) openTab(go.dataset.goTab);
-  });
+function makeName(mood, mascot, spark) {
+  const noun = titleCase(mascot);
+  const prefixes = {
+    livingDetail: ['Possessed', 'Opinionated', 'Awake'],
+    tinyJob: ['Official', 'Certified', 'Tiny'],
+    secretSymbol: ['Marked', 'Mysterious', 'Map-Lost'],
+    wrongScale: ['Overpacked', 'Too-Tiny', 'Oversized'],
+    microProblem: ['Wobbly', 'Barely Fine', 'Tiny Crisis'],
+    costumeLogic: ['Disguised', 'Costumed', 'Pretending'],
+    quietMagic: ['Softly Magical', 'Glowing', 'Almost Enchanted'],
+    attachedOddity: ['Attached', 'Tagalong', 'Side-Glitched'],
+    tinyCompanion: ['Followed', 'Companion', 'Little-Buddy'],
+    fakeImportance: ['Museum-Grade', 'Important', 'Very Official']
+  };
+  return `${choice(prefixes[spark] || ['Odd'])} ${noun}`;
 }
 
-function openTab(tab) {
-  $$('.tab-btn').forEach(btn => btn.classList.toggle('is-active', btn.dataset.tab === tab));
-  $$('.tab-panel').forEach(panel => panel.classList.toggle('is-active', panel.id === tab));
-}
+function rollCard({ fullSurprise = false, mutate = null } = {}) {
+  if (fullSurprise) {
+    $('#laneSelect').value = 'surprise';
+    $('#moodSelect').value = 'surprise';
+    $('#sparkSelect').value = 'surprise';
+    $('#shapeSelect').value = choice(shapes).value;
+  }
 
-function bindControls() {
-  $('#makerForm').addEventListener('submit', event => {
-    event.preventDefault();
-    generateCard();
-    openTab('card');
-  });
-  $('#quickGenerate').addEventListener('click', () => { generateCard(); openTab('card'); });
-  $('#surpriseBtn').addEventListener('click', () => { randomizeForm(); generateCard(); openTab('card'); });
-  $('#themeToggle').addEventListener('click', () => applyTheme(document.body.dataset.theme === 'dark' ? 'light' : 'dark'));
-  $('#saveNoteBtn').addEventListener('click', saveNote);
-  $('#exportBtn').addEventListener('click', exportToybox);
-  $('#clearToyboxBtn').addEventListener('click', clearToybox);
-  $('#askCoachBtn').addEventListener('click', askCoach);
-  $$('.status-btn').forEach(btn => btn.addEventListener('click', () => updateStatus(btn.dataset.status)));
-}
+  let lane = pickValue($('#laneSelect').value, lanes);
+  let mascotPool = mascotDeck[lane] || Object.values(mascotDeck).flat();
+  if (biasOn && Math.random() < 0.42) mascotPool = [...mascotPool, ...oddBiasMascots];
 
-function applyTheme(theme) {
-  document.body.dataset.theme = theme === 'dark' ? 'dark' : 'light';
-  localStorage.setItem(STORAGE_KEYS.theme, document.body.dataset.theme);
-  $('#themeToggle').textContent = document.body.dataset.theme === 'dark' ? 'Milkfoam desk' : 'Dark desk';
-}
+  const moodKey = pickValue($('#moodSelect').value, moods);
+  const sparkKey = pickValue($('#sparkSelect').value, sparks);
+  const shapeLimit = $('#shapeSelect').value || '5';
+  const mascot = choice(mascotPool);
+  const mood = moodData[moodKey];
+  const extra = choice(extras);
+  const spark = sparkData[sparkKey];
+  const template = choice(spark.templates);
+  const oddThing = template.replaceAll('{extra}', extra);
 
-function randomizeForm() {
-  ['#subjectFamily', '#mood', '#material', '#purpose', '#difficulty'].forEach(selector => {
-    const select = $(selector);
-    select.selectedIndex = Math.floor(Math.random() * select.options.length);
-  });
-  const family = DATA.subjectFamily[$('#subjectFamily').value];
-  $('#customSubject').value = pick(family.subjects);
-}
+  const title = makeName(moodKey, mascot, sparkKey);
+  const build = [...(shapeRecipes[shapeLimit] || shapeRecipes['5'])];
 
-function generateCard(options = {}) {
-  if (options.random) randomizeForm();
-  const familyKey = $('#subjectFamily').value;
-  const moodKey = $('#mood').value;
-  const materialKey = $('#material').value;
-  const purposeKey = $('#purpose').value;
-  const difficultyKey = $('#difficulty').value;
-  const family = DATA.subjectFamily[familyKey];
-  const mood = DATA.mood[moodKey];
-  const material = DATA.material[materialKey];
-  const purpose = DATA.purpose[purposeKey];
-  const difficulty = DATA.difficulty[difficultyKey];
-  const rawSubject = $('#customSubject').value.trim() || pick(family.subjects);
-  const subject = rawSubject.toLowerCase();
-  const name = makeName(subject, moodKey, materialKey, familyKey);
+  if (mutate === 'simpler') {
+    build.splice(0, build.length, 'one simple body shape', 'two eyes or one symbol face', 'one tiny extra');
+  }
+  if (mutate === 'weirder') {
+    build.push('one odd mark that looks intentional, even if it is not');
+  }
 
   currentCard = {
-    id: uid(),
+    id: crypto.randomUUID ? crypto.randomUUID() : String(Date.now()),
     createdAt: new Date().toISOString(),
-    name,
-    subject,
-    familyKey,
-    moodKey,
-    materialKey,
-    purposeKey,
-    difficultyKey,
-    family: family.label,
+    lane,
+    mascot,
     mood: mood.label,
-    material: material.label,
-    purpose: purpose.label,
-    difficulty: difficulty.label,
-    status: 'fresh',
-    note: '',
-    blueprint: buildBlueprint(subject, family, mood, material, purpose, difficulty),
-    drills: buildDrills(subject, mood, material, purpose)
+    spark: spark.label,
+    shapeLimit,
+    extra,
+    title,
+    idea: `Draw a ${mood.label} ${mascot} mascot. ${capitalize(oddThing)}.`,
+    oddThing: capitalize(oddThing),
+    build,
+    poseCue: `${mood.pose}. Expression cue: ${mood.face}.`,
+    guardrail: guardrailFor(lane, sparkKey, mutate),
+    coach: choice(coachLines),
+    status: 'rolled',
+    notes: ''
   };
 
-  writeJSON(STORAGE_KEYS.current, currentCard);
-  $('#tinyCoach').textContent = pick(coachLines);
+  animateRoll();
   renderCard();
-  renderPractice();
-  if (!options.silent) sparkleButton($('#quickGenerate'));
+  renderBlueprint(currentCard);
+  showToast('Oddlet rolled. It is small, strange, and employable.');
 }
 
-function makeName(subject, moodKey, materialKey, familyKey) {
-  const roots = subject.split(/\s+/).filter(Boolean);
-  const core = roots[roots.length - 1] || subject;
-  const prefixes = {
-    shy: 'Bashful', curious: 'Peeking', proud: 'Noble', sleepy: 'Drowsy', dramatic: 'Opera', grumpy: 'Pouty', hauntedCute: 'Moonlost', sparkly: 'Glint', focused: 'Tasky'
+function guardrailFor(lane, spark, mutate) {
+  if (mutate === 'simpler') return 'Use fewer parts than you want. If it works as a blob with eyes, you are allowed one extra detail.';
+  if (mutate === 'weirder') return 'Make only one thing weird. Bigger weirdness beats more weirdness.';
+  const byLane = {
+    object: 'Keep the object readable before adding the face. Body first, personality second, chaos third.',
+    food: 'Do not decorate until the food silhouette reads. One topping can be the joke.',
+    symbol: 'The symbol must stay readable. Make the face support it, not swallow it.',
+    ghost: 'Start with one clean ghost/blob silhouette. Ragged edges come after the shape works.',
+    stationery: 'Let the tool shape do most of the work. The face should not hide what the object is.',
+    weather: 'Use soft shapes and one clear motion cue. Avoid too many floating bits.',
+    plant: 'Big plant shape first. Leaves and sprouts should be grouped, not scattered everywhere.',
+    charm: 'Keep it icon-like: one charm body, one face, one tiny symbolic oddity.'
   };
-  const suffixes = {
-    plush: 'plush', gummy: 'drop', clay: 'charm', paper: 'cutie', sticker: 'sticker', glass: 'glimmer', velvet: 'velvet', crayon: 'scrib', pearl: 'pearl'
+  const bySpark = {
+    tinyCompanion: 'The companion should be much smaller than the mascot so the main silhouette stays in charge.',
+    wrongScale: 'If one thing is oversized, simplify the rest. Let the scale joke breathe.',
+    secretSymbol: 'Make the symbol clear and simple. One mark can feel mysterious without being complicated.'
   };
-  const familySuffix = { blob: 'bean', food: 'bite', object: 'buddy', letter: 'glyph', icon: 'badge', creature: 'kin', mask: 'mask', plant: 'sprout' };
-  return `${prefixes[moodKey] || 'Tiny'} ${titleCase(core)}${suffixes[materialKey] || familySuffix[familyKey]}`;
+  return bySpark[spark] || byLane[lane] || 'Main shape first. Face second. Odd little thing third.';
 }
 
-function buildBlueprint(subject, family, mood, material, purpose, difficulty) {
-  const steps = [
-    `Draw the largest ${subject} silhouette first. Ignore the face until the shape feels readable.`,
-    pick(family.shape),
-    `Place the face using this mood rule: ${mood.face}.`,
-    `Add posture: ${mood.posture}.`,
-    `Apply the ${material.label.toLowerCase()} finish: ${material.finish}.`,
-    `Purpose check: ${purpose.rule}`
-  ].slice(0, difficulty.steps);
-
-  return {
-    coreShape: pick(family.shape),
-    faceMap: mood.face,
-    posture: mood.posture,
-    silhouetteRule: family.readability,
-    exaggerate: mood.exaggerate,
-    simplify: mood.simplify,
-    dangerZone: family.danger,
-    polish: material.finish,
-    brush: material.brush,
-    layerStack: material.layer,
-    output: purpose.output,
-    constraint: difficulty.constraint,
-    steps
-  };
+function capitalize(text) {
+  return text.charAt(0).toUpperCase() + text.slice(1);
 }
 
-function buildDrills(subject, mood, material, purpose) {
-  return [
-    { title: 'Shape skeleton', text: `Draw ${subject} with only the main body, one face zone, and one identity clue.` },
-    { title: 'Mood mutation', text: `Redraw it so ${mood.label.toLowerCase()} is visible without adding props. Use face placement and posture.` },
-    { title: 'Polish pass', text: `Add ${material.label.toLowerCase()} using one shadow, one highlight, and one texture clue.` },
-    { title: 'Purpose shrink', text: `Check it as a ${purpose.label.toLowerCase()}. Shrink it mentally to 192px and remove anything that turns muddy.` }
-  ];
+function animateRoll() {
+  const slot = $('.slot-window');
+  slot.classList.remove('rolling');
+  void slot.offsetWidth;
+  slot.classList.add('rolling');
+  $('#slotOne').textContent = currentCard.mascot;
+  $('#slotTwo').textContent = currentCard.spark;
+  $('#slotThree').textContent = currentCard.extra;
+  $('#coachLine').textContent = currentCard.coach;
 }
 
 function renderCard() {
-  const output = $('#cardOutput');
-  if (!currentCard) {
-    output.innerHTML = $('#emptyCardTemplate').innerHTML;
-    return;
-  }
-  const b = currentCard.blueprint;
-  output.innerHTML = `
-    <div class="card-top">
-      <div class="card-token" data-initial="${escapeHTML(DATA.subjectFamily[currentCard.familyKey].icon)}"></div>
-      <div class="card-title">
-        <p class="eyebrow">Current mascot card</p>
-        <h2>${escapeHTML(currentCard.name)}</h2>
-        <p>${escapeHTML(currentCard.subject)} as a ${escapeHTML(currentCard.mood.toLowerCase())} ${escapeHTML(currentCard.material.toLowerCase())} ${escapeHTML(currentCard.purpose.toLowerCase())}.</p>
-        <div class="pill-row">
-          ${[currentCard.family, currentCard.mood, currentCard.material, currentCard.purpose, currentCard.difficulty, currentCard.status].map(x => `<span class="pill">${escapeHTML(x)}</span>`).join('')}
-        </div>
-      </div>
-    </div>
-    <div class="card-grid">
-      ${infoCard('Core shape', [b.coreShape, b.constraint])}
-      ${infoCard('Face map', [b.faceMap, b.posture])}
-      ${infoCard('Silhouette rule', [b.silhouetteRule, `Danger zone: ${b.dangerZone}`])}
-      ${infoCard('Design decision', [`Exaggerate: ${b.exaggerate}`, `Simplify: ${b.simplify}`])}
-      ${infoCard('Polish pass', [b.polish, `Brush idea: ${b.brush}`])}
-      ${infoCard('Layer stack', b.layerStack)}
-      ${infoCard('Draw path', b.steps, true, 'ol')}
-      ${currentCard.note ? infoCard('Redraw note', [currentCard.note]) : ''}
-    </div>
-    <div class="card-actions">
-      <button class="primary-btn" id="saveCardBtn" type="button">Save to Toybox</button>
-      <button class="ghost-btn" id="copyCardBtn" type="button">Copy card text</button>
-      <button class="ghost-btn" id="newVersionBtn" type="button">New version</button>
-    </div>
+  if (!currentCard) return;
+  $('#cardTitle').textContent = 'Current Oddlet';
+  $('#ideaTitle').textContent = currentCard.title;
+  $('#ideaText').textContent = currentCard.idea;
+  $('#oddThing').textContent = currentCard.oddThing;
+  $('#poseCue').textContent = currentCard.poseCue;
+  $('#guardrail').textContent = currentCard.guardrail;
+  $('#difficultyPill').textContent = currentCard.shapeLimit === 'loose' ? 'loose simple' : `${currentCard.shapeLimit} shapes`;
+  $('#buildList').innerHTML = currentCard.build.map((item) => `<li>${item}</li>`).join('');
+}
+
+function renderBlueprint(card) {
+  const svg = $('#blueprintSvg');
+  const color = getComputedStyle(document.documentElement);
+  const mint = color.getPropertyValue('--mint').trim() || '#78e0c2';
+  const primary = color.getPropertyValue('--primary').trim() || '#ff7f73';
+  const pink = color.getPropertyValue('--pink').trim() || '#ff8fbd';
+  const blue = color.getPropertyValue('--blue').trim() || '#91b7ff';
+  const bodyShape = bodyShapeFor(card?.lane);
+  const symbol = symbolFor(card?.extra);
+
+  svg.innerHTML = `
+    <defs>
+      <filter id="softShadow" x="-20%" y="-20%" width="140%" height="140%">
+        <feDropShadow dx="0" dy="12" stdDeviation="10" flood-color="#000" flood-opacity="0.22" />
+      </filter>
+      <linearGradient id="bodyGrad" x1="0" x2="1" y1="0" y2="1">
+        <stop offset="0" stop-color="${mint}" stop-opacity="0.95" />
+        <stop offset="1" stop-color="${primary}" stop-opacity="0.82" />
+      </linearGradient>
+    </defs>
+    <g opacity="0.36" stroke="currentColor" fill="none" stroke-width="2" stroke-dasharray="8 10">
+      <path d="M58 120 H264" />
+      <path d="M160 34 V214" />
+      <circle cx="160" cy="120" r="78" />
+    </g>
+    <g filter="url(#softShadow)">
+      ${bodyShape}
+      <circle cx="132" cy="110" r="16" fill="#111426" />
+      <path d="M128 110 l4 -8 l4 8 l-4 8z" fill="${blue}" />
+      <path d="M184 100 l24 24 M208 100 l-24 24" stroke="#111426" stroke-width="10" stroke-linecap="round" />
+      <path d="M148 148 q12 12 26 0" fill="none" stroke="#111426" stroke-width="7" stroke-linecap="round" />
+      <g transform="translate(206 146)">${symbol}</g>
+      <path d="M94 156 q-25 25 -2 44" fill="none" stroke="${pink}" stroke-width="12" stroke-linecap="round" opacity="0.9" />
+      <path d="M224 156 q25 25 2 44" fill="none" stroke="${pink}" stroke-width="12" stroke-linecap="round" opacity="0.9" />
+    </g>
   `;
-  $('#saveCardBtn').addEventListener('click', saveCurrentCard);
-  $('#copyCardBtn').addEventListener('click', copyCardText);
-  $('#newVersionBtn').addEventListener('click', () => { generateCard(); openTab('card'); });
-  $$('.status-btn').forEach(btn => btn.classList.toggle('is-active', btn.dataset.status === currentCard.status));
-  $('#redrawNote').value = currentCard.note || '';
 }
 
-function infoCard(title, items, full = false, listTag = 'ul') {
-  const safeItems = items.filter(Boolean).map(item => `<li>${escapeHTML(item)}</li>`).join('');
-  return `<section class="info-card ${full ? 'full' : ''}"><h3>${escapeHTML(title)}</h3><${listTag}>${safeItems}</${listTag}></section>`;
+function bodyShapeFor(lane) {
+  const fill = 'url(#bodyGrad)';
+  const stroke = 'rgba(255,255,255,.62)';
+  const shapesByLane = {
+    object: `<path d="M92 64 q72 -28 139 2 q16 8 14 30 q-5 63 -18 95 q-10 25 -38 22 l-83 -10 q-24 -3 -24 -28 l2 -82 q1 -21 8 -29z" fill="${fill}" stroke="${stroke}" stroke-width="4" />`,
+    food: `<path d="M94 78 q66 -38 130 0 q22 13 10 39 q-5 12 -2 39 q4 35 -30 42 q-40 8 -84 -1 q-35 -7 -30 -42 q3 -27 -4 -41 q-12 -24 10 -36z" fill="${fill}" stroke="${stroke}" stroke-width="4" />`,
+    symbol: `<path d="M158 55 q35 20 54 58 q16 34 6 68 q-7 23 -31 23 h-50 q-25 0 -34 -23 q-13 -35 5 -72 q17 -35 50 -54z" fill="${fill}" stroke="${stroke}" stroke-width="4" />`,
+    ghost: `<path d="M94 90 q9 -47 68 -48 q61 -1 70 48 q9 55 -4 112 q-14 -15 -28 0 q-15 -17 -31 1 q-15 -17 -31 0 q-14 -16 -31 -1 q-20 -55 -13 -112z" fill="${fill}" stroke="${stroke}" stroke-width="4" />`,
+    stationery: `<rect x="98" y="58" width="128" height="142" rx="26" fill="${fill}" stroke="${stroke}" stroke-width="4" transform="rotate(-4 160 130)" />`,
+    weather: `<path d="M96 137 q-22 -43 24 -55 q16 -45 60 -24 q38 -12 54 22 q41 4 33 43 q-8 38 -55 35 h-84 q-23 0 -32 -21z" fill="${fill}" stroke="${stroke}" stroke-width="4" />`,
+    plant: `<path d="M162 48 q39 37 41 78 q54 10 33 51 q-20 39 -75 32 q-54 7 -75 -32 q-21 -41 33 -51 q3 -41 43 -78z" fill="${fill}" stroke="${stroke}" stroke-width="4" />`,
+    charm: `<path d="M160 50 l75 75 l-75 86 l-75 -86z" fill="${fill}" stroke="${stroke}" stroke-width="4" />`
+  };
+  return shapesByLane[lane] || shapesByLane.object;
 }
 
-function renderPractice() {
-  const custom = currentCard?.drills || [];
-  const all = [...custom, ...drills].slice(0, 8);
-  $('#practiceList').innerHTML = all.map(drill => `<article class="drill-card"><h3>${escapeHTML(drill.title)}</h3><p>${escapeHTML(drill.text)}</p></article>`).join('');
+function symbolFor(extra = 'star') {
+  const fill = getComputedStyle(document.documentElement).getPropertyValue('--primary-2').trim() || '#ffb36e';
+  if (extra.includes('heart')) return `<path d="M0 10 q0 -16 14 -10 q14 -6 14 10 q0 14 -14 24 q-14 -10 -14 -24z" fill="${fill}" />`;
+  if (extra.includes('key')) return `<circle cx="8" cy="8" r="7" fill="none" stroke="${fill}" stroke-width="5"/><path d="M15 15 L34 34 M27 27 h9 M24 31 h8" stroke="${fill}" stroke-width="5" stroke-linecap="round" />`;
+  if (extra.includes('moon')) return `<path d="M22 0 q-17 14 -8 35 q-18 -6 -18 -21 q0 -18 26 -14z" fill="${fill}" />`;
+  if (extra.includes('question')) return `<text x="0" y="32" fill="${fill}" font-size="42" font-weight="900">?</text>`;
+  if (extra.includes('sign') || extra.includes('note') || extra.includes('envelope')) return `<rect x="-2" y="0" width="42" height="30" rx="6" fill="${fill}"/><path d="M2 5 l17 13 l17 -13" fill="none" stroke="#20151a" stroke-width="3"/>`;
+  return `<path d="M16 0 l5 12 l13 3 l-10 8 l2 13 l-10 -7 l-11 7 l3 -13 l-10 -8 l13 -3z" fill="${fill}" />`;
 }
 
-function updateStatus(status) {
-  if (!currentCard) return;
-  currentCard.status = status;
-  writeJSON(STORAGE_KEYS.current, currentCard);
-  renderCard();
+function showToast(message) {
+  const toast = $('#toast');
+  toast.textContent = message;
+  toast.classList.add('show');
+  clearTimeout(showToast.timer);
+  showToast.timer = setTimeout(() => toast.classList.remove('show'), 2300);
 }
 
-function saveNote() {
-  if (!currentCard) return;
-  currentCard.note = $('#redrawNote').value.trim();
-  writeJSON(STORAGE_KEYS.current, currentCard);
-  renderCard();
-  openTab('card');
-}
-
-function saveCurrentCard() {
-  if (!currentCard) return;
-  const exists = toybox.some(card => card.id === currentCard.id);
-  toybox = exists ? toybox.map(card => card.id === currentCard.id ? currentCard : card) : [currentCard, ...toybox];
-  writeJSON(STORAGE_KEYS.toybox, toybox);
-  renderToybox();
-  sparkleButton($('#saveCardBtn'));
-}
-
-function renderToybox() {
-  const list = $('#toyboxList');
-  if (!toybox.length) {
-    list.innerHTML = `<div class="empty-state"><img src="ICON-192x192.png" alt="" /><h2>Your Toybox is empty.</h2><p>Save a mascot card and it will appear here.</p></div>`;
+function saveCurrent() {
+  if (!currentCard) {
+    showToast('Roll an Oddlet first. Empty jars make no noise.');
     return;
   }
-  list.innerHTML = toybox.map(card => `
-    <article class="saved-card">
-      <p class="eyebrow">${escapeHTML(card.status || 'saved')}</p>
-      <h3>${escapeHTML(card.name)}</h3>
-      <p>${escapeHTML(card.subject)} • ${escapeHTML(card.mood)} • ${escapeHTML(card.material)}</p>
-      <p class="mini">${new Date(card.createdAt).toLocaleString()}</p>
-      <div class="saved-actions">
-        <button class="ghost-btn" data-load="${escapeHTML(card.id)}" type="button">Open</button>
-        <button class="danger-btn" data-delete="${escapeHTML(card.id)}" type="button">Delete</button>
+  const stash = getStash();
+  stash.unshift({ ...currentCard, status: 'saved' });
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(stash.slice(0, 80)));
+  renderStash();
+  showToast('Saved to Sketch Stash.');
+}
+
+function getStash() {
+  try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]'); } catch { return []; }
+}
+
+function renderStash() {
+  const stash = getStash();
+  const list = $('#stashList');
+  if (!stash.length) {
+    list.innerHTML = '<div class="empty">No saved Oddlets yet. Roll one tiny creature and trap it lovingly in the jar.</div>';
+    return;
+  }
+  list.innerHTML = stash.map((item) => `
+    <article class="stash-card" data-id="${item.id}">
+      <div>
+        <h3>${escapeHtml(item.title)}</h3>
+        <p>${escapeHtml(item.idea)}</p>
+      </div>
+      <p><strong>Odd thing:</strong> ${escapeHtml(item.oddThing)}</p>
+      <div class="stash-actions">
+        <button class="ghost-btn" data-action="load">Load</button>
+        <button class="ghost-btn" data-action="drawn">${item.status === 'drawn' ? 'Drawn ✓' : 'Mark drawn'}</button>
+        <button class="ghost-btn" data-action="favorite">${item.favorite ? 'Favorite ★' : 'Favorite'}</button>
+        <button class="ghost-btn danger" data-action="delete">Delete</button>
       </div>
     </article>
   `).join('');
-  $$('[data-load]', list).forEach(btn => btn.addEventListener('click', () => loadCard(btn.dataset.load)));
-  $$('[data-delete]', list).forEach(btn => btn.addEventListener('click', () => deleteCard(btn.dataset.delete)));
 }
 
-function loadCard(id) {
-  const found = toybox.find(card => card.id === id);
-  if (!found) return;
-  currentCard = found;
-  writeJSON(STORAGE_KEYS.current, currentCard);
-  renderCard();
-  renderPractice();
-  openTab('card');
+function escapeHtml(text) {
+  return String(text).replace(/[&<>'"]/g, (char) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[char]));
 }
 
-function deleteCard(id) {
-  toybox = toybox.filter(card => card.id !== id);
-  writeJSON(STORAGE_KEYS.toybox, toybox);
-  renderToybox();
+function handleStashClick(event) {
+  const button = event.target.closest('button[data-action]');
+  const card = event.target.closest('.stash-card');
+  if (!button || !card) return;
+  const id = card.dataset.id;
+  let stash = getStash();
+  const item = stash.find((entry) => entry.id === id);
+  if (!item) return;
+
+  const action = button.dataset.action;
+  if (action === 'load') {
+    currentCard = { ...item };
+    renderCard();
+    renderBlueprint(currentCard);
+    switchTab('card');
+    showToast('Loaded. The little creature has returned.');
+  }
+  if (action === 'drawn') {
+    item.status = item.status === 'drawn' ? 'saved' : 'drawn';
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(stash));
+    renderStash();
+  }
+  if (action === 'favorite') {
+    item.favorite = !item.favorite;
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(stash));
+    renderStash();
+  }
+  if (action === 'delete') {
+    stash = stash.filter((entry) => entry.id !== id);
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(stash));
+    renderStash();
+    showToast('Released back into the weird.');
+  }
 }
 
-function clearToybox() {
-  if (!toybox.length) return;
-  const ok = confirm('Clear every saved mascot card from this browser?');
-  if (!ok) return;
-  toybox = [];
-  writeJSON(STORAGE_KEYS.toybox, toybox);
-  renderToybox();
+async function copyCard() {
+  if (!currentCard) return showToast('Roll first, copy later. The order matters to the jar.');
+  const text = formatCard(currentCard);
+  await navigator.clipboard.writeText(text);
+  showToast('Copied draw card.');
 }
 
-function exportToybox() {
-  const blob = new Blob([JSON.stringify(toybox, null, 2)], { type: 'application/json' });
+function formatCard(card) {
+  return `${card.title}\n\n${card.idea}\n\nOdd little thing: ${card.oddThing}\n\nBuild it from:\n- ${card.build.join('\n- ')}\n\nPose + expression: ${card.poseCue}\n\nBeginner guardrail: ${card.guardrail}\n\nRedraw spin: ${choice(redrawSpins).text}`;
+}
+
+function exportStash() {
+  const blob = new Blob([JSON.stringify(getStash(), null, 2)], { type: 'application/json' });
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
   a.href = url;
-  a.download = `shape-drew-toybox-${new Date().toISOString().slice(0,10)}.json`;
+  a.download = `oddlet-stash-${new Date().toISOString().slice(0,10)}.json`;
   a.click();
   URL.revokeObjectURL(url);
 }
 
-function copyCardText() {
-  if (!currentCard) return;
-  const b = currentCard.blueprint;
-  const text = `${currentCard.name}\nSubject: ${currentCard.subject}\nMood: ${currentCard.mood}\nMaterial: ${currentCard.material}\nPurpose: ${currentCard.purpose}\n\nCore shape: ${b.coreShape}\nFace map: ${b.faceMap}\nSilhouette: ${b.silhouetteRule}\nDanger zone: ${b.dangerZone}\nPolish: ${b.polish}\n\nDraw path:\n${b.steps.map((s, i) => `${i + 1}. ${s}`).join('\n')}`;
-  navigator.clipboard?.writeText(text).then(() => sparkleButton($('#copyCardBtn')));
+function clearStash() {
+  if (!confirm('Clear the whole Sketch Stash on this device?')) return;
+  localStorage.removeItem(STORAGE_KEY);
+  renderStash();
+  showToast('Stash cleared. A fresh drawer appears.');
 }
 
-async function askCoach() {
-  const key = $('#openrouterKey').value.trim();
-  const model = $('#openrouterModel').value.trim();
-  const userPrompt = $('#coachPrompt').value.trim();
-  localStorage.setItem(STORAGE_KEYS.openrouterKey, key);
+function renderSpins() {
+  $('#spinGrid').innerHTML = redrawSpins.map((spin, index) => `
+    <button class="spin-card" type="button" data-index="${index}">
+      <strong>${spin.title}</strong>
+      <span>${spin.text}</span>
+    </button>
+  `).join('');
+}
 
-  if (!key) return setCoach('Add your OpenRouter API key first. It stays in this browser only.');
-  if (!model) return setCoach('Choose an OpenRouter model first. The model field is intentionally blank so you control it.');
-  if (!userPrompt) return setCoach('Tell the coach what you want help with. Try asking for readability, silhouette, Procreate layers, or a redraw plan.');
+function handleSpin(event) {
+  const button = event.target.closest('button[data-index]');
+  if (!button) return;
+  const spin = redrawSpins[Number(button.dataset.index)];
+  $('#spinTitle').textContent = spin.title;
+  $('#spinText').textContent = currentCard ? `${spin.text} Use it on: ${currentCard.title}.` : spin.text;
+  showToast('Redraw spin loaded. Same creature, new tiny headache.');
+}
 
-  setCoach('Thinking through the mascot bones...');
-  const context = currentCard ? `Current card: ${JSON.stringify(currentCard, null, 2)}` : 'No current mascot card.';
+function switchTab(tabId) {
+  $$('.tab').forEach((button) => button.classList.toggle('active', button.dataset.tab === tabId));
+  $$('.view').forEach((view) => view.classList.toggle('active', view.id === tabId));
+}
+
+function saveSettings() {
+  const settings = { apiKey: $('#apiKey').value.trim(), modelName: $('#modelName').value.trim(), theme: document.body.classList.contains('light') ? 'light' : 'dark' };
+  localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings));
+  showToast('Settings saved on this device.');
+}
+
+function loadSettings() {
+  try {
+    const settings = JSON.parse(localStorage.getItem(SETTINGS_KEY) || '{}');
+    if (settings.apiKey) $('#apiKey').value = settings.apiKey;
+    if (settings.modelName) $('#modelName').value = settings.modelName;
+    if (settings.theme === 'light') document.body.classList.add('light');
+  } catch {}
+  updateThemeButton();
+}
+
+function updateThemeButton() {
+  $('#themeBtn').textContent = document.body.classList.contains('light') ? 'Night desk' : 'Peach desk';
+}
+
+async function runAI() {
+  if (!currentCard) return showToast('Roll a card first so the AI has a creature to bother.');
+  const apiKey = $('#apiKey').value.trim();
+  const model = $('#modelName').value.trim();
+  if (!apiKey) return showToast('Add your OpenRouter key first.');
+  if (!model) return showToast('Add the model you want to use. I left it empty on purpose.');
+
+  $('#aiOutput').textContent = 'Asking the tiny oracle...';
+  const prompt = `${$('#aiPrompt').value.trim()}\n\nCurrent card:\n${formatCard(currentCard)}`;
+
   try {
     const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
       method: 'POST',
       headers: {
+        'Authorization': `Bearer ${apiKey}`,
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${key}`,
         'HTTP-Referer': location.origin,
-        'X-Title': 'SHAPE.drew'
+        'X-Title': 'Oddlet PWA'
       },
       body: JSON.stringify({
         model,
         messages: [
-          { role: 'system', content: 'You are a concise, beginner-friendly mascot design coach. Give practical drawing advice focused on shape language, silhouette readability, expression, Procreate layers, and simple redraw decisions. Avoid vague praise. Keep it useful and playful.' },
-          { role: 'user', content: `${context}\n\nUser request: ${userPrompt}` }
-        ]
+          { role: 'system', content: 'You generate short, beginner-friendly mascot drawing prompts. Keep ideas simple, funny, weird, and drawable. Avoid complex scenes and avoid advanced rendering.' },
+          { role: 'user', content: prompt }
+        ],
+        temperature: 0.9
       })
     });
     const data = await response.json();
-    if (!response.ok) throw new Error(data?.error?.message || 'OpenRouter request failed.');
-    setCoach(data?.choices?.[0]?.message?.content || 'No response returned. Try another model or request.');
+    if (!response.ok) throw new Error(data?.error?.message || 'OpenRouter request failed');
+    $('#aiOutput').textContent = data?.choices?.[0]?.message?.content || 'No text returned.';
   } catch (error) {
-    setCoach(`OpenRouter error: ${error.message}`);
+    $('#aiOutput').textContent = `Error: ${error.message}`;
   }
 }
 
-function setCoach(text) { $('#coachOutput').textContent = text; }
+function initInstallPrompt() {
+  window.addEventListener('beforeinstallprompt', (event) => {
+    event.preventDefault();
+    deferredPrompt = event;
+    $('#installBtn').hidden = false;
+  });
+  $('#installBtn').addEventListener('click', async () => {
+    if (!deferredPrompt) return;
+    deferredPrompt.prompt();
+    await deferredPrompt.userChoice;
+    deferredPrompt = null;
+    $('#installBtn').hidden = true;
+  });
+}
 
-function sparkleButton(btn) {
-  if (!btn) return;
-  const old = btn.textContent;
-  btn.textContent = 'Saved ✦';
-  setTimeout(() => { btn.textContent = old; }, 900);
+function initServiceWorker() {
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => navigator.serviceWorker.register('./service-worker.js'));
+  }
+}
+
+function initEvents() {
+  $$('.tab').forEach((button) => button.addEventListener('click', () => switchTab(button.dataset.tab)));
+  $('#rollBtn').addEventListener('click', () => rollCard());
+  $('#surpriseBtn').addEventListener('click', () => rollCard({ fullSurprise: true }));
+  $('#simplerBtn').addEventListener('click', () => rollCard({ mutate: 'simpler' }));
+  $('#weirderBtn').addEventListener('click', () => rollCard({ mutate: 'weirder' }));
+  $('#saveBtn').addEventListener('click', saveCurrent);
+  $('#copyBtn').addEventListener('click', copyCard);
+  $('#exportBtn').addEventListener('click', exportStash);
+  $('#clearBtn').addEventListener('click', clearStash);
+  $('#stashList').addEventListener('click', handleStashClick);
+  $('#spinGrid').addEventListener('click', handleSpin);
+  $('#aiBtn').addEventListener('click', runAI);
+  $('#saveSettingsBtn').addEventListener('click', saveSettings);
+  $('#biasSwitch').addEventListener('click', () => {
+    biasOn = !biasOn;
+    $('#biasSwitch').classList.toggle('on', biasOn);
+    $('#biasSwitch').setAttribute('aria-pressed', String(biasOn));
+    showToast(biasOn ? 'Notebook oddball bias on.' : 'Notebook oddball bias off. The drawer behaves, slightly.');
+  });
+  $('#themeBtn').addEventListener('click', () => {
+    document.body.classList.toggle('light');
+    updateThemeButton();
+    saveSettings();
+  });
+}
+
+function init() {
+  fillSelect('#laneSelect', lanes);
+  fillSelect('#moodSelect', moods);
+  fillSelect('#sparkSelect', sparks);
+  fillSelect('#shapeSelect', shapes);
+  loadSettings();
+  initEvents();
+  initInstallPrompt();
+  initServiceWorker();
+  renderSpins();
+  renderStash();
+  rollCard({ fullSurprise: true });
 }
 
 init();

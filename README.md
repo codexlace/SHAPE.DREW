@@ -1,36 +1,41 @@
-# Character Signal
+# Oddlet
 
-A single-page static PWA for generating character concepts, emotional archetypes, drawable blueprints, Procreate-friendly layer plans, and optional OpenRouter AI expansions.
+Oddlet is a static, GitHub Pages-ready PWA for rolling simple weird mascot ideas to draw.
+
+It is intentionally not a texture lab, not a full drawing school, and not an image generator. It gives you a mascot-object, one tiny spark, a beginner-safe build path, and redraw spins so drawing stays playful.
 
 ## Files
 
-- `index.html` — complete app
-- `manifest.json` — PWA manifest
-- `service-worker.js` — offline cache
-- `ICON-512x512.png` — app icon
-- `ICON-192x192.png` — app icon
-- `character-signal-logo.png` — header/logo image
+Upload all files to the root of your GitHub Pages repository:
 
-## OpenRouter
+- `index.html`
+- `styles.css`
+- `app.js`
+- `manifest.json`
+- `service-worker.js`
+- `ICON-192x192.png`
+- `ICON-512x512.png`
 
-The app intentionally leaves the model empty in the code:
+## Features
 
-```js
-const OPENROUTER_MODEL = "";
-```
-
-You can add the model directly in `index.html`, or use the app's Settings tab to store your API key and model locally on your device.
-
-Do not commit your private API key into a public GitHub repository.
+- Roll mascot/object ideas with varied spark types
+- Notebook oddball bias for signs, symbols, X eyes, object creatures, and sketchy weirdness
+- Simple generated blueprint preview
+- Beginner guardrails: body first, face second, odd thing third
+- Redraw spins for practice without boredom
+- Local Sketch Stash with drawn/favorite tracking
+- JSON export
+- Light/dark desk mode
+- Optional OpenRouter text remix with a blank model field for you to choose yourself
 
 ## Deploy
 
-Upload all files to GitHub Pages, Netlify, Cloudflare Pages, or Vercel as a static site.
+1. Create or open a GitHub repository.
+2. Upload these files into the root folder.
+3. Go to Settings → Pages.
+4. Deploy from the main branch root.
+5. Open your Pages URL.
 
+## Notes
 
-## V2 additions
-
-- Service worker cache bumped to `character-signal-v3-repair-practice`.
-- Added Repair Cards for your real drawing style: weird mascots, object pals, paper spirits, and icon creatures.
-- Added Practice Deck with short drills and seen tracking.
-- Added beginner-friendly redraw guidance that protects the weirdness while improving structure.
+All saved cards are stored locally in the browser with `localStorage`. OpenRouter settings are also stored locally if you choose to save them.

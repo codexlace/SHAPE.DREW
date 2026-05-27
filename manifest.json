@@ -1,11 +1,11 @@
 {
-  "name": "Character Signal",
-  "short_name": "Signal",
-  "description": "A paper-doll oracle PWA for building character concepts, visual blueprints, and Procreate-friendly drawing plans.",
-  "start_url": "./",
+  "name": "Oddlet",
+  "short_name": "Oddlet",
+  "description": "A tiny mascot prompt arcade for drawing simple weird object-creatures with one drawable spark.",
+  "start_url": "./index.html",
   "display": "standalone",
-  "background_color": "#f9ead5",
-  "theme_color": "#f6d6b8",
+  "background_color": "#151923",
+  "theme_color": "#171D2A",
   "orientation": "portrait-primary",
   "icons": [
     {
