@@ -25,6 +25,7 @@
       </div>
       <div class="hero-actions">
         <button class="ghost-btn" id="themeBtn" type="button">Night desk</button>
+        <button class="ghost-btn" id="resetAppBtn" type="button">Reset app</button>
         <button class="ghost-btn" id="installBtn" type="button" hidden>Install</button>
       </div>
     </header>
@@ -49,6 +50,11 @@
               <label>
                 Mascot lane
                 <select id="laneSelect"></select>
+              </label>
+              <label>
+                Oddlet Species
+                <select id="speciesSelect"></select>
+                <span class="select-hint" id="speciesHint">Choose a specific Oddlet body, or let the drawer decide.</span>
               </label>
               <label>
                 Mood
@@ -220,6 +226,10 @@
               <div class="blueprint-item mood-read-item">
                 <span>Mood read</span>
                 <p id="blueMoodRead">The face, tilt, and prop placement reveal the mood.</p>
+              </div>
+              <div class="blueprint-item species-note-item">
+                <span>Species body note</span>
+                <p id="blueSpeciesBodyNote">Start with the largest simple shape first.</p>
               </div>
             </div>
           </section>

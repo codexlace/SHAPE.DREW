@@ -109,3 +109,38 @@ Added 15 new moods and upgraded every mood with its own drawing logic:
 - Moodprint label inside the SVG blueprint preview
 
 New moods include tiny panic, smug, melancholy-cute, feral-cute, too official, secretly guilty, delighted goblin, dramatically offended, cosmic blank, clingy, overprepared, softly haunted, sneaky, starstruck, and mildly cursed.
+
+
+## V1.8 Species Drawer
+
+Adds a second pointed dropdown called **Oddlet Species**.
+
+Flow:
+Mascot lane → Oddlet Species → Mood → Spark type → Shape limit
+
+The species dropdown updates based on the chosen lane, with 20 specific choices per lane and a small instructional hint for each lane.
+
+
+## V1.9 Species Blueprint Engine
+
+Adds species-specific blueprint logic.
+
+Now:
+- Lane chooses broad blueprint grammar
+- Oddlet Species chooses actual SVG body shape
+- Mood adjusts face/expression/tilt
+- Spark adjusts the prop and weird marker placement
+
+Also adds a **Reset app** button in the header to clear local storage and old caches when updating builds.
+Service worker cache updated to **v1.9.0**.
+
+
+## V2.0 Full Species Body Atlas
+
+Adds the full species body atlas:
+- 27 new species blueprint entries
+- 27 new SVG body renderers
+- new blueprint zone coordinates
+- species body note in the Blueprint Breakdown
+- safer fallback matching for new species/body shapes
+- service worker cache bumped to oddlet-v2-0-0

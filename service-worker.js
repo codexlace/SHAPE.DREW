@@ -1,4 +1,4 @@
-const CACHE_NAME = 'oddlet-cache-v1.7.0';
+const CACHE_NAME = 'oddlet-v2-0-0';
 const ASSETS = [
   './',
   './index.html',

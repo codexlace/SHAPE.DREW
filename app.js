@@ -94,6 +94,199 @@ const energyRules = {
 
 const defaultFavoriteSeeds = ['X eye', 'question mark', 'tiny sign', 'paint palette', 'ghost', 'brush', 'heart', 'star', 'living detail', 'wrong scale'];
 
+
+const speciesByLane = {
+  object: [
+    'button gremlin',
+    'teacup goblin',
+    'melting candle creature',
+    'tiny mailbox oddlet',
+    'sock with a secret',
+    'bottle cap goblin',
+    'keyhole creature',
+    'pocket mirror imp',
+    'paper bag ghostling',
+    'spoon sprite',
+    'wobbly clock gremlin',
+    'tiny door creature',
+    'ribbon spool oddlet',
+    'cracked mug mascot',
+    'lost toy block',
+    'jar lid creature',
+    'tiny lamp gremlin',
+    'coin purse creature',
+    'safety pin imp',
+    'mini suitcase oddlet'
+  ],
+  food: [
+    'toast slice creature',
+    'lemon wedge goblin',
+    'mushroom cap oddlet',
+    'jellybean blob',
+    'dumpling creature',
+    'cupcake liner imp',
+    'blueberry sprite',
+    'marshmallow ghostlet',
+    'noodle cup mascot',
+    'tiny pickle gremlin',
+    'pancake stack creature',
+    'strawberry charm',
+    'croissant goblin',
+    'cheese cube oddlet',
+    'cinnamon roll creature',
+    'cookie crumb sprite',
+    'soup dumpling blob',
+    'waffle square mascot',
+    'gummy bear relic',
+    'rice ball creature'
+  ],
+  symbol: [
+    'question mark mascot',
+    'star sticker creature',
+    'map pin gremlin',
+    'X mark oddlet',
+    'arrow sign creature',
+    'tiny moon symbol',
+    'warning triangle goblin',
+    'sparkle sprite',
+    'heart stamp mascot',
+    'speech bubble creature',
+    'exclamation point oddlet',
+    'spiral mark familiar',
+    'asterisk creature',
+    'checkmark gremlin',
+    'broken circle mascot',
+    'tiny crown symbol',
+    'cloud icon creature',
+    'plus sign oddlet',
+    'eye symbol familiar',
+    'label tag creature'
+  ],
+  ghost: [
+    'sheet ghost oddlet',
+    'dust bunny creature',
+    'fog puff familiar',
+    'pillow goblin',
+    'blanket creature',
+    'tiny shadow mascot',
+    'mask blob',
+    'soft cryptid',
+    'worry puff',
+    'moonlit blob',
+    'closet fluff creature',
+    'lint monster',
+    'sleepy haunt',
+    'sock ghost',
+    'curtain spirit',
+    'under-bed puff',
+    'tiny banshee bean',
+    'mothball ghostlet',
+    'cloudy gremlin',
+    'shy monster blob'
+  ],
+  stationery: [
+    'pencil stub creature',
+    'eraser goblin',
+    'notebook page oddlet',
+    'sticky note mascot',
+    'paint brush gremlin',
+    'crayon creature',
+    'ink bottle familiar',
+    'paperclip sprite',
+    'ruler oddlet',
+    'tape roll creature',
+    'marker cap goblin',
+    'binder clip mascot',
+    'highlighter imp',
+    'glue stick creature',
+    'scissor charm',
+    'index card oddlet',
+    'stamp pad goblin',
+    'pushpin creature',
+    'folder tab mascot',
+    'washi tape gremlin'
+  ],
+  weather: [
+    'rain cloud blob',
+    'tiny storm creature',
+    'moon puddle oddlet',
+    'sun drop mascot',
+    'fog bean',
+    'snow puff creature',
+    'wind swirl sprite',
+    'raindrop gremlin',
+    'misty star familiar',
+    'thunder button',
+    'hail pebble creature',
+    'rainbow shard oddlet',
+    'cloud sock goblin',
+    'lightning noodle',
+    'dew drop mascot',
+    'tornado curl creature',
+    'frost patch oddlet',
+    'weather vane imp',
+    'umbrella drip creature',
+    'storm eye blob'
+  ],
+  plant: [
+    'tiny sprout creature',
+    'cactus nub goblin',
+    'leaf pile oddlet',
+    'flower bud mascot',
+    'acorn creature',
+    'moss blob',
+    'tiny fern familiar',
+    'seed packet oddlet',
+    'mushroom cap sprout',
+    'berry twig creature',
+    'potted bulb goblin',
+    'daisy face mascot',
+    'vine curl sprite',
+    'clover charm',
+    'thorny bean creature',
+    'petal puff oddlet',
+    'root baby goblin',
+    'succulent nub',
+    'weeping leaf creature',
+    'seedling ghost'
+  ],
+  charm: [
+    'lucky charm creature',
+    'tiny bell oddlet',
+    'ribbon charm mascot',
+    'locket goblin',
+    'glass bead creature',
+    'mini crown oddlet',
+    'toy mask familiar',
+    'pocket talisman',
+    'button badge creature',
+    'little relic',
+    'keychain ghostlet',
+    'friendship bead mascot',
+    'tiny pendant sprite',
+    'moon charm creature',
+    'heart locket oddlet',
+    'bottle charm goblin',
+    'wishbone mascot',
+    'tiny tag familiar',
+    'glow bead creature',
+    'secret amulet oddlet'
+  ]
+};
+
+const speciesHints = {
+  surprise: 'Choose a specific Oddlet body, or let the drawer decide.',
+  object: 'Object gremlins work best when the object shape reads before the face.',
+  food: 'Snack creatures need one clear food silhouette before toppings or limbs.',
+  symbol: 'Symbol creatures should stay readable as icons first, characters second.',
+  ghost: 'Soft monsters work best as one big blob, puff, sheet, or shadow shape.',
+  stationery: 'Stationery oddballs need the tool shape to stay clear under the personality.',
+  weather: 'Weather blobs like soft edges, floating details, and one clear motion cue.',
+  plant: 'Plant sprouts work best when leaves are grouped into one simple mass.',
+  charm: 'Tiny charms should feel icon-like, small, and symbolic.'
+};
+
+
 const mascotDeck = {
   object: ['paint palette', 'tiny mailbox', 'teacup', 'button', 'sock', 'candle', 'mirror', 'key', 'paper bag', 'bottle cap', 'little clock', 'spoon', 'tiny door'],
   food: ['toast slice', 'lemon wedge', 'mushroom', 'jellybean', 'strawberry', 'pancake stack', 'dumpling', 'cupcake liner', 'blueberry', 'marshmallow', 'noodle cup', 'tiny pickle'],
@@ -137,6 +330,595 @@ const packDecks = {
     sparks: ['fakeImportance', 'tinyJob', 'microProblem', 'wrongScale']
   }
 };
+
+
+const speciesBlueprints = {
+  'button gremlin': {
+    bodyShape: 'circleButton',
+    bodyLabel: 'round button body',
+    faceZone: 'lowerCenter',
+    propAnchor: 'topRight',
+    weirdZone: 'buttonHole',
+    bodyHint: 'Start with a soft circle, then add two or four button holes.',
+    avoid: ['extra buttons', 'shirt background', 'too many holes', 'second face']
+  },
+  'teacup goblin': {
+    bodyShape: 'cup',
+    bodyLabel: 'small cup body',
+    faceZone: 'frontCenter',
+    propAnchor: 'handleSide',
+    weirdZone: 'rim',
+    bodyHint: 'Start with a squat cup shape, then add one simple handle.',
+    avoid: ['saucer scene', 'steam overload', 'tiny spoon clutter', 'realistic porcelain detail']
+  },
+  'melting candle creature': {
+    bodyShape: 'candle',
+    bodyLabel: 'soft candle cylinder',
+    faceZone: 'middleLow',
+    propAnchor: 'topCenter',
+    weirdZone: 'waxDrip',
+    bodyHint: 'Start with a rounded vertical rectangle, then add one wax drip.',
+    avoid: ['many flames', 'realistic fire', 'background altar', 'too many drips']
+  },
+  'toast slice creature': {
+    bodyShape: 'toast',
+    bodyLabel: 'rounded toast slice',
+    faceZone: 'lowerCenter',
+    propAnchor: 'topLeft',
+    weirdZone: 'crustCorner',
+    bodyHint: 'Start with a square bottom and rounded bread top.',
+    avoid: ['plate', 'full breakfast', 'too many toppings', 'extra arms']
+  },
+  'lemon wedge goblin': {
+    bodyShape: 'wedge',
+    bodyLabel: 'lemon wedge triangle',
+    faceZone: 'centerLow',
+    propAnchor: 'topEdge',
+    weirdZone: 'seedSpot',
+    bodyHint: 'Start with a rounded triangle wedge, then add one seed or shine mark.',
+    avoid: ['too many seeds', 'realistic pulp', 'knife', 'drink scene']
+  },
+  'waffle square mascot': {
+    bodyShape: 'waffle',
+    bodyLabel: 'rounded waffle square',
+    faceZone: 'lowerCenter',
+    propAnchor: 'topRight',
+    weirdZone: 'gridCell',
+    bodyHint: 'Start with a rounded square, then add only 2–4 soft waffle grid lines.',
+    avoid: ['too many grid lines', 'plate', 'syrup puddle', 'fork']
+  },
+  'question mark mascot': {
+    bodyShape: 'questionMark',
+    bodyLabel: 'big question mark silhouette',
+    faceZone: 'lowerCurve',
+    propAnchor: 'upperCurve',
+    weirdZone: 'dot',
+    bodyHint: 'Start with a big question mark shape. Keep the symbol readable before adding the face.',
+    avoid: ['extra symbols', 'busy face', 'tiny unreadable marks', 'background text']
+  },
+  'star sticker creature': {
+    bodyShape: 'star',
+    bodyLabel: 'soft star sticker',
+    faceZone: 'center',
+    propAnchor: 'topPoint',
+    weirdZone: 'onePoint',
+    bodyHint: 'Start with a chunky five-point star, then soften the points.',
+    avoid: ['too many sparkles', 'thin sharp points', 'second star', 'galaxy background']
+  },
+  'sheet ghost oddlet': {
+    bodyShape: 'sheetGhost',
+    bodyLabel: 'soft sheet ghost',
+    faceZone: 'middleLow',
+    propAnchor: 'sideFloat',
+    weirdZone: 'lowerEdge',
+    bodyHint: 'Start with a rounded sheet shape and one wavy bottom edge.',
+    avoid: ['too many folds', 'haunted house', 'complex hands', 'extra ghost']
+  },
+  'dust bunny creature': {
+    bodyShape: 'fluffBlob',
+    bodyLabel: 'fluffy dust bunny blob',
+    faceZone: 'lowerCenter',
+    propAnchor: 'topLeft',
+    weirdZone: 'furTuft',
+    bodyHint: 'Start with one fuzzy oval. Add only a few tufts.',
+    avoid: ['too many spikes', 'realistic fur', 'background floor', 'extra ears if not needed']
+  },
+  'pencil stub creature': {
+    bodyShape: 'pencilStub',
+    bodyLabel: 'short pencil body',
+    faceZone: 'middle',
+    propAnchor: 'eraserEnd',
+    weirdZone: 'woodTip',
+    bodyHint: 'Start with a short rectangle, then add a tiny point and eraser end.',
+    avoid: ['full pencil length', 'desk background', 'too many labels', 'extra tools']
+  },
+  'sticky note mascot': {
+    bodyShape: 'stickyNote',
+    bodyLabel: 'square sticky note',
+    faceZone: 'centerLow',
+    propAnchor: 'foldedCorner',
+    weirdZone: 'cornerCurl',
+    bodyHint: 'Start with a soft square, then fold one corner.',
+    avoid: ['too much writing', 'many notes', 'office scene', 'tiny unreadable text']
+  },
+  'rain cloud blob': {
+    bodyShape: 'cloud',
+    bodyLabel: 'puffy cloud body',
+    faceZone: 'lowerCenter',
+    propAnchor: 'underCloud',
+    weirdZone: 'raindrop',
+    bodyHint: 'Start with three connected puffs. Keep the bottom simple.',
+    avoid: ['too many raindrops', 'full sky', 'lightning plus rainbow plus sun', 'busy texture']
+  },
+  'raindrop gremlin': {
+    bodyShape: 'drop',
+    bodyLabel: 'single raindrop body',
+    faceZone: 'lowerCenter',
+    propAnchor: 'topPoint',
+    weirdZone: 'insideDrop',
+    bodyHint: 'Start with one teardrop shape. Make the face low.',
+    avoid: ['puddle scene', 'many drops', 'realistic water texture', 'extra limbs']
+  },
+  'tiny sprout creature': {
+    bodyShape: 'sprout',
+    bodyLabel: 'seed body with two leaves',
+    faceZone: 'seedCenter',
+    propAnchor: 'leafTip',
+    weirdZone: 'leafMark',
+    bodyHint: 'Start with a seed oval, then add two simple leaves.',
+    avoid: ['too many leaves', 'garden background', 'realistic roots', 'flower overload']
+  },
+  'cactus nub goblin': {
+    bodyShape: 'cactus',
+    bodyLabel: 'rounded cactus nub',
+    faceZone: 'middleLow',
+    propAnchor: 'sideArm',
+    weirdZone: 'spinePatch',
+    bodyHint: 'Start with a rounded vertical blob. Add only a few spine marks.',
+    avoid: ['too many spikes', 'desert scene', 'many arms', 'realistic texture']
+  },
+  'tiny bell oddlet': {
+    bodyShape: 'bell',
+    bodyLabel: 'small bell charm',
+    faceZone: 'frontLow',
+    propAnchor: 'topLoop',
+    weirdZone: 'bottomRim',
+    bodyHint: 'Start with a bell dome, then add a tiny loop at the top.',
+    avoid: ['full chain', 'too many shine marks', 'extra charms', 'realistic metal detail']
+  },
+  'heart locket oddlet': {
+    bodyShape: 'heart',
+    bodyLabel: 'heart locket body',
+    faceZone: 'centerLow',
+    propAnchor: 'topLoop',
+    weirdZone: 'engraving',
+    bodyHint: 'Start with a chunky heart shape. Add one hinge or tiny loop.',
+    avoid: ['necklace scene', 'tiny photo inside', 'too many engravings', 'extra hearts']
+  }
+};
+
+
+const newSpeciesBlueprints = {
+  'envelope creature': {
+    bodyShape: 'envelope',
+    bodyLabel: 'soft envelope body',
+    faceZone: 'frontCenter',
+    propAnchor: 'topRight',
+    weirdZone: 'flapCenter',
+    bodyHint: 'Start with a soft rectangle, then add one simple triangle flap across the front.',
+    avoid: ['too much tiny writing', 'mailbox background', 'extra envelopes', 'realistic paper folds']
+  },
+  'tiny mailbox oddlet': {
+    bodyShape: 'mailbox',
+    bodyLabel: 'rounded mailbox body',
+    faceZone: 'frontCenter',
+    propAnchor: 'sideFloat',
+    weirdZone: 'flagSide',
+    bodyHint: 'Start with a rounded-top box, then add one tiny flag on the side.',
+    avoid: ['full street scene', 'realistic metal details', 'too many letters', 'complicated post structure']
+  },
+  'pocket mirror imp': {
+    bodyShape: 'mirror',
+    bodyLabel: 'oval pocket mirror body',
+    faceZone: 'insideSymbol',
+    propAnchor: 'handleSide',
+    weirdZone: 'rim',
+    bodyHint: 'Start with a simple oval, then add a small handle or thick frame.',
+    avoid: ['realistic reflection', 'too many sparkles', 'full vanity setup', 'thin fragile frame']
+  },
+  'spoon sprite': {
+    bodyShape: 'spoon',
+    bodyLabel: 'spoon bowl and handle body',
+    faceZone: 'largestMass',
+    propAnchor: 'toolEnd',
+    weirdZone: 'bowlShine',
+    bodyHint: 'Start with an oval spoon bowl, then attach one long simple handle.',
+    avoid: ['fork details', 'table setting', 'realistic metal shine', 'tiny engraved patterns']
+  },
+  'clock creature': {
+    bodyShape: 'clock',
+    bodyLabel: 'round clock body',
+    faceZone: 'insideSymbol',
+    propAnchor: 'topCenter',
+    weirdZone: 'clockHand',
+    bodyHint: 'Start with a circle, then add two simple clock hands and a few tiny ticks.',
+    avoid: ['too many numbers', 'realistic gears', 'wall background', 'complicated clock face']
+  },
+  'tiny door creature': {
+    bodyShape: 'door',
+    bodyLabel: 'rounded door body',
+    faceZone: 'frontCenter',
+    propAnchor: 'topEdge',
+    weirdZone: 'knobSpot',
+    bodyHint: 'Start with a tall rounded rectangle, then add one small knob on the side.',
+    avoid: ['full house scene', 'realistic wood grain', 'extra windows', 'tiny door panels']
+  },
+  'mini suitcase oddlet': {
+    bodyShape: 'suitcase',
+    bodyLabel: 'rounded suitcase body',
+    faceZone: 'frontCenter',
+    propAnchor: 'topLoop',
+    weirdZone: 'labelPatch',
+    bodyHint: 'Start with a rounded rectangle, then add a small handle on top.',
+    avoid: ['too many travel stickers', 'airport background', 'realistic zippers', 'extra bags']
+  },
+  'croissant goblin': {
+    bodyShape: 'croissant',
+    bodyLabel: 'curved croissant body',
+    faceZone: 'centerLow',
+    propAnchor: 'upperCurve',
+    weirdZone: 'butteryStripe',
+    bodyHint: 'Start with a chunky crescent bun, then add only two soft segment lines.',
+    avoid: ['too many pastry stripes', 'plate scene', 'realistic crumbs', 'extra breakfast items']
+  },
+  'cinnamon roll creature': {
+    bodyShape: 'cinnamonRoll',
+    bodyLabel: 'spiral cinnamon roll body',
+    faceZone: 'center',
+    propAnchor: 'topRight',
+    weirdZone: 'innerCurve',
+    bodyHint: 'Start with a soft circle, then draw one clear spiral swirl inside it.',
+    avoid: ['too many icing lines', 'bakery background', 'realistic crumbs', 'extra pastries']
+  },
+  'rice ball creature': {
+    bodyShape: 'riceBall',
+    bodyLabel: 'rounded triangle rice ball body',
+    faceZone: 'lowerCenter',
+    propAnchor: 'topRight',
+    weirdZone: 'seaweedPatch',
+    bodyHint: 'Start with a rounded triangle, then add one simple seaweed patch near the bottom.',
+    avoid: ['tiny rice grains everywhere', 'plate scene', 'extra food props', 'sharp triangle corners']
+  },
+  'speech bubble creature': {
+    bodyShape: 'speechBubble',
+    bodyLabel: 'rounded speech bubble body',
+    faceZone: 'frontCenter',
+    propAnchor: 'topRight',
+    weirdZone: 'bubbleTail',
+    bodyHint: 'Start with a rounded blob, then add one small tail pointing outward.',
+    avoid: ['long sentences inside', 'comic panel background', 'multiple bubbles', 'tiny punctuation clutter']
+  },
+  'warning triangle goblin': {
+    bodyShape: 'warningTriangle',
+    bodyLabel: 'warning triangle body',
+    faceZone: 'insideSymbol',
+    propAnchor: 'topCenter',
+    weirdZone: 'symbolTip',
+    bodyHint: 'Start with a rounded triangle, then place the face inside the safe middle area.',
+    avoid: ['real hazard signage', 'too many warning symbols', 'sharp aggressive corners', 'background caution tape']
+  },
+  'paperclip sprite': {
+    bodyShape: 'paperclip',
+    bodyLabel: 'looped paperclip body',
+    faceZone: 'largestMass',
+    propAnchor: 'topLoop',
+    weirdZone: 'ringEnd',
+    bodyHint: 'Start with one long rounded loop, then add a smaller inner loop.',
+    avoid: ['realistic wire twists', 'too many loops', 'paper stack background', 'thin unreadable lines']
+  },
+  'tape roll creature': {
+    bodyShape: 'tapeRoll',
+    bodyLabel: 'round tape roll body',
+    faceZone: 'frontCenter',
+    propAnchor: 'topRight',
+    weirdZone: 'rim',
+    bodyHint: 'Start with a donut ring shape, then show the inner hole clearly.',
+    avoid: ['messy tape strips everywhere', 'desktop background', 'realistic dispenser teeth', 'too many circular outlines']
+  },
+  'scissor charm': {
+    bodyShape: 'scissors',
+    bodyLabel: 'simplified scissor body',
+    faceZone: 'largestMass',
+    propAnchor: 'topLoop',
+    weirdZone: 'bladeTip',
+    bodyHint: 'Start with two soft handle loops, then add two short simple blades.',
+    avoid: ['sharp weapon feeling', 'realistic metal blades', 'complex hinge details', 'cut paper background']
+  },
+  'eraser creature': {
+    bodyShape: 'eraser',
+    bodyLabel: 'rounded eraser body',
+    faceZone: 'frontCenter',
+    propAnchor: 'eraserEnd',
+    weirdZone: 'wrapperBand',
+    bodyHint: 'Start with a soft rounded rectangle, then add one wrapper band across the middle.',
+    avoid: ['school desk scene', 'tiny brand lettering', 'realistic worn corners', 'pencil clutter']
+  },
+  'marker cap sprite': {
+    bodyShape: 'markerCap',
+    bodyLabel: 'short marker cap body',
+    faceZone: 'frontCenter',
+    propAnchor: 'toolEnd',
+    weirdZone: 'capEdge',
+    bodyHint: 'Start with a short rounded cylinder, then add one simple cap rim.',
+    avoid: ['full marker body', 'too many grooves', 'realistic plastic texture', 'art supply pile']
+  },
+  'folder tab creature': {
+    bodyShape: 'folderTab',
+    bodyLabel: 'folder tab body',
+    faceZone: 'frontCenter',
+    propAnchor: 'foldedCorner',
+    weirdZone: 'labelPatch',
+    bodyHint: 'Start with a wide rectangle, then add one tab bump along the top edge.',
+    avoid: ['tiny file text', 'office background', 'too many papers', 'sharp flat corners']
+  },
+  'lightning noodle goblin': {
+    bodyShape: 'lightningNoodle',
+    bodyLabel: 'zigzag noodle body',
+    faceZone: 'largestMass',
+    propAnchor: 'upperRight',
+    weirdZone: 'edgeWobble',
+    bodyHint: 'Start with a thick zigzag line, then round every bend so it feels noodle-soft.',
+    avoid: ['thin lightning bolt', 'storm background', 'too many jagged points', 'electric realism']
+  },
+  'tornado curl creature': {
+    bodyShape: 'tornadoCurl',
+    bodyLabel: 'spiral tornado body',
+    faceZone: 'middleLow',
+    propAnchor: 'topEdge',
+    weirdZone: 'innerCurve',
+    bodyHint: 'Start with a wide spiral cone, larger at the top and smaller near the bottom.',
+    avoid: ['destructive storm scene', 'too many wind lines', 'realistic debris', 'tiny background houses']
+  },
+  'umbrella drip creature': {
+    bodyShape: 'umbrella',
+    bodyLabel: 'umbrella dome body',
+    faceZone: 'frontLow',
+    propAnchor: 'topCenter',
+    weirdZone: 'raindrop',
+    bodyHint: 'Start with a half-circle dome, then add a tiny handle or droplet underneath.',
+    avoid: ['full rainy landscape', 'too many raindrops', 'realistic umbrella ribs', 'extra weather symbols']
+  },
+  'seed packet oddlet': {
+    bodyShape: 'seedPacket',
+    bodyLabel: 'seed packet body',
+    faceZone: 'frontCenter',
+    propAnchor: 'topRight',
+    weirdZone: 'labelPatch',
+    bodyHint: 'Start with a packet rectangle, then add one simple label patch on the front.',
+    avoid: ['tiny seed instructions', 'garden background', 'too many plant drawings', 'realistic packaging folds']
+  },
+  'clover creature': {
+    bodyShape: 'clover',
+    bodyLabel: 'three-leaf clover body',
+    faceZone: 'largestMass',
+    propAnchor: 'leafTip',
+    weirdZone: 'leafMark',
+    bodyHint: 'Start with three round heart-like leaves meeting in the center.',
+    avoid: ['too many tiny leaves', 'field background', 'realistic veins', 'four-leaf complexity']
+  },
+  'succulent sprite': {
+    bodyShape: 'succulent',
+    bodyLabel: 'layered succulent body',
+    faceZone: 'largestMass',
+    propAnchor: 'leafTip',
+    weirdZone: 'petalEdge',
+    bodyHint: 'Start with a simple rosette, then add only a few big layered leaves.',
+    avoid: ['too many tiny petals', 'plant pot scene', 'realistic botanical detail', 'sharp cactus spikes']
+  },
+  'pendant charm': {
+    bodyShape: 'pendant',
+    bodyLabel: 'teardrop pendant body',
+    faceZone: 'centerLow',
+    propAnchor: 'topLoop',
+    weirdZone: 'engraving',
+    bodyHint: 'Start with a teardrop charm shape, then add a tiny loop at the top.',
+    avoid: ['complex jewelry chain', 'realistic gemstone facets', 'too many engravings', 'necklace background']
+  },
+  'wishbone sprite': {
+    bodyShape: 'wishbone',
+    bodyLabel: 'Y-shaped wishbone body',
+    faceZone: 'largestMass',
+    propAnchor: 'topEdge',
+    weirdZone: 'knot',
+    bodyHint: 'Start with a soft Y shape, then round the two upper prongs.',
+    avoid: ['real bone texture', 'sharp bony points', 'plate scene', 'too many cracks']
+  },
+  'glow bead creature': {
+    bodyShape: 'glowBead',
+    bodyLabel: 'glowing bead body',
+    faceZone: 'center',
+    propAnchor: 'floatingNear',
+    weirdZone: 'orbitDetail',
+    bodyHint: 'Start with a simple orb, then add one shine ring or tiny glow halo.',
+    avoid: ['too many glow rings', 'space background', 'realistic glass refraction', 'extra floating beads']
+  }
+};
+
+Object.assign(speciesBlueprints, newSpeciesBlueprints);
+
+
+
+const speciesBodyNotes = {
+  envelope: 'Start with a soft rectangle, then add one triangle flap across the front.',
+  mailbox: 'Start with a rounded-top box, then add one side flag and a simple post if needed.',
+  mirror: 'Start with an oval, then add a frame or tiny handle.',
+  spoon: 'Start with an oval bowl, then attach one thin rounded handle.',
+  clock: 'Start with a circle, then add two clock hands and only a few ticks.',
+  door: 'Start with a tall rounded rectangle, then add one knob.',
+  suitcase: 'Start with a rounded rectangle, then add a small handle on top.',
+  croissant: 'Start with a chunky crescent bun, then add two or three soft segment lines.',
+  cinnamonRoll: 'Start with a circle, then add one clear spiral inside.',
+  riceBall: 'Start with a rounded triangle, then add one simple seaweed patch.',
+  speechBubble: 'Start with a rounded bubble, then add one small tail.',
+  warningTriangle: 'Start with a rounded triangle icon body, then keep the face centered inside.',
+  paperclip: 'Start with one big loop, then add a smaller inner loop.',
+  tapeRoll: 'Start with a donut ring, then make the center hole readable.',
+  scissors: 'Start with two handle loops, then add short softened blades.',
+  eraser: 'Start with a rounded rectangle, then add one wrapper band.',
+  markerCap: 'Start with a short cap cylinder, then add a rim line.',
+  folderTab: 'Start with a rectangle, then add one tab bump along the top.',
+  lightningNoodle: 'Start with a thick zigzag, then round every bend so it feels soft.',
+  tornadoCurl: 'Start with a wide spiral cone, larger at the top and smaller at the bottom.',
+  umbrella: 'Start with a half-circle dome, then add a handle or drip underneath.',
+  seedPacket: 'Start with a packet rectangle, then add one label patch.',
+  clover: 'Start with three round leaves meeting in the center.',
+  succulent: 'Start with a rosette, then add a few big layered leaves.',
+  pendant: 'Start with a teardrop charm, then add a tiny top loop.',
+  wishbone: 'Start with a soft Y shape, then round the two upper prongs.',
+  glowBead: 'Start with a simple orb, then add one glow ring or shine halo.'
+};
+
+function getSpeciesBodyNote(blueprint) {
+  if (!blueprint) return 'Start with the largest simple shape first, then add one weird detail.';
+  return speciesBodyNotes[blueprint.bodyShape] || blueprint.bodyHint || 'Start with the largest simple shape first, then add one weird detail.';
+}
+
+function inferSpeciesBlueprint(species, lane) {
+  const name = String(species || '').toLowerCase();
+  if (speciesBlueprints[name]) return speciesBlueprints[name];
+  if (name.includes('toast')) return speciesBlueprints['toast slice creature'];
+  if (name.includes('lemon') || name.includes('wedge')) return speciesBlueprints['lemon wedge goblin'];
+  if (name.includes('waffle')) return speciesBlueprints['waffle square mascot'];
+  if (name.includes('question')) return speciesBlueprints['question mark mascot'];
+  if (name.includes('star')) return speciesBlueprints['star sticker creature'];
+  if (name.includes('ghost')) return speciesBlueprints['sheet ghost oddlet'];
+  if (name.includes('cloud')) return speciesBlueprints['rain cloud blob'];
+  if (name.includes('drop')) return speciesBlueprints['raindrop gremlin'];
+  if (name.includes('sprout')) return speciesBlueprints['tiny sprout creature'];
+  if (name.includes('cactus')) return speciesBlueprints['cactus nub goblin'];
+  if (name.includes('bell')) return speciesBlueprints['tiny bell oddlet'];
+  if (name.includes('heart') || name.includes('locket')) return speciesBlueprints['heart locket oddlet'];
+  if (name.includes('pencil')) return speciesBlueprints['pencil stub creature'];
+  if (name.includes('sticky')) return speciesBlueprints['sticky note mascot'];
+  if (name.includes('button')) return speciesBlueprints['button gremlin'];
+  if (name.includes('teacup') || name.includes('cup')) return speciesBlueprints['teacup goblin'];
+  if (name.includes('candle')) return speciesBlueprints['melting candle creature'];
+  if (name.includes('envelope')) return speciesBlueprints['envelope creature'];
+  if (name.includes('mailbox')) return speciesBlueprints['tiny mailbox oddlet'];
+  if (name.includes('mirror')) return speciesBlueprints['pocket mirror imp'];
+  if (name.includes('spoon')) return speciesBlueprints['spoon sprite'];
+  if (name.includes('clock')) return speciesBlueprints['clock creature'];
+  if (name.includes('door')) return speciesBlueprints['tiny door creature'];
+  if (name.includes('suitcase')) return speciesBlueprints['mini suitcase oddlet'];
+  if (name.includes('croissant')) return speciesBlueprints['croissant goblin'];
+  if (name.includes('cinnamon')) return speciesBlueprints['cinnamon roll creature'];
+  if (name.includes('rice ball')) return speciesBlueprints['rice ball creature'];
+  if (name.includes('speech bubble')) return speciesBlueprints['speech bubble creature'];
+  if (name.includes('warning triangle')) return speciesBlueprints['warning triangle goblin'];
+  if (name.includes('paperclip')) return speciesBlueprints['paperclip sprite'];
+  if (name.includes('tape roll') || name.includes('washi tape')) return speciesBlueprints['tape roll creature'];
+  if (name.includes('scissor')) return speciesBlueprints['scissor charm'];
+  if (name.includes('eraser')) return speciesBlueprints['eraser creature'];
+  if (name.includes('marker cap')) return speciesBlueprints['marker cap sprite'];
+  if (name.includes('folder tab')) return speciesBlueprints['folder tab creature'];
+  if (name.includes('lightning noodle')) return speciesBlueprints['lightning noodle goblin'];
+  if (name.includes('tornado')) return speciesBlueprints['tornado curl creature'];
+  if (name.includes('umbrella')) return speciesBlueprints['umbrella drip creature'];
+  if (name.includes('seed packet')) return speciesBlueprints['seed packet oddlet'];
+  if (name.includes('clover')) return speciesBlueprints['clover creature'];
+  if (name.includes('succulent')) return speciesBlueprints['succulent sprite'];
+  if (name.includes('pendant')) return speciesBlueprints['pendant charm'];
+  if (name.includes('wishbone')) return speciesBlueprints['wishbone sprite'];
+  if (name.includes('glow bead')) return speciesBlueprints['glow bead creature'];
+  if (name.includes('mushroom')) return { bodyShape: 'mushroom', bodyLabel: 'cap-and-stem mushroom body', faceZone: 'middleLow', propAnchor: 'capEdge', weirdZone: 'capSpot', bodyHint: 'Start with a wide cap, then tuck a small stem underneath.', avoid: ['too many cap spots', 'forest scene', 'extra mushrooms', 'realistic gills'] };
+  if (name.includes('dumpling') || name.includes('marshmallow') || name.includes('jellybean')) return { bodyShape: 'snackBlob', bodyLabel: 'soft snack blob', faceZone: 'lowerCenter', propAnchor: 'topEdge', weirdZone: 'surfacePatch', bodyHint: 'Start with one rounded snack blob before adding the face.', avoid: ['plate', 'too many toppings', 'extra food friends', 'background meal'] };
+  if (name.includes('arrow') || name.includes('sign') || name.includes('label')) return { bodyShape: 'sign', bodyLabel: 'simple sign or label body', faceZone: 'insideSymbol', propAnchor: 'upperRight', weirdZone: 'symbolTip', bodyHint: 'Start with one clear sign shape. Keep the arrow or label readable.', avoid: ['extra signs', 'busy text', 'background map', 'hidden face'] };
+  if (name.includes('moon')) return { bodyShape: 'crescent', bodyLabel: 'soft crescent body', faceZone: 'centerLow', propAnchor: 'upperCurve', weirdZone: 'innerCurve', bodyHint: 'Start with a chunky crescent, then add the face inside the curve.', avoid: ['full galaxy', 'too many stars', 'thin crescent points', 'second moon'] };
+  if (name.includes('mask')) return { bodyShape: 'mask', bodyLabel: 'rounded mask body', faceZone: 'center', propAnchor: 'topRight', weirdZone: 'eyePatch', bodyHint: 'Start with a rounded mask silhouette and one clear eye zone.', avoid: ['full costume', 'extra face', 'too many stitches', 'background theater'] };
+  if (name.includes('key')) return { bodyShape: 'key', bodyLabel: 'simple key body', faceZone: 'plainArea', propAnchor: 'ringEnd', weirdZone: 'keyTeeth', bodyHint: 'Start with a big key ring and a simple shaft.', avoid: ['keychain pile', 'realistic metal detail', 'many teeth', 'background lock'] };
+  if (name.includes('sock')) return { bodyShape: 'sock', bodyLabel: 'bent sock body', faceZone: 'middleLow', propAnchor: 'toeEnd', weirdZone: 'heelPatch', bodyHint: 'Start with one bent sock shape, then add a heel patch.', avoid: ['laundry pile', 'many stripes', 'second sock', 'realistic fabric texture'] };
+  if (name.includes('bottle') || name.includes('jar')) return { bodyShape: 'bottle', bodyLabel: 'small bottle body', faceZone: 'frontCenter', propAnchor: 'topCenter', weirdZone: 'labelPatch', bodyHint: 'Start with a simple bottle or jar silhouette and one label area.', avoid: ['shelf scene', 'tiny label text', 'extra bottles', 'glass realism'] };
+  if (name.includes('ribbon') || name.includes('bow')) return { bodyShape: 'ribbon', bodyLabel: 'soft ribbon body', faceZone: 'center', propAnchor: 'topRight', weirdZone: 'knot', bodyHint: 'Start with a center knot and two soft loops.', avoid: ['too many folds', 'full outfit', 'extra bows', 'fabric texture'] };
+  if (name.includes('clock')) return { bodyShape: 'circleButton', bodyLabel: 'round clock body', faceZone: 'lowerCenter', propAnchor: 'topRight', weirdZone: 'clockHand', bodyHint: 'Start with a circle, then add two simple clock hands.', avoid: ['many numbers', 'wall background', 'second clock', 'realistic gears'] };
+  if (name.includes('flower') || name.includes('daisy')) return { bodyShape: 'flower', bodyLabel: 'simple flower head body', faceZone: 'center', propAnchor: 'petalEdge', weirdZone: 'petalMark', bodyHint: 'Start with one center circle and a few big petals.', avoid: ['too many petals', 'garden scene', 'realistic pollen', 'extra flowers'] };
+  if (name.includes('acorn')) return { bodyShape: 'acorn', bodyLabel: 'acorn cap and seed body', faceZone: 'lowerCenter', propAnchor: 'capEdge', weirdZone: 'capPattern', bodyHint: 'Start with the acorn seed oval, then add one cap shape.', avoid: ['tree background', 'too many cap marks', 'extra nuts', 'realistic shell texture'] };
+  const laneFallbacks = {
+    object: {
+      bodyShape: 'roundedObject',
+      bodyLabel: 'simple object body',
+      faceZone: 'lowerCenter',
+      propAnchor: 'topRight',
+      weirdZone: 'surfacePatch',
+      bodyHint: 'Start with one readable object silhouette before adding face or props.',
+      avoid: ['background', 'extra objects', 'second face', 'too many realistic details']
+    },
+    food: {
+      bodyShape: 'snackBlob',
+      bodyLabel: 'simple snack body',
+      faceZone: 'lowerCenter',
+      propAnchor: 'topEdge',
+      weirdZone: 'toppingSpot',
+      bodyHint: 'Start with one clear food silhouette before toppings.',
+      avoid: ['plate', 'full meal scene', 'too many toppings', 'realistic food texture']
+    },
+    symbol: {
+      bodyShape: 'symbolIcon',
+      bodyLabel: 'readable symbol body',
+      faceZone: 'insideSymbol',
+      propAnchor: 'upperRight',
+      weirdZone: 'symbolTip',
+      bodyHint: 'Start with the symbol first. The face comes after it still reads.',
+      avoid: ['extra symbols', 'hidden face', 'busy decorations', 'warped icon']
+    },
+    ghost: {
+      bodyShape: 'blob',
+      bodyLabel: 'soft monster blob',
+      faceZone: 'middleLow',
+      propAnchor: 'sideFloat',
+      weirdZone: 'edgeWobble',
+      bodyHint: 'Start with one soft blob or sheet shape.',
+      avoid: ['too many ragged edges', 'full scene', 'extra monsters', 'complex arms']
+    },
+    stationery: {
+      bodyShape: 'deskTool',
+      bodyLabel: 'desk-tool body',
+      faceZone: 'plainArea',
+      propAnchor: 'toolEnd',
+      weirdZone: 'labelPatch',
+      bodyHint: 'Start with the tool shape, then add personality.',
+      avoid: ['too many tools', 'tiny text', 'desk background', 'hidden silhouette']
+    },
+    weather: {
+      bodyShape: 'weatherBlob',
+      bodyLabel: 'soft weather body',
+      faceZone: 'lowerCenter',
+      propAnchor: 'floatingNear',
+      weirdZone: 'orbitDetail',
+      bodyHint: 'Start with one puff, drop, swirl, or moon shape.',
+      avoid: ['too many floating bits', 'full sky', 'over-texture', 'weather pileup']
+    },
+    plant: {
+      bodyShape: 'plantMass',
+      bodyLabel: 'grouped plant body',
+      faceZone: 'largestMass',
+      propAnchor: 'leafEdge',
+      weirdZone: 'leafMark',
+      bodyHint: 'Start with one grouped plant mass before drawing individual leaves.',
+      avoid: ['scattered leaves', 'too many stems', 'garden scene', 'realistic botany']
+    },
+    charm: {
+      bodyShape: 'charmIcon',
+      bodyLabel: 'small charm body',
+      faceZone: 'centerLow',
+      propAnchor: 'topLoop',
+      weirdZone: 'engraving',
+      bodyHint: 'Start with one clean icon-like charm shape.',
+      avoid: ['extra chains', 'too many dangling parts', 'tiny unreadable symbols', 'jewelry realism']
+    }
+  };
+  return laneFallbacks[lane] || laneFallbacks.object;
+}
+
 
 const oddBiasMascots = ['paint palette', 'paper bag', 'question mark', 'mask blob', 'ink bottle', 'warning triangle', 'X mark', 'sticky note', 'tiny shadow', 'map pin', 'paint brush', 'arrow sign'];
 
@@ -524,6 +1306,27 @@ function fillSelect(id, list) {
   select.innerHTML = list.map((item) => `<option value="${item.value}">${item.label}</option>`).join('');
 }
 
+function updateSpeciesSelect() {
+  const speciesSelect = $('#speciesSelect');
+  if (!speciesSelect) return;
+  const laneValue = $('#laneSelect')?.value || 'surprise';
+  let options = [];
+
+  if (laneValue === 'surprise') {
+    options = Object.values(speciesByLane).flat();
+  } else {
+    options = speciesByLane[laneValue] || [];
+  }
+
+  speciesSelect.innerHTML = [
+    '<option value="surprise">Surprise me</option>',
+    ...options.map((item) => `<option value="${item}">${titleCase(item)}</option>`)
+  ].join('');
+
+  const hint = $('#speciesHint');
+  if (hint) hint.textContent = speciesHints[laneValue] || speciesHints.surprise;
+}
+
 function titleCase(text) {
   return text.split(' ').map((part) => part ? part[0].toUpperCase() + part.slice(1) : part).join(' ');
 }
@@ -548,6 +1351,8 @@ function makeName(mood, mascot, spark) {
 function rollCard({ fullSurprise = false, mutate = null, daily = false } = {}) {
   if (fullSurprise) {
     $('#laneSelect').value = 'surprise';
+    updateSpeciesSelect();
+    $('#speciesSelect').value = 'surprise';
     $('#moodSelect').value = 'surprise';
     $('#sparkSelect').value = 'surprise';
     $('#shapeSelect').value = choice(shapes).value;
@@ -581,7 +1386,9 @@ function rollCard({ fullSurprise = false, mutate = null, daily = false } = {}) {
   const sparkKey = forcedSpark || pickValue($('#sparkSelect').value, sparks);
   let shapeLimit = $('#shapeSelect').value || '5';
   if (energy.shape) shapeLimit = energy.shape;
-  const mascot = choice(mascotPool);
+  const speciesChoice = $('#speciesSelect')?.value || 'surprise';
+  const mascot = speciesChoice !== 'surprise' ? speciesChoice : choice(mascotPool);
+  const speciesBlueprint = inferSpeciesBlueprint(mascot, lane);
   const mood = moodData[moodKey];
   const extra = choice(extraPool);
   const spark = sparkData[sparkKey];
@@ -605,7 +1412,10 @@ function rollCard({ fullSurprise = false, mutate = null, daily = false } = {}) {
     id: crypto.randomUUID ? crypto.randomUUID() : String(Date.now()),
     createdAt: new Date().toISOString(),
     lane,
+    speciesChoice,
     mascot,
+    species: mascot,
+    blueprintSpecies: speciesBlueprint,
     moodKey,
     mood: mood.label,
     sparkKey,
@@ -618,7 +1428,7 @@ function rollCard({ fullSurprise = false, mutate = null, daily = false } = {}) {
     build,
     poseCue: `${mood.pose}. Expression cue: ${mood.face}.`,
     guardrail: guardrailFor(lane, sparkKey, mutate),
-    drawFirst: drawFirstFor(lane, mascot),
+    drawFirst: speciesBlueprint.bodyHint || drawFirstFor(lane, mascot),
     whyWorks: whyWorksFor({ mascot, extra, spark: spark.label }),
     pack: packKey,
     energy: energyKey,
@@ -657,6 +1467,9 @@ function seededPick(list, seedText) {
 function chooseDailyControls() {
   const today = new Date().toISOString().slice(0, 10);
   $('#laneSelect').value = seededPick(lanes.filter(x => x.value !== 'surprise'), `${today}:lane`).value;
+  updateSpeciesSelect();
+  const dailySpecies = speciesByLane[$('#laneSelect').value] || [];
+  $('#speciesSelect').value = dailySpecies.length ? seededPick(dailySpecies.map((item) => ({ value: item })), `${today}:species`).value : 'surprise';
   $('#moodSelect').value = seededPick(moods.filter(x => x.value !== 'surprise'), `${today}:mood`).value;
   $('#sparkSelect').value = seededPick(sparks.filter(x => x.value !== 'surprise'), `${today}:spark`).value;
   $('#shapeSelect').value = seededPick(shapes, `${today}:shape`).value;
@@ -1012,6 +1825,16 @@ function buildBlueprintIntelligence(card) {
 
   Object.assign(blueprint, laneRules[lane] || {});
 
+  const speciesRules = card?.blueprintSpecies || inferSpeciesBlueprint(card?.species || card?.mascot, card?.lane);
+  if (speciesRules) {
+    blueprint.primarySilhouette = speciesRules.bodyLabel || blueprint.primarySilhouette;
+    blueprint.faceZone = speciesRules.faceZone || blueprint.faceZone;
+    blueprint.propAnchor = speciesRules.propAnchor || blueprint.propAnchor;
+    blueprint.easiestStartingShape = speciesRules.bodyHint || blueprint.easiestStartingShape;
+    blueprint.weirdThingPlacement = speciesRules.weirdZone || blueprint.weirdThingPlacement;
+    blueprint.doNotAdd = [...new Set([...(speciesRules.avoid || []), ...(blueprint.doNotAdd || [])])].slice(0, 5);
+  }
+
   if (mascot.includes('wedge') || mascot.includes('triangle')) {
     blueprint.primarySilhouette = 'rounded wedge';
     blueprint.easiestStartingShape = 'squashed triangle or rounded wedge';
@@ -1117,6 +1940,15 @@ function buildBlueprintIntelligence(card) {
     blueprint.doNotAdd = ['third weird thing', 'extra character', 'full environment', 'tiny clutter'];
   }
 
+  if (speciesRules) {
+    blueprint.primarySilhouette = speciesRules.bodyLabel || blueprint.primarySilhouette;
+    blueprint.easiestStartingShape = speciesRules.bodyHint || blueprint.easiestStartingShape;
+    blueprint.weirdThingPlacement = speciesRules.weirdZone || blueprint.weirdThingPlacement;
+    if (!moodRule?.faceZone) blueprint.faceZone = speciesRules.faceZone || blueprint.faceZone;
+    if (!moodRule?.propBehavior) blueprint.propAnchor = speciesRules.propAnchor || blueprint.propAnchor;
+    blueprint.doNotAdd = [...new Set([...(speciesRules.avoid || []), ...(blueprint.doNotAdd || [])])].slice(0, 5);
+  }
+
   return blueprint;
 }
 
@@ -1132,6 +1964,8 @@ function renderBlueprintBreakdown(card) {
   $('#blueWeirdPlacement').textContent = blueprint.weirdThingPlacement;
   $('#blueDoNotAdd').textContent = blueprint.doNotAdd.join(', ');
   $('#blueMoodRead').textContent = blueprint.moodRead || 'The face, tilt, and prop placement reveal the mood.';
+  const speciesBlueprint = card?.blueprintSpecies || inferSpeciesBlueprint(card?.species || card?.mascot, card?.lane);
+  $('#blueSpeciesBodyNote').textContent = getSpeciesBodyNote(speciesBlueprint);
 }
 
 function guardrailFor(lane, spark, mutate) {
@@ -1295,49 +2129,553 @@ function renderMoodFace(card, ink = '#111426', blue = '#91b7ff') {
   return `${brows[visual.browStyle] || ''}${eyes[visual.eyeStyle] || eyes.blankDots}${mouth[visual.mouthStyle] || mouth.tinyLine}`;
 }
 
+function blueprintPoint(zone) {
+  const points = {
+    lowerCenter: { x: 160, y: 138 },
+    centerLow: { x: 160, y: 132 },
+    middleLow: { x: 160, y: 125 },
+    frontCenter: { x: 154, y: 123 },
+    center: { x: 160, y: 120 },
+    middle: { x: 150, y: 120 },
+    lowerCurve: { x: 162, y: 145 },
+    seedCenter: { x: 160, y: 146 },
+    frontLow: { x: 160, y: 138 },
+    plainArea: { x: 152, y: 120 },
+    insideSymbol: { x: 160, y: 125 },
+    largestMass: { x: 160, y: 140 },
+    lowerThird: { x: 160, y: 145 },
+    topRight: { x: 205, y: 76 },
+    topLeft: { x: 112, y: 82 },
+    topCenter: { x: 160, y: 58 },
+    topEdge: { x: 160, y: 78 },
+    upperCurve: { x: 190, y: 80 },
+    foldedCorner: { x: 198, y: 88 },
+    handleSide: { x: 212, y: 122 },
+    topLoop: { x: 160, y: 58 },
+    sideFloat: { x: 224, y: 118 },
+    underCloud: { x: 160, y: 171 },
+    leafTip: { x: 200, y: 94 },
+    eraserEnd: { x: 104, y: 120 },
+    toolEnd: { x: 210, y: 120 },
+    upperRight: { x: 205, y: 82 },
+    floatingNear: { x: 218, y: 104 },
+    surfacePatch: { x: 190, y: 135 },
+    buttonHole: { x: 177, y: 139 },
+    rim: { x: 160, y: 88 },
+    waxDrip: { x: 144, y: 104 },
+    crustCorner: { x: 198, y: 86 },
+    seedSpot: { x: 178, y: 126 },
+    gridCell: { x: 178, y: 105 },
+    dot: { x: 162, y: 174 },
+    onePoint: { x: 179, y: 98 },
+    lowerEdge: { x: 170, y: 176 },
+    furTuft: { x: 145, y: 82 },
+    woodTip: { x: 211, y: 120 },
+    cornerCurl: { x: 198, y: 90 },
+    raindrop: { x: 158, y: 171 },
+    insideDrop: { x: 160, y: 120 },
+    leafMark: { x: 196, y: 105 },
+    sideArm: { x: 198, y: 126 },
+    spinePatch: { x: 174, y: 113 },
+    bottomRim: { x: 160, y: 164 },
+    engraving: { x: 160, y: 128 },
+    capEdge: { x: 190, y: 88 },
+    capSpot: { x: 145, y: 84 },
+    symbolTip: { x: 196, y: 94 },
+    edgeWobble: { x: 115, y: 160 },
+    labelPatch: { x: 160, y: 132 },
+    orbitDetail: { x: 215, y: 104 },
+    innerCurve: { x: 174, y: 128 },
+    eyePatch: { x: 184, y: 116 },
+    keyTeeth: { x: 206, y: 126 },
+    toeEnd: { x: 198, y: 142 },
+    heelPatch: { x: 138, y: 142 },
+    knot: { x: 160, y: 120 },
+    clockHand: { x: 160, y: 120 },
+    petalEdge: { x: 196, y: 112 },
+    capPattern: { x: 160, y: 100 },
+    ringEnd: { x: 114, y: 120 },
+    flapCenter: { x: 160, y: 112 },
+    flagSide: { x: 214, y: 92 },
+    bowlShine: { x: 150, y: 92 },
+    knobSpot: { x: 196, y: 134 },
+    butteryStripe: { x: 160, y: 106 },
+    seaweedPatch: { x: 160, y: 160 },
+    bubbleTail: { x: 202, y: 164 },
+    bladeTip: { x: 204, y: 90 },
+    wrapperBand: { x: 160, y: 122 },
+    innerHole: { x: 160, y: 120 },
+    spiralCenter: { x: 160, y: 120 },
+    tapeEdge: { x: 205, y: 104 },
+    folderTab: { x: 134, y: 84 },
+    lightningBend: { x: 162, y: 118 },
+    tornadoTip: { x: 160, y: 176 },
+    umbrellaHandle: { x: 160, y: 178 },
+    seedLabel: { x: 160, y: 116 },
+    cloverCenter: { x: 160, y: 132 },
+    rosetteCenter: { x: 160, y: 128 },
+    pendantLoop: { x: 160, y: 70 },
+    wishboneFork: { x: 160, y: 104 },
+    glowRing: { x: 160, y: 120 },
+  };
+  return points[zone] || points.center;
+}
+
+function blueprintBodySvg(shape, colors) {
+  const { mint, primary, pink, blue } = colors;
+  const atlas = (inner) => `<g transform="translate(84 48) scale(1.48)">${inner}</g>`;
+  const bodies = {
+    envelope: atlas(`
+      <rect x="18" y="24" width="68" height="48" rx="8" class="bp-body"/>
+      <path d="M20 28 L52 52 L84 28" class="bp-detail"/>
+      <path d="M20 70 L45 48" class="bp-detail"/>
+      <path d="M84 70 L59 48" class="bp-detail"/>
+    `),
+    mailbox: atlas(`
+      <path d="M20 64 L20 38 Q20 22 36 22 L68 22 Q84 22 84 38 L84 64 Z" class="bp-body"/>
+      <rect x="44" y="64" width="16" height="22" rx="4" class="bp-detail"/>
+      <path d="M78 34 L94 34 L94 46 L78 46 Z" class="bp-detail"/>
+    `),
+    mirror: atlas(`
+      <ellipse cx="52" cy="38" rx="26" ry="30" class="bp-body"/>
+      <ellipse cx="52" cy="38" rx="18" ry="22" class="bp-detail"/>
+      <rect x="47" y="64" width="10" height="26" rx="5" class="bp-body"/>
+    `),
+    spoon: atlas(`
+      <ellipse cx="44" cy="32" rx="20" ry="26" class="bp-body"/>
+      <rect x="40" y="54" width="8" height="42" rx="4" class="bp-body"/>
+      <path d="M36 26 Q44 18 52 26" class="bp-detail"/>
+    `),
+    clock: atlas(`
+      <circle cx="52" cy="52" r="34" class="bp-body"/>
+      <circle cx="52" cy="52" r="26" class="bp-detail"/>
+      <path d="M52 52 L52 34" class="bp-detail"/>
+      <path d="M52 52 L66 60" class="bp-detail"/>
+      <circle cx="52" cy="52" r="3" class="bp-detail"/>
+      <path d="M52 22 L52 28 M52 76 L52 82 M22 52 L28 52 M76 52 L82 52" class="bp-detail"/>
+    `),
+    door: atlas(`
+      <path d="M30 84 L30 30 Q30 20 40 20 L66 20 Q76 20 76 30 L76 84 Z" class="bp-body"/>
+      <circle cx="66" cy="55" r="4" class="bp-detail"/>
+      <path d="M38 84 L38 28" class="bp-detail"/>
+    `),
+    suitcase: atlas(`
+      <rect x="22" y="34" width="64" height="46" rx="10" class="bp-body"/>
+      <path d="M42 34 Q42 24 54 24 Q66 24 66 34" class="bp-detail"/>
+      <path d="M32 42 L32 76 M76 42 L76 76" class="bp-detail"/>
+    `),
+    croissant: atlas(`
+      <path d="M18 58 Q34 22 56 32 Q76 22 92 58 Q72 48 56 54 Q38 48 18 58 Z" class="bp-body"/>
+      <path d="M38 36 Q34 48 38 58" class="bp-detail"/>
+      <path d="M56 32 Q52 46 56 58" class="bp-detail"/>
+      <path d="M74 36 Q70 48 74 58" class="bp-detail"/>
+    `),
+    cinnamonRoll: atlas(`
+      <circle cx="52" cy="52" r="34" class="bp-body"/>
+      <path d="M52 52 m-4 0 q0 -10 12 -10 q14 0 14 14 q0 20 -24 20 q-26 0 -26 -24 q0 -28 30 -28 q30 0 30 30" class="bp-detail"/>
+    `),
+    riceBall: atlas(`
+      <path d="M52 20 Q78 44 82 76 Q52 88 22 76 Q26 44 52 20 Z" class="bp-body"/>
+      <path d="M38 66 Q52 58 66 66 L66 82 Q52 88 38 82 Z" class="bp-detail"/>
+    `),
+    speechBubble: atlas(`
+      <path d="M24 28 Q18 28 18 36 L18 60 Q18 68 26 68 L62 68 L78 82 L74 68 L80 68 Q88 68 88 60 L88 36 Q88 28 80 28 Z" class="bp-body"/>
+    `),
+    warningTriangle: atlas(`
+      <path d="M52 18 L88 82 L16 82 Z" class="bp-body"/>
+      <path d="M52 38 L52 60" class="bp-detail"/>
+      <circle cx="52" cy="70" r="3" class="bp-detail"/>
+    `),
+    paperclip: atlas(`
+      <path d="M42 76 Q24 76 24 58 L24 34 Q24 18 42 18 Q60 18 60 34 L60 68 Q60 88 40 88 Q20 88 20 68 L20 38" class="bp-body"/>
+      <path d="M42 28 Q50 28 50 36 L50 66 Q50 76 40 76" class="bp-detail"/>
+    `),
+    tapeRoll: atlas(`
+      <circle cx="52" cy="52" r="34" class="bp-body"/>
+      <circle cx="52" cy="52" r="16" class="bp-hole"/>
+      <path d="M76 40 Q90 44 88 58 Q82 54 74 56" class="bp-detail"/>
+    `),
+    scissors: atlas(`
+      <circle cx="34" cy="68" r="13" class="bp-body"/>
+      <circle cx="58" cy="68" r="13" class="bp-body"/>
+      <circle cx="46" cy="54" r="4" class="bp-detail"/>
+      <path d="M46 54 L78 24" class="bp-body"/>
+      <path d="M46 54 L22 24" class="bp-body"/>
+      <path d="M54 50 L82 36" class="bp-detail"/>
+      <path d="M38 50 L18 36" class="bp-detail"/>
+    `),
+    eraser: atlas(`
+      <rect x="22" y="34" width="68" height="40" rx="10" class="bp-body"/>
+      <rect x="48" y="34" width="20" height="40" rx="3" class="bp-detail"/>
+      <path d="M28 42 L42 42" class="bp-detail"/>
+    `),
+    markerCap: atlas(`
+      <path d="M34 28 L72 28 Q78 28 78 36 L78 72 Q78 80 72 80 L34 80 Q28 80 28 72 L28 36 Q28 28 34 28 Z" class="bp-body"/>
+      <path d="M32 38 L78 38" class="bp-detail"/>
+      <path d="M36 80 L70 80" class="bp-detail"/>
+    `),
+    folderTab: atlas(`
+      <path d="M18 34 L38 34 L46 26 L70 26 L78 34 L88 34 L88 78 L18 78 Z" class="bp-body"/>
+      <path d="M18 42 L88 42" class="bp-detail"/>
+    `),
+    lightningNoodle: atlas(`
+      <path d="M58 14 L30 48 L50 48 L38 90 L78 42 L56 42 Z" class="bp-body"/>
+      <path d="M52 26 Q46 38 40 48" class="bp-detail"/>
+    `),
+    tornadoCurl: atlas(`
+      <path d="M24 26 Q52 10 82 26 Q66 38 36 38 Q68 46 74 58 Q56 70 38 62 Q50 76 56 88 Q42 84 40 74 Q38 62 50 56 Q30 50 32 40 Q34 30 52 28" class="bp-body"/>
+      <path d="M34 32 Q52 42 76 32" class="bp-detail"/>
+      <path d="M38 54 Q54 64 72 56" class="bp-detail"/>
+    `),
+    umbrella: atlas(`
+      <path d="M18 54 Q52 18 86 54 Z" class="bp-body"/>
+      <path d="M18 54 Q30 62 42 54 Q52 62 62 54 Q74 62 86 54" class="bp-detail"/>
+      <path d="M52 54 L52 82 Q52 92 62 86" class="bp-detail"/>
+    `),
+    seedPacket: atlas(`
+      <rect x="28" y="20" width="52" height="68" rx="8" class="bp-body"/>
+      <rect x="36" y="36" width="36" height="24" rx="5" class="bp-detail"/>
+      <path d="M36 72 L72 72" class="bp-detail"/>
+    `),
+    clover: atlas(`
+      <circle cx="42" cy="42" r="18" class="bp-body"/>
+      <circle cx="62" cy="42" r="18" class="bp-body"/>
+      <circle cx="52" cy="62" r="18" class="bp-body"/>
+      <path d="M52 66 Q48 82 38 88" class="bp-detail"/>
+    `),
+    succulent: atlas(`
+      <path d="M52 18 Q64 42 52 56 Q40 42 52 18 Z" class="bp-body"/>
+      <path d="M30 32 Q54 42 52 62 Q32 58 30 32 Z" class="bp-body"/>
+      <path d="M74 32 Q72 58 52 62 Q50 42 74 32 Z" class="bp-body"/>
+      <path d="M36 62 Q52 48 68 62 Q54 84 36 62 Z" class="bp-body"/>
+      <circle cx="52" cy="54" r="5" class="bp-detail"/>
+    `),
+    pendant: atlas(`
+      <circle cx="52" cy="20" r="7" class="bp-detail"/>
+      <path d="M52 26 Q78 50 52 86 Q26 50 52 26 Z" class="bp-body"/>
+      <path d="M42 52 Q52 44 62 52" class="bp-detail"/>
+    `),
+    wishbone: atlas(`
+      <path d="M52 84 Q50 62 42 48 Q34 34 28 24" class="bp-body"/>
+      <path d="M52 84 Q54 62 62 48 Q70 34 76 24" class="bp-body"/>
+      <path d="M52 84 Q52 68 52 54" class="bp-detail"/>
+    `),
+    glowBead: atlas(`
+      <circle cx="52" cy="52" r="28" class="bp-body"/>
+      <circle cx="52" cy="52" r="38" class="bp-glow"/>
+      <path d="M42 38 Q48 30 58 34" class="bp-detail"/>
+    `),
+    roundedObject: `
+      <rect x="105" y="62" width="110" height="112" rx="28"
+        fill="rgba(255,255,255,.08)" stroke="${mint}" stroke-width="3"/>
+    `,
+    snackBlob: `
+      <path d="M105 92 C112 54 187 54 205 92 C225 139 193 180 151 178 C109 176 88 135 105 92Z"
+        fill="rgba(255,255,255,.08)" stroke="${primary}" stroke-width="3"/>
+    `,
+    circleButton: `
+      <circle cx="160" cy="120" r="58"
+        fill="rgba(255,255,255,.08)" stroke="${primary}" stroke-width="3"/>
+      <circle cx="143" cy="108" r="5" fill="${mint}"/>
+      <circle cx="177" cy="108" r="5" fill="${mint}"/>
+      <circle cx="143" cy="139" r="5" fill="${mint}"/>
+      <circle cx="177" cy="139" r="5" fill="${mint}"/>
+    `,
+    cup: `
+      <path d="M112 88 H194 L184 166 H124 Z"
+        fill="rgba(255,255,255,.08)" stroke="${primary}" stroke-width="3"/>
+      <path d="M192 105 C226 100 226 145 188 139"
+        fill="none" stroke="${mint}" stroke-width="3" stroke-linecap="round"/>
+      <path d="M112 88 C132 76 174 76 194 88"
+        fill="none" stroke="${blue}" stroke-width="3" stroke-linecap="round"/>
+    `,
+    candle: `
+      <rect x="124" y="82" width="72" height="100" rx="22"
+        fill="rgba(255,255,255,.08)" stroke="${primary}" stroke-width="3"/>
+      <path d="M160 52 C174 70 162 82 160 86 C154 76 145 68 160 52Z"
+        fill="rgba(255,255,255,.15)" stroke="${pink}" stroke-width="3"/>
+      <path d="M134 94 C139 112 151 99 151 119"
+        fill="none" stroke="${mint}" stroke-width="3" stroke-linecap="round"/>
+    `,
+    toast: `
+      <path d="M108 105 C108 65 137 52 160 72 C183 52 212 65 212 105 L212 176 H108 Z"
+        fill="rgba(255,255,255,.08)" stroke="${primary}" stroke-width="3" stroke-linejoin="round"/>
+    `,
+    wedge: `
+      <path d="M96 154 C128 82 183 65 224 135 C187 174 137 181 96 154Z"
+        fill="rgba(255,255,255,.08)" stroke="${primary}" stroke-width="3"/>
+      <path d="M125 145 C152 114 180 105 205 132"
+        fill="none" stroke="${mint}" stroke-width="2" stroke-linecap="round"/>
+    `,
+    waffle: `
+      <rect x="106" y="68" width="108" height="108" rx="22"
+        fill="rgba(255,255,255,.08)" stroke="${primary}" stroke-width="3"/>
+      <path d="M142 73 V172 M178 73 V172 M111 104 H209 M111 140 H209"
+        stroke="${mint}" stroke-width="2" opacity=".7"/>
+    `,
+    questionMark: `
+      <path d="M133 85 C137 54 187 50 197 82 C206 111 169 113 166 139"
+        fill="none" stroke="${primary}" stroke-width="18" stroke-linecap="round"/>
+      <circle cx="162" cy="174" r="11" fill="${primary}"/>
+    `,
+    star: `
+      <path d="M160 55 L179 98 L225 101 L190 130 L201 176 L160 151 L119 176 L130 130 L95 101 L141 98 Z"
+        fill="rgba(255,255,255,.08)" stroke="${primary}" stroke-width="3" stroke-linejoin="round"/>
+    `,
+    sheetGhost: `
+      <path d="M104 179 V107 C104 72 129 54 160 54 C191 54 216 72 216 107 V179
+        C200 164 187 190 170 175 C154 160 139 190 122 175 C114 168 109 174 104 179Z"
+        fill="rgba(255,255,255,.08)" stroke="${blue}" stroke-width="3" stroke-linejoin="round"/>
+    `,
+    fluffBlob: `
+      <path d="M109 128 C83 101 107 72 135 82 C144 52 183 55 190 84 C222 78 235 113 213 135 C226 165 190 188 166 170 C139 194 96 168 109 128Z"
+        fill="rgba(255,255,255,.08)" stroke="${blue}" stroke-width="3"/>
+    `,
+    pencilStub: `
+      <path d="M98 98 H195 L225 120 L195 142 H98 Z"
+        fill="rgba(255,255,255,.08)" stroke="${primary}" stroke-width="3" stroke-linejoin="round"/>
+      <path d="M195 98 L225 120 L195 142"
+        fill="none" stroke="${mint}" stroke-width="3"/>
+    `,
+    stickyNote: `
+      <path d="M106 70 H214 V176 H106 Z"
+        fill="rgba(255,255,255,.08)" stroke="${primary}" stroke-width="3" stroke-linejoin="round"/>
+      <path d="M184 70 V100 H214"
+        fill="none" stroke="${mint}" stroke-width="3"/>
+    `,
+    cloud: `
+      <path d="M101 139 C82 111 106 84 132 94 C141 68 178 64 190 94 C217 91 235 115 218 140 C208 158 122 161 101 139Z"
+        fill="rgba(255,255,255,.08)" stroke="${blue}" stroke-width="3"/>
+    `,
+    drop: `
+      <path d="M160 54 C196 101 211 128 197 156 C184 183 136 183 123 156 C109 128 124 101 160 54Z"
+        fill="rgba(255,255,255,.08)" stroke="${blue}" stroke-width="3"/>
+    `,
+    sprout: `
+      <ellipse cx="160" cy="146" rx="46" ry="36"
+        fill="rgba(255,255,255,.08)" stroke="${primary}" stroke-width="3"/>
+      <path d="M160 111 C140 79 112 86 108 108 C132 116 150 117 160 111Z"
+        fill="rgba(255,255,255,.08)" stroke="${mint}" stroke-width="3"/>
+      <path d="M160 111 C180 79 208 86 212 108 C188 116 170 117 160 111Z"
+        fill="rgba(255,255,255,.08)" stroke="${mint}" stroke-width="3"/>
+    `,
+    cactus: `
+      <path d="M130 172 V99 C130 72 151 62 160 62 C169 62 190 72 190 99 V172 Z"
+        fill="rgba(255,255,255,.08)" stroke="${mint}" stroke-width="3"/>
+      <path d="M130 120 C104 116 105 150 130 145 M190 112 C217 107 216 143 190 137"
+        fill="none" stroke="${mint}" stroke-width="3" stroke-linecap="round"/>
+    `,
+    bell: `
+      <path d="M118 158 C130 143 124 105 133 88 C144 68 176 68 187 88 C196 105 190 143 202 158 Z"
+        fill="rgba(255,255,255,.08)" stroke="${primary}" stroke-width="3" stroke-linejoin="round"/>
+      <circle cx="160" cy="65" r="9" fill="none" stroke="${mint}" stroke-width="3"/>
+      <path d="M138 169 H182" stroke="${mint}" stroke-width="3" stroke-linecap="round"/>
+    `,
+    heart: `
+      <path d="M160 178 C116 144 93 119 106 91 C117 67 148 73 160 96 C172 73 203 67 214 91 C227 119 204 144 160 178Z"
+        fill="rgba(255,255,255,.08)" stroke="${pink}" stroke-width="3" stroke-linejoin="round"/>
+    `,
+    mushroom: `
+      <path d="M100 112 C105 68 215 68 220 112 C196 127 126 127 100 112Z"
+        fill="rgba(255,255,255,.08)" stroke="${primary}" stroke-width="3"/>
+      <rect x="135" y="110" width="50" height="70" rx="22"
+        fill="rgba(255,255,255,.08)" stroke="${mint}" stroke-width="3"/>
+    `,
+    sign: `
+      <rect x="103" y="72" width="114" height="84" rx="18"
+        fill="rgba(255,255,255,.08)" stroke="${primary}" stroke-width="3"/>
+      <path d="M160 156 V188" stroke="${mint}" stroke-width="4" stroke-linecap="round"/>
+    `,
+    crescent: `
+      <path d="M195 60 C154 76 132 124 154 170 C118 158 96 127 102 96 C109 60 149 42 195 60Z"
+        fill="rgba(255,255,255,.08)" stroke="${blue}" stroke-width="3"/>
+    `,
+    mask: `
+      <path d="M104 96 C122 62 198 62 216 96 C208 154 187 180 160 180 C133 180 112 154 104 96Z"
+        fill="rgba(255,255,255,.08)" stroke="${primary}" stroke-width="3"/>
+    `,
+    key: `
+      <circle cx="122" cy="118" r="32" fill="rgba(255,255,255,.08)" stroke="${primary}" stroke-width="3"/>
+      <path d="M154 118 H220 M198 118 V138 M214 118 V132" stroke="${mint}" stroke-width="7" stroke-linecap="round"/>
+    `,
+    sock: `
+      <path d="M122 70 H178 V134 C178 158 210 148 212 172 C186 186 132 180 122 150 Z"
+        fill="rgba(255,255,255,.08)" stroke="${primary}" stroke-width="3"/>
+    `,
+    bottle: `
+      <path d="M140 60 H180 V92 C198 101 205 121 202 172 H118 C115 121 122 101 140 92Z"
+        fill="rgba(255,255,255,.08)" stroke="${blue}" stroke-width="3"/>
+      <rect x="132" y="126" width="56" height="30" rx="8" fill="none" stroke="${mint}" stroke-width="3"/>
+    `,
+    ribbon: `
+      <path d="M160 120 C128 84 98 88 96 120 C98 152 128 156 160 120Z"
+        fill="rgba(255,255,255,.08)" stroke="${pink}" stroke-width="3"/>
+      <path d="M160 120 C192 84 222 88 224 120 C222 152 192 156 160 120Z"
+        fill="rgba(255,255,255,.08)" stroke="${pink}" stroke-width="3"/>
+      <circle cx="160" cy="120" r="14" fill="rgba(255,255,255,.08)" stroke="${primary}" stroke-width="3"/>
+    `,
+    flower: `
+      <circle cx="160" cy="120" r="24" fill="rgba(255,255,255,.08)" stroke="${primary}" stroke-width="3"/>
+      <circle cx="160" cy="78" r="22" fill="rgba(255,255,255,.08)" stroke="${pink}" stroke-width="3"/>
+      <circle cx="202" cy="120" r="22" fill="rgba(255,255,255,.08)" stroke="${pink}" stroke-width="3"/>
+      <circle cx="160" cy="162" r="22" fill="rgba(255,255,255,.08)" stroke="${pink}" stroke-width="3"/>
+      <circle cx="118" cy="120" r="22" fill="rgba(255,255,255,.08)" stroke="${pink}" stroke-width="3"/>
+    `,
+    acorn: `
+      <path d="M116 112 C122 72 198 72 204 112 C196 162 178 186 160 186 C142 186 124 162 116 112Z"
+        fill="rgba(255,255,255,.08)" stroke="${primary}" stroke-width="3"/>
+      <path d="M112 105 C126 76 194 76 208 105 C184 119 136 119 112 105Z"
+        fill="rgba(255,255,255,.08)" stroke="${mint}" stroke-width="3"/>
+    `,
+    symbolIcon: `
+      <path d="M160 58 L217 120 L160 182 L103 120 Z"
+        fill="rgba(255,255,255,.08)" stroke="${primary}" stroke-width="3"/>
+    `,
+    blob: `
+      <path d="M105 126 C88 78 130 52 165 72 C210 48 236 104 210 145 C228 190 145 195 126 166 C98 166 91 145 105 126Z"
+        fill="rgba(255,255,255,.08)" stroke="${blue}" stroke-width="3"/>
+    `,
+    deskTool: `
+      <rect x="105" y="86" width="120" height="74" rx="20"
+        fill="rgba(255,255,255,.08)" stroke="${primary}" stroke-width="3"/>
+      <path d="M205 86 L230 123 L205 160" fill="none" stroke="${mint}" stroke-width="3"/>
+    `,
+    weatherBlob: `
+      <path d="M100 132 C90 92 128 74 158 88 C186 58 229 91 212 130 C230 162 180 178 154 160 C130 178 90 160 100 132Z"
+        fill="rgba(255,255,255,.08)" stroke="${blue}" stroke-width="3"/>
+    `,
+    plantMass: `
+      <path d="M160 186 C126 162 108 128 125 96 C142 64 178 64 195 96 C212 128 194 162 160 186Z"
+        fill="rgba(255,255,255,.08)" stroke="${mint}" stroke-width="3"/>
+      <path d="M160 98 C136 76 110 82 100 106 C126 112 148 112 160 98Z M160 98 C184 76 210 82 220 106 C194 112 172 112 160 98Z"
+        fill="none" stroke="${primary}" stroke-width="3"/>
+    `,
+    charmIcon: `
+      <path d="M160 54 L218 120 L160 186 L102 120 Z"
+        fill="rgba(255,255,255,.08)" stroke="${primary}" stroke-width="3"/>
+      <circle cx="160" cy="54" r="10" fill="none" stroke="${mint}" stroke-width="3"/>
+    `
+  };
+  return bodies[shape] || bodies.roundedObject;
+}
+
+function blueprintFaceSvg(zone, card, colors) {
+  const { x, y } = blueprintPoint(zone);
+  const ink = colors.ink;
+  const blue = colors.blue;
+  const moodKey = card?.moodKey || 'blank';
+  const line = (d, w = 3) => `<path d="${d}" fill="none" stroke="${ink}" stroke-width="${w}" stroke-linecap="round" stroke-linejoin="round"/>`;
+  const dot = (cx, cy, r = 4) => `<circle cx="${cx}" cy="${cy}" r="${r}" fill="${ink}"/>`;
+  const brow = (kind = 'soft') => {
+    if (kind === 'angry') return `${line(`M${x-24} ${y-16} l18 6`, 3)}${line(`M${x+8} ${y-10} l18 -6`, 3)}`;
+    if (kind === 'raised') return `${line(`M${x-24} ${y-16} q10 -8 20 -2`, 3)}${line(`M${x+8} ${y-22} q10 -8 20 -2`, 3)}`;
+    if (kind === 'flat') return `${line(`M${x-25} ${y-15} h18`, 3)}${line(`M${x+8} ${y-15} h18`, 3)}`;
+    if (kind === 'worried') return `${line(`M${x-25} ${y-18} q10 -6 20 0`, 3)}${line(`M${x+8} ${y-18} q10 -6 20 0`, 3)}`;
+    return '';
+  };
+  const smile = line(`M${x-8} ${y+20} q9 7 20 0`, 3);
+  const frown = line(`M${x-8} ${y+23} q10 -7 20 0`, 3);
+  const flat = line(`M${x-8} ${y+20} h20`, 3);
+  const open = `<ellipse cx="${x+2}" cy="${y+20}" rx="6" ry="8" fill="${ink}"/>`;
+  const smirk = line(`M${x-9} ${y+20} q16 9 27 -2`, 3);
+  const star = `<path d="M${x+14} ${y-12} l4 8 l9 2 l-7 5 l2 9 l-8 -5 l-8 5 l2 -9 l-7 -5 l9 -2z" fill="${blue}"/>`;
+
+  if (['sleepy', 'melancholyCute', 'softlyHaunted'].includes(moodKey)) {
+    return `${brow('worried')}${line(`M${x-26} ${y} q10 6 20 0`, 4)}${line(`M${x+8} ${y} q10 6 20 0`, 4)}${moodKey === 'melancholyCute' ? frown : flat}`;
+  }
+  if (['suspicious', 'sneaky', 'secretlyGuilty'].includes(moodKey)) {
+    return `${brow('raised')}${line(`M${x-26} ${y} q12 -5 24 0`, 4)}${dot(x+18, y+2, 4)}${moodKey === 'sneaky' ? smirk : flat}`;
+  }
+  if (['dramatic', 'dramaticallyOffended', 'grumpy', 'tinyPanic'].includes(moodKey)) {
+    return `${brow(moodKey === 'tinyPanic' ? 'worried' : 'angry')}${dot(x-18, y, moodKey === 'tinyPanic' ? 7 : 5)}${dot(x+18, y+2, moodKey === 'tinyPanic' ? 7 : 5)}${moodKey === 'tinyPanic' ? open : frown}`;
+  }
+  if (['proud', 'smug', 'tooOfficial', 'overprepared'].includes(moodKey)) {
+    return `${brow(moodKey === 'tooOfficial' ? 'flat' : 'raised')}${moodKey === 'smug' ? line(`M${x-26} ${y} q10 5 22 0`, 4) + line(`M${x+8} ${y} q10 5 22 0`, 4) : dot(x-18, y, 4) + dot(x+18, y, 4)}${moodKey === 'smug' ? smirk : flat}`;
+  }
+  if (['hopeful', 'delightedGoblin', 'starstruck'].includes(moodKey)) {
+    return `${brow('soft')}${moodKey === 'starstruck' ? star : dot(x-18, y, 7)}${dot(x+18, y, 7)}${moodKey === 'delightedGoblin' ? open : smile}`;
+  }
+  if (['feralCute', 'mildlyCursed', 'blank', 'cosmicBlank', 'secret'].includes(moodKey)) {
+    const right = moodKey === 'cosmicBlank' || moodKey === 'secret' ? star : `<path d="M${x+10} ${y-7} l15 15 M${x+25} ${y-7} l-15 15" stroke="${ink}" stroke-width="4" stroke-linecap="round"/>`;
+    const mouth = moodKey === 'feralCute' ? `${smile}<path d="M${x+2} ${y+25} l4 8 l4 -8" fill="#fff8f1" stroke="${ink}" stroke-width="2"/>` : flat;
+    return `${dot(x-18, y, moodKey === 'feralCute' ? 7 : 5)}${right}${mouth}`;
+  }
+  if (['bashful', 'clingy'].includes(moodKey)) {
+    return `${brow('worried')}${dot(x-18, y+3, 5)}${dot(x+18, y+3, 5)}${smile}<circle cx="${x-32}" cy="${y+14}" r="5" fill="${colors.pink}" opacity=".55"/><circle cx="${x+34}" cy="${y+14}" r="5" fill="${colors.pink}" opacity=".55"/>`;
+  }
+  return `${dot(x-18, y, 5)}${dot(x+18, y, 5)}${smile}`;
+}
+
+function blueprintMarkerSvg(zone, label, colors) {
+  const point = blueprintPoint(zone);
+  return `
+    <g>
+      <circle cx="${point.x}" cy="${point.y}" r="13"
+        fill="rgba(120,224,194,.15)" stroke="${colors.mint}" stroke-width="2"/>
+      <path d="M${point.x - 5} ${point.y} H${point.x + 5} M${point.x} ${point.y - 5} V${point.y + 5}"
+        stroke="${colors.mint}" stroke-width="2" stroke-linecap="round"/>
+      <text x="${point.x}" y="${point.y + 28}" text-anchor="middle"
+        fill="${colors.primary}" font-size="8" font-weight="800">${label}</text>
+    </g>
+  `;
+}
+
+function sparkAdjustedWeirdZone(speciesRules, card) {
+  const spark = card?.sparkKey || '';
+  if (spark === 'tinyCompanion') return 'sideFloat';
+  if (spark === 'quietMagic') return 'floatingNear';
+  if (spark === 'wrongScale') return speciesRules.propAnchor || 'topRight';
+  if (spark === 'secretSymbol') return speciesRules.weirdZone || 'surfacePatch';
+  if (spark === 'tinyJob') return speciesRules.propAnchor || 'frontCenter';
+  if (spark === 'attachedOddity') return speciesRules.weirdZone || speciesRules.propAnchor || 'topRight';
+  return speciesRules.weirdZone || speciesRules.propAnchor || 'topRight';
+}
+
 function renderBlueprint(card) {
   const svg = $('#blueprintSvg');
-  const color = getComputedStyle(document.documentElement);
-  const mint = color.getPropertyValue('--mint').trim() || '#78e0c2';
-  const primary = color.getPropertyValue('--primary').trim() || '#ff7f73';
-  const pink = color.getPropertyValue('--pink').trim() || '#ff8fbd';
-  const blue = color.getPropertyValue('--blue').trim() || '#91b7ff';
-  const ink = '#111426';
-  const bodyShape = bodyShapeFor(card?.lane);
-  const symbol = symbolFor(card?.extra);
+  if (!svg || !card) return;
+  const styles = getComputedStyle(document.documentElement);
+  const colors = {
+    mint: styles.getPropertyValue('--mint').trim() || '#78e0c2',
+    primary: styles.getPropertyValue('--primary').trim() || '#ff7f73',
+    pink: styles.getPropertyValue('--pink').trim() || '#ff8fbd',
+    blue: styles.getPropertyValue('--blue').trim() || '#91b7ff',
+    ink: '#111426'
+  };
+  const speciesRules = card.blueprintSpecies || inferSpeciesBlueprint(card.species || card.mascot, card.lane);
   const visual = moodVisualFor(card);
   const tilt = visual.tilt || 0;
-  const prop = visual.prop || { x: 206, y: 146, scale: 1, opacity: 1 };
-  const face = renderMoodFace(card, ink, blue);
-  const moodLabel = (card?.mood || 'mood').replace(/&/g, '&amp;');
-  const moodRead = (card?.blueprint?.moodRead || moodData[card?.moodKey]?.moodRead || 'Face, tilt, and prop placement reveal the mood.').replace(/&/g, '&amp;').replace(/</g, '&lt;');
+  const faceZone = speciesRules.faceZone || 'lowerCenter';
+  const propAnchor = speciesRules.propAnchor || 'topRight';
+  const weirdZone = sparkAdjustedWeirdZone(speciesRules, card);
+  const moodLabel = escapeHtml(card?.mood || 'mood');
+  const bodyLabel = escapeHtml(speciesRules.bodyLabel || 'blueprint body');
+  const moodRead = escapeHtml(card?.blueprint?.moodRead || moodData[card?.moodKey]?.moodRead || 'Face, tilt, and prop placement reveal the mood.');
 
   svg.innerHTML = `
     <defs>
       <filter id="softShadow" x="-20%" y="-20%" width="140%" height="140%">
-        <feDropShadow dx="0" dy="12" stdDeviation="10" flood-color="#000" flood-opacity="0.22" />
+        <feDropShadow dx="0" dy="10" stdDeviation="8" flood-color="#000" flood-opacity=".22"/>
       </filter>
-      <linearGradient id="bodyGrad" x1="0" x2="1" y1="0" y2="1">
-        <stop offset="0" stop-color="${mint}" stop-opacity="0.95" />
-        <stop offset="1" stop-color="${primary}" stop-opacity="0.82" />
-      </linearGradient>
     </defs>
-    <g opacity="0.36" stroke="currentColor" fill="none" stroke-width="2" stroke-dasharray="8 10">
+    <rect x="16" y="16" width="288" height="208" rx="28"
+      fill="rgba(255,255,255,.035)" stroke="rgba(255,255,255,.12)" />
+    <g opacity="0.34" stroke="currentColor" fill="none" stroke-width="2" stroke-dasharray="8 10">
       <path d="M58 120 H264" />
       <path d="M160 34 V214" />
       <circle cx="160" cy="120" r="78" />
     </g>
     <g filter="url(#softShadow)" transform="translate(160 132) rotate(${tilt}) translate(-160 -132)">
-      ${bodyShape}
-      ${face}
-      <g transform="translate(${prop.x} ${prop.y}) scale(${prop.scale || 1})" opacity="${prop.opacity || 1}">${symbol}</g>
-      <path d="M94 156 q-25 25 -2 44" fill="none" stroke="${pink}" stroke-width="12" stroke-linecap="round" opacity="0.9" />
-      <path d="M224 156 q25 25 2 44" fill="none" stroke="${pink}" stroke-width="12" stroke-linecap="round" opacity="0.9" />
+      ${blueprintBodySvg(speciesRules.bodyShape, colors)}
+      ${blueprintFaceSvg(faceZone, card, colors)}
+      ${blueprintMarkerSvg(propAnchor, 'prop', colors)}
+      ${blueprintMarkerSvg(weirdZone, 'weird', colors)}
     </g>
-    <g opacity="0.94">
+    <g opacity="0.96">
       <rect x="20" y="18" width="280" height="42" rx="16" fill="rgba(17,20,38,.44)" />
-      <text x="36" y="44" fill="${blue}" font-size="15" font-weight="900">Moodprint: ${moodLabel}</text>
-      <text x="36" y="224" fill="currentColor" font-size="11" opacity="0.74">${moodRead.slice(0, 70)}${moodRead.length > 70 ? '…' : ''}</text>
+      <text x="36" y="44" fill="${colors.blue}" font-size="15" font-weight="900">Moodprint: ${moodLabel}</text>
+      <text x="160" y="216" text-anchor="middle" fill="${colors.mint}" font-size="10" font-weight="900">${bodyLabel}</text>
+      <text x="36" y="232" fill="currentColor" font-size="10" opacity="0.66">${moodRead.slice(0, 82)}${moodRead.length > 82 ? '…' : ''}</text>
     </g>
   `;
 }
@@ -1417,7 +2755,7 @@ function renderStash() {
       </div>
       <p><strong>Odd thing:</strong> ${escapeHtml(item.oddThing)}</p>
       ${item.notes ? `<p class="stash-note"><strong>Note:</strong> ${escapeHtml(item.notes)}</p>` : ''}
-      <div class="stash-tags"><span>${escapeHtml(item.lane || 'odd')}</span><span>${escapeHtml(item.spark || 'spark')}</span><span>${escapeHtml(item.energy || 'normal')}</span><span>${escapeHtml(item.shapeLimit || 'simple')} shapes</span></div>
+      <div class="stash-tags"><span>${escapeHtml(item.lane || 'odd')}</span><span>${escapeHtml(item.mascot || 'species')}</span><span>${escapeHtml(item.spark || 'spark')}</span><span>${escapeHtml(item.energy || 'normal')}</span><span>${escapeHtml(item.shapeLimit || 'simple')} shapes</span></div>
       <div class="stash-actions">
         <button class="ghost-btn" data-action="load">Load</button>
         <button class="ghost-btn" data-action="drawn">${item.status === 'drawn' ? 'Drawn ✓' : 'Mark drawn'}</button>
@@ -1487,6 +2825,11 @@ Tiny version: ${card.tinyVersion || makeTinyVersion(card)}
 Oddlet version: ${card.oddletVersion || makeOddletVersion(card)}
 
 Creature commentary: ${card.commentary || makeCommentary(card)}
+
+Oddlet species: ${card.species || card.mascot}
+Species blueprint: ${(card.blueprintSpecies || inferSpeciesBlueprint(card.species || card.mascot, card.lane)).bodyLabel}
+Species start hint: ${(card.blueprintSpecies || inferSpeciesBlueprint(card.species || card.mascot, card.lane)).bodyHint}
+Species body note: ${getSpeciesBodyNote(card.blueprintSpecies || inferSpeciesBlueprint(card.species || card.mascot, card.lane))}
 
 Odd little thing: ${card.oddThing}
 
@@ -1792,8 +3135,30 @@ function initServiceWorker() {
   }
 }
 
+async function resetApp() {
+  const confirmed = confirm('Reset Oddlet on this device? This clears saved cards, favorites, settings, and old app caches so the newest build can wake up clean.');
+  if (!confirmed) return;
+  try {
+    localStorage.removeItem(STORAGE_KEY);
+    localStorage.removeItem(SETTINGS_KEY);
+    localStorage.removeItem(FAVORITES_KEY);
+    if ('caches' in window) {
+      const keys = await caches.keys();
+      await Promise.all(keys.map((key) => caches.delete(key)));
+    }
+    if ('serviceWorker' in navigator) {
+      const regs = await navigator.serviceWorker.getRegistrations();
+      await Promise.all(regs.map((reg) => reg.update()));
+    }
+  } catch (error) {
+    console.warn('Reset app warning:', error);
+  }
+  location.reload();
+}
+
 function initEvents() {
   $$('.tab').forEach((button) => button.addEventListener('click', () => switchTab(button.dataset.tab)));
+  $('#laneSelect').addEventListener('change', updateSpeciesSelect);
   $('#rollBtn').addEventListener('click', () => rollCard());
   $('#surpriseBtn').addEventListener('click', () => rollCard({ fullSurprise: true }));
   $('#dailyBtn').addEventListener('click', () => rollCard({ daily: true }));
@@ -1811,6 +3176,7 @@ function initEvents() {
   $('#spinGrid').addEventListener('click', handleSpin);
   $('#aiBtn').addEventListener('click', runAI);
   $('#saveSettingsBtn').addEventListener('click', saveSettings);
+  $('#resetAppBtn').addEventListener('click', resetApp);
   $('#biasSwitch').addEventListener('click', () => {
     biasOn = !biasOn;
     $('#biasSwitch').classList.toggle('on', biasOn);
@@ -1826,6 +3192,7 @@ function initEvents() {
 
 function init() {
   fillSelect('#laneSelect', lanes);
+  updateSpeciesSelect();
   fillSelect('#moodSelect', moods);
   fillSelect('#sparkSelect', sparks);
   fillSelect('#shapeSelect', shapes);

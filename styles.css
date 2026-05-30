@@ -796,3 +796,50 @@ ul { padding-left: 18px; margin: 0; }
   .palette-swatches,
   .palette-assignments { grid-template-columns: 1fr; }
 }
+
+
+.select-hint {
+  display: block;
+  margin-top: -2px;
+  color: var(--soft);
+  font-size: .78rem;
+  line-height: 1.35;
+  font-weight: 700;
+}
+
+#speciesSelect {
+  border-color: color-mix(in srgb, var(--mint) 38%, var(--line));
+}
+
+
+
+.bp-body {
+  fill: rgba(255,255,255,.08);
+  stroke: var(--primary);
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.bp-detail {
+  fill: none;
+  stroke: var(--mint);
+  stroke-width: 2.25;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  opacity: .78;
+}
+
+.bp-hole {
+  fill: rgba(17,20,38,.32);
+  stroke: var(--mint);
+  stroke-width: 2.5;
+}
+
+.bp-glow {
+  fill: none;
+  stroke: var(--blue);
+  stroke-width: 2;
+  opacity: .38;
+}
+
