@@ -1,8 +1,24 @@
 {
-  "name": "Oddlet Lab",
+  "name": "Oddlet",
   "short_name": "Oddlet",
-  "start_url": ".",
+  "description": "A tiny mascot prompt arcade for drawing simple weird object-creatures with one drawable spark.",
+  "start_url": "./index.html",
   "display": "standalone",
-  "background_color": "#faf8fc",
-  "theme_color": "#7965c4"
+  "background_color": "#151923",
+  "theme_color": "#171D2A",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "ICON-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "ICON-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
 }

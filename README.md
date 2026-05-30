@@ -156,3 +156,24 @@ Adds:
 - Tiny twist teaching note in Blueprint Breakdown
 - copy/export includes twist and twist note
 - service worker cache bumped to oddlet-v2-1-0
+
+
+## V2.2 Little Object Drawer
+
+Adds:
+- visible Little Object dropdown in the Create/Lesson controls
+- lane-aware Little Object suggestions with Surprise me fallback
+- the selected Little Object now drives the {extra} used by spark templates
+- blueprint object marker now reflects the selected Little Object
+- Blueprint Breakdown now explains Little Object placement instead of a vague prop anchor
+- Daily Oddlet picks a daily Little Object too
+- service worker cache bumped to oddlet-v2-2-0
+
+
+## V2.3 Blueprint Object Preview
+
+Adds:
+- visual Little Object preview directly inside the blueprint SVG
+- object icon preview stays tied to the selected Little Object and its placement zone
+- keeps all previous modules, controls, logic, blueprint systems, palette logic, species atlas, moodprint layer, and tiny twist blueprint pins
+- service worker cache bumped to oddlet-v2-3-0
