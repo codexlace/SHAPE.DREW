@@ -61,6 +61,181 @@ const sparks = [
   { value: 'fakeImportance', label: 'Fake importance' }
 ];
 
+
+const twistsBySpark = {
+  livingDetail: [
+    'one tiny mark has its own face',
+    'a sticker patch is awake and judging',
+    'the corner has little eyes',
+    'a crack in the body is smiling',
+    'one button, seed, or dot is alive',
+    'the label reacts more than the mascot',
+    'a tiny bite mark looks guilty',
+    'one shine spot has an expression',
+    'a stitched patch is blinking',
+    'a drip has a tiny mouth',
+    'a crumb is trying to escape',
+    'one fold looks suspicious',
+    'a symbol on the body is nervous',
+    'a tiny spot is staring at the viewer',
+    'a loose thread has personality'
+  ],
+  tinyJob: [
+    'guardian of one tiny object',
+    'official crumb inspector',
+    'keeper of a useless label',
+    'protector of a single sparkle',
+    'tiny mailbox clerk',
+    'button hole supervisor',
+    'emergency sticker manager',
+    'certified puddle watcher',
+    'miniature sign holder',
+    'secret snack security guard',
+    'moonbeam assistant',
+    'dust cataloguer',
+    'tiny weather reporter',
+    'official ribbon straightener',
+    'very serious dot counter'
+  ],
+  secretSymbol: [
+    'mysterious X mark',
+    'tiny question mark patch',
+    'hidden moon stamp',
+    'small warning triangle',
+    'secret eye symbol',
+    'crooked arrow label',
+    'tiny crown mark',
+    'strange spiral stamp',
+    'mini heart seal',
+    'glowing dot code',
+    'folded map symbol',
+    'odd little star scar',
+    'unknown badge shape',
+    'tiny “you are here” mark',
+    'symbol that points to the wrong place'
+  ],
+  wrongScale: [
+    'huge tiny crown',
+    'oversized sticker label',
+    'massive little spoon',
+    'too-big ribbon bow',
+    'giant button on a tiny body',
+    'huge charm loop',
+    'tiny mascot carrying a huge crumb',
+    'enormous tag attached to it',
+    'oversized sparkle hovering nearby',
+    'big suspicious envelope',
+    'tiny body with giant boots',
+    'huge key too heavy to hold',
+    'massive pencil tip',
+    'giant raindrop companion',
+    'large official badge'
+  ],
+  microProblem: [
+    'the label keeps peeling off',
+    'the tiny crown is slipping',
+    'one leg is too short',
+    'the prop is wobbling',
+    'a drip is falling at the worst time',
+    'the ribbon is tangled',
+    'the face is slightly misplaced',
+    'the sparkle is too heavy',
+    'the companion is hiding',
+    'the sign points the wrong way',
+    'one corner is folded sadly',
+    'the handle is emotionally unstable',
+    'the hat does not fit',
+    'the tiny object is stuck',
+    'the mascot is pretending nothing is wrong'
+  ],
+  costumeLogic: [
+    'wearing one tiny cape',
+    'pretending to be a wizard',
+    'wearing a fake crown',
+    'dressed like a tiny official',
+    'wearing one oversized bow',
+    'disguised as a sticker',
+    'wearing a paper mask',
+    'pretending to be royalty',
+    'wearing a little raincoat',
+    'dressed like a desk clerk',
+    'wearing a badly placed hat',
+    'costumed as a tiny ghost',
+    'wearing one dramatic collar',
+    'pretending to be fancy',
+    'wearing a costume that only makes sense to itself'
+  ],
+  quietMagic: [
+    'one shy sparkle floats nearby',
+    'a tiny glow leaks from the edge',
+    'the symbol softly shines',
+    'one dot orbits the mascot',
+    'a small moonbeam touches it',
+    'the prop levitates slightly',
+    'a tiny charm hums with glow',
+    'one eye has a magical glint',
+    'a soft halo sits behind it',
+    'a glow puddle forms underneath',
+    'a tiny star follows it',
+    'the weird detail sparkles once',
+    'one edge looks enchanted',
+    'a little spell mark floats above',
+    'the mascot does not realize it is magical'
+  ],
+  attachedOddity: [
+    'a tag with its own mood',
+    'a ribbon acting independent',
+    'a handle that looks suspicious',
+    'a corner charm dangling off',
+    'a tiny sticker stuck to the side',
+    'a loop attached at the top',
+    'a side patch with little eyes',
+    'a loose string pulling away',
+    'a tiny envelope taped on',
+    'a bead hanging from one edge',
+    'a label attached too seriously',
+    'a small bell tied on',
+    'a weird charm clipped to it',
+    'a folded flap with personality',
+    'an attached dot that looks important'
+  ],
+  tinyCompanion: [
+    'a tiny droplet sidekick',
+    'a small star buddy',
+    'a nervous crumb companion',
+    'a mini ghost hiding behind it',
+    'a little button friend',
+    'a tiny moon follower',
+    'a shy sticker sidekick',
+    'a small sprout copying its face',
+    'a tiny cloud hovering nearby',
+    'a little dot creature',
+    'a mini charm following it',
+    'a tiny shadow buddy',
+    'a small sparkle with opinions',
+    'a baby version of the mascot',
+    'a tiny prop that thinks it is in charge'
+  ],
+  fakeImportance: [
+    'wearing an official badge',
+    'standing beside a serious label',
+    'guarding a useless object',
+    'presenting a crumb like treasure',
+    'holding a tiny certificate',
+    'wearing a museum tag',
+    'posing like royalty',
+    'protecting one ordinary dot',
+    'standing on a tiny pedestal',
+    'displaying a very important sticker',
+    'holding a sign that says official',
+    'guarding a spoon like a relic',
+    'treating a button like a sacred artifact',
+    'wearing a dramatic tiny medal',
+    'acting like the tiny prop is legally binding'
+  ]
+};
+
+
 const shapes = [
   { value: '3', label: '3-shape easy' },
   { value: '5', label: '5-shape cute' },
@@ -330,6 +505,191 @@ const packDecks = {
     sparks: ['fakeImportance', 'tinyJob', 'microProblem', 'wrongScale']
   }
 };
+
+
+
+const newTwistBlueprintRules = {
+  'one tiny mark has its own face': { zone: 'surfacePatch', label: 'face mark', note: 'Place the living mark on the main body surface so it reads as part of the mascot.' },
+  'a sticker patch is awake and judging': { zone: 'labelPatch', label: 'sticker', note: 'Put the sticker patch on a clear body area and give it a tiny judging expression.' },
+  'the corner has little eyes': { zone: 'foldedCorner', label: 'corner eyes', note: 'Place the eyes on one corner so the body still reads first.' },
+  'a crack in the body is smiling': { zone: 'surfacePatch', label: 'crack', note: 'Make the crack one simple curved line with a tiny smile, not a full second face.' },
+  'one button, seed, or dot is alive': { zone: 'innerHole', label: 'alive dot', note: 'Pick one small dot or hole and make only that detail alive.' },
+  'the label reacts more than the mascot': { zone: 'labelPatch', label: 'label', note: 'Let the label carry the expression while the mascot stays simple.' },
+  'a tiny bite mark looks guilty': { zone: 'topRight', label: 'bite', note: 'Place the bite on an outer edge and keep it small enough to not destroy the silhouette.' },
+  'one shine spot has an expression': { zone: 'bowlShine', label: 'shine', note: 'Put the expression inside one shine spot or highlight area.' },
+  'a stitched patch is blinking': { zone: 'surfacePatch', label: 'patch', note: 'Draw one stitched patch with a single blinking eye, not lots of stitches.' },
+  'a drip has a tiny mouth': { zone: 'bottomEdge', label: 'drip', note: 'Place the tiny mouth on the drip so the falling shape becomes the joke.' },
+  'a crumb is trying to escape': { zone: 'sideFloat', label: 'crumb', note: 'Put the crumb just outside the body edge so it feels like it is escaping.' },
+  'one fold looks suspicious': { zone: 'foldedCorner', label: 'fold', note: 'Use the fold as the suspicious detail and avoid extra face clutter.' },
+  'a symbol on the body is nervous': { zone: 'surfacePatch', label: 'symbol', note: 'Place the nervous symbol on the main body, close to the face but not covering it.' },
+  'a tiny spot is staring at the viewer': { zone: 'surfacePatch', label: 'spot', note: 'Make one spot stare outward so the weirdness is readable immediately.' },
+  'a loose thread has personality': { zone: 'sideAttach', label: 'thread', note: 'Attach the thread to one edge so it feels connected to the mascot.' },
+  'guardian of one tiny object': { zone: 'frontCenter', label: 'guarded', note: 'Place the tiny object in front like treasure, with the mascot protecting it.' },
+  'official crumb inspector': { zone: 'bottomEdge', label: 'crumb', note: 'Put the crumb near the bottom edge so the mascot can inspect it clearly.' },
+  'keeper of a useless label': { zone: 'labelPatch', label: 'label', note: 'Make the label visible and silly-important, but do not fill it with tiny writing.' },
+  'protector of a single sparkle': { zone: 'upperRight', label: 'sparkle', note: 'Place one sparkle near the mascot and let the pose imply protection.' },
+  'tiny mailbox clerk': { zone: 'flagSide', label: 'mail', note: 'Use a small mail or flag-side marker so the job reads without drawing a full post office.' },
+  'button hole supervisor': { zone: 'buttonHole', label: 'hole', note: 'Focus attention on one button hole and treat it like a tiny official station.' },
+  'emergency sticker manager': { zone: 'labelPatch', label: 'sticker', note: 'Put the sticker patch on the body and make it feel very official.' },
+  'certified puddle watcher': { zone: 'underBody', label: 'puddle', note: 'Place the puddle under the mascot so the job is readable without a background.' },
+  'miniature sign holder': { zone: 'frontCenter', label: 'sign', note: 'Put the sign in front or to one side and keep the sign text minimal.' },
+  'secret snack security guard': { zone: 'frontCenter', label: 'snack', note: 'Put the protected snack close to the body and avoid adding a whole snack scene.' },
+  'moonbeam assistant': { zone: 'upperRight', label: 'beam', note: 'Place the moonbeam above or beside the mascot as one soft magical cue.' },
+  'dust cataloguer': { zone: 'sideFloat', label: 'dust', note: 'Use one or two dust dots nearby, not a dusty background.' },
+  'tiny weather reporter': { zone: 'upperRight', label: 'weather', note: 'Place one tiny weather symbol near the mascot like a report badge.' },
+  'official ribbon straightener': { zone: 'sideAttach', label: 'ribbon', note: 'Attach the ribbon to the body and make it the one job-related detail.' },
+  'very serious dot counter': { zone: 'surfacePatch', label: 'dots', note: 'Use a small group of dots on the body, but keep the count visually simple.' },
+  'mysterious X mark': { zone: 'surfacePatch', label: 'X mark', note: 'Place the X on the body like a secret stamp, not as a second face unless intended.' },
+  'tiny question mark patch': { zone: 'surfacePatch', label: '? patch', note: 'Put the question mark on a clean body area so the symbol stays readable.' },
+  'hidden moon stamp': { zone: 'upperRight', label: 'moon', note: 'Place the moon stamp near the upper body or edge so it feels hidden but clear.' },
+  'small warning triangle': { zone: 'surfacePatch', label: 'warning', note: 'Keep the warning triangle simple and centered enough to read.' },
+  'secret eye symbol': { zone: 'faceZone', label: 'eye', note: 'Place the eye symbol near the face zone, but do not let it become a second full face.' },
+  'crooked arrow label': { zone: 'labelPatch', label: 'arrow', note: 'Put the crooked arrow on a label patch or sign area.' },
+  'tiny crown mark': { zone: 'topCenter', label: 'crown', note: 'Use the crown mark near the top so it reads as tiny symbolic importance.' },
+  'strange spiral stamp': { zone: 'spiralCenter', label: 'spiral', note: 'Place the spiral in a clear center or patch area so it does not become clutter.' },
+  'mini heart seal': { zone: 'surfacePatch', label: 'heart', note: 'Use one tiny heart seal on the body, preferably close to the chest area.' },
+  'glowing dot code': { zone: 'surfacePatch', label: 'dot code', note: 'Use only a few glowing dots so the code feels intentional, not messy.' },
+  'folded map symbol': { zone: 'foldedCorner', label: 'map', note: 'Place the map symbol near a fold or corner for a secret-paper feeling.' },
+  'odd little star scar': { zone: 'surfacePatch', label: 'star scar', note: 'Make the star scar small and readable with simple points.' },
+  'unknown badge shape': { zone: 'labelPatch', label: 'badge', note: 'Use a badge-like patch on the front surface.' },
+  'tiny “you are here” mark': { zone: 'labelPatch', label: 'you are here', note: 'Put this on a label or sign area and avoid tiny map details.' },
+  'symbol that points to the wrong place': { zone: 'surfacePatch', label: 'wrong way', note: 'Place the symbol where its wrong direction is obvious but not confusing.' },
+  'huge tiny crown': { zone: 'topCenter', label: 'big crown', note: 'Put the crown on top and make it oversized while simplifying everything else.' },
+  'oversized sticker label': { zone: 'labelPatch', label: 'big label', note: 'Let the label take up a big readable area on the body.' },
+  'massive little spoon': { zone: 'sideFloat', label: 'big spoon', note: 'Place the spoon beside the mascot and make the scale joke clear.' },
+  'too-big ribbon bow': { zone: 'sideAttach', label: 'big bow', note: 'Attach the oversized bow to one edge or top corner.' },
+  'giant button on a tiny body': { zone: 'surfacePatch', label: 'giant button', note: 'Put the button on the front and let it dominate the small body.' },
+  'huge charm loop': { zone: 'topLoop', label: 'big loop', note: 'Make the charm loop oversized at the top so the silhouette still reads.' },
+  'tiny mascot carrying a huge crumb': { zone: 'sideFloat', label: 'huge crumb', note: 'Place the crumb beside or above the mascot and keep the body simple.' },
+  'enormous tag attached to it': { zone: 'sideAttach', label: 'huge tag', note: 'Attach the large tag to one side so it feels connected.' },
+  'oversized sparkle hovering nearby': { zone: 'upperRight', label: 'big sparkle', note: 'Place the sparkle above or beside the mascot as the main scale joke.' },
+  'big suspicious envelope': { zone: 'sideFloat', label: 'big envelope', note: 'Put the big envelope beside the mascot and keep it simple.' },
+  'tiny body with giant boots': { zone: 'bottomEdge', label: 'big boots', note: 'Place the boots under the body and avoid extra leg detail.' },
+  'huge key too heavy to hold': { zone: 'sideFloat', label: 'huge key', note: 'Let the key sit to the side or lower edge with a heavy-feeling tilt.' },
+  'massive pencil tip': { zone: 'toolEnd', label: 'big tip', note: 'Make the pencil tip the biggest readable feature.' },
+  'giant raindrop companion': { zone: 'sideFloat', label: 'big drop', note: 'Place the raindrop beside the mascot, larger than expected.' },
+  'large official badge': { zone: 'frontCenter', label: 'big badge', note: 'Put the badge front-center and simplify the face.' },
+  'the label keeps peeling off': { zone: 'labelPatch', label: 'peeling', note: 'Place the peeling label on one edge and curl only one corner.' },
+  'the tiny crown is slipping': { zone: 'topCenter', label: 'slip crown', note: 'Tilt the crown slightly off the top to show the problem.' },
+  'one leg is too short': { zone: 'bottomEdge', label: 'short leg', note: 'Show the issue with one tiny uneven foot or leg, not detailed anatomy.' },
+  'the prop is wobbling': { zone: 'sideFloat', label: 'wobble', note: 'Place the prop to one side with a tiny wobble mark.' },
+  'a drip is falling at the worst time': { zone: 'bottomEdge', label: 'drip', note: 'Put the drip just below the body so the falling moment reads quickly.' },
+  'the ribbon is tangled': { zone: 'sideAttach', label: 'tangle', note: 'Attach the ribbon to one side and use one simple tangle loop.' },
+  'the face is slightly misplaced': { zone: 'faceZone', label: 'face', note: 'Shift the face slightly off-center but keep it readable.' },
+  'the sparkle is too heavy': { zone: 'upperRight', label: 'heavy spark', note: 'Place the sparkle close to the body and make it droop or pull downward.' },
+  'the companion is hiding': { zone: 'sideFloat', label: 'hiding', note: 'Tuck the companion partly behind the main silhouette.' },
+  'the sign points the wrong way': { zone: 'frontCenter', label: 'wrong sign', note: 'Place the sign in front and angle the arrow incorrectly.' },
+  'one corner is folded sadly': { zone: 'foldedCorner', label: 'sad fold', note: 'Use one folded corner as the emotional problem.' },
+  'the handle is emotionally unstable': { zone: 'handleSide', label: 'handle', note: 'Put the problem on the handle and use a wobble or expression cue.' },
+  'the hat does not fit': { zone: 'topCenter', label: 'bad hat', note: 'Place the hat on top and let it sit too large or crooked.' },
+  'the tiny object is stuck': { zone: 'surfacePatch', label: 'stuck', note: 'Put the tiny object partly embedded in the body surface.' },
+  'the mascot is pretending nothing is wrong': { zone: 'surfacePatch', label: 'problem', note: 'Place one obvious problem on the body while keeping the face calm.' },
+  'wearing one tiny cape': { zone: 'sideAttach', label: 'cape', note: 'Attach the cape to one side or back edge and keep it tiny.' },
+  'pretending to be a wizard': { zone: 'topCenter', label: 'wizard', note: 'Use one hat or star mark to show wizard energy, not a full outfit.' },
+  'wearing a fake crown': { zone: 'topCenter', label: 'crown', note: 'Place the crown clearly on top with a simple silhouette.' },
+  'dressed like a tiny official': { zone: 'frontCenter', label: 'official', note: 'Use one badge, collar, or sign at the front.' },
+  'wearing one oversized bow': { zone: 'sideAttach', label: 'bow', note: 'Attach the bow to one side or top edge and keep the mascot body readable.' },
+  'disguised as a sticker': { zone: 'labelPatch', label: 'sticker', note: 'Use a sticker border or patch on the body instead of a full disguise.' },
+  'wearing a paper mask': { zone: 'faceZone', label: 'mask', note: 'Place the mask over the face zone and leave the body simple.' },
+  'pretending to be royalty': { zone: 'topCenter', label: 'royal', note: 'Use crown or medal placement at the top/front, not a full royal outfit.' },
+  'wearing a little raincoat': { zone: 'surfacePatch', label: 'raincoat', note: 'Show the raincoat as one simple body patch or collar.' },
+  'dressed like a desk clerk': { zone: 'frontCenter', label: 'clerk', note: 'Use one tiny badge or label on the front.' },
+  'wearing a badly placed hat': { zone: 'topCenter', label: 'hat', note: 'Put the hat slightly crooked so the costume joke reads.' },
+  'costumed as a tiny ghost': { zone: 'lowerEdge', label: 'ghost sheet', note: 'Add one sheet-like lower edge or ghost patch, not a full second character.' },
+  'wearing one dramatic collar': { zone: 'frontCenter', label: 'collar', note: 'Place the collar under the face to frame the expression.' },
+  'pretending to be fancy': { zone: 'frontCenter', label: 'fancy', note: 'Use one fancy marker like a bow, collar, or tiny badge.' },
+  'wearing a costume that only makes sense to itself': { zone: 'surfacePatch', label: 'costume', note: 'Use one odd costume detail and keep the rest simple.' },
+  'one shy sparkle floats nearby': { zone: 'upperRight', label: 'sparkle', note: 'Place one small sparkle above or beside the body.' },
+  'a tiny glow leaks from the edge': { zone: 'edgeWobble', label: 'glow edge', note: 'Put the glow on one edge so the silhouette still reads.' },
+  'the symbol softly shines': { zone: 'surfacePatch', label: 'shine', note: 'Place the shine directly on the symbol or body mark.' },
+  'one dot orbits the mascot': { zone: 'orbitDetail', label: 'orbit', note: 'Put the orbiting dot close to the mascot, not across the whole canvas.' },
+  'a small moonbeam touches it': { zone: 'upperRight', label: 'moonbeam', note: 'Place the moonbeam as one small angled cue near the upper body.' },
+  'the prop levitates slightly': { zone: 'sideFloat', label: 'levitate', note: 'Lift the prop just off the body with a small gap.' },
+  'a tiny charm hums with glow': { zone: 'topLoop', label: 'glow charm', note: 'Place the glow around the charm loop or attached charm.' },
+  'one eye has a magical glint': { zone: 'faceZone', label: 'eye glint', note: 'Put the glint in one eye only to keep the face readable.' },
+  'a soft halo sits behind it': { zone: 'glowRing', label: 'halo', note: 'Place the halo behind the body, not as a second prop.' },
+  'a glow puddle forms underneath': { zone: 'underBody', label: 'glow puddle', note: 'Put the glow underneath as a grounding shape.' },
+  'a tiny star follows it': { zone: 'sideFloat', label: 'star', note: 'Place the star companion slightly behind or beside the mascot.' },
+  'the weird detail sparkles once': { zone: 'surfacePatch', label: 'spark', note: 'Add one sparkle mark to the weird detail, not sparkles everywhere.' },
+  'one edge looks enchanted': { zone: 'edgeWobble', label: 'enchanted', note: 'Put the enchantment on one edge so it supports the silhouette.' },
+  'a little spell mark floats above': { zone: 'topCenter', label: 'spell', note: 'Float the spell mark above the head/body and keep it small.' },
+  'the mascot does not realize it is magical': { zone: 'upperRight', label: 'magic', note: 'Place the magic near the mascot while the face stays unaware.' },
+  'a tag with its own mood': { zone: 'sideAttach', label: 'tag', note: 'Attach the tag to one side and give the tag the expression.' },
+  'a ribbon acting independent': { zone: 'sideAttach', label: 'ribbon', note: 'Attach the ribbon to the body and let it curve away with attitude.' },
+  'a handle that looks suspicious': { zone: 'handleSide', label: 'handle', note: 'Put the suspicious expression or marker on the handle area.' },
+  'a corner charm dangling off': { zone: 'topRight', label: 'charm', note: 'Attach the charm to one corner and keep it smaller than the body.' },
+  'a tiny sticker stuck to the side': { zone: 'sideAttach', label: 'sticker', note: 'Stick it to one side edge so it feels attached, not floating.' },
+  'a loop attached at the top': { zone: 'topLoop', label: 'loop', note: 'Place the loop above the body like a charm hanger.' },
+  'a side patch with little eyes': { zone: 'sideAttach', label: 'side patch', note: 'Put the patch on the side and make the eyes tiny.' },
+  'a loose string pulling away': { zone: 'sideAttach', label: 'string', note: 'Attach the string to the edge and curve it outward.' },
+  'a tiny envelope taped on': { zone: 'surfacePatch', label: 'envelope', note: 'Place the tiny envelope on the front surface like a taped-on note.' },
+  'a bead hanging from one edge': { zone: 'sideAttach', label: 'bead', note: 'Hang the bead from one side or corner.' },
+  'a label attached too seriously': { zone: 'labelPatch', label: 'label', note: 'Place the label on the main body surface so it looks official.' },
+  'a small bell tied on': { zone: 'topLoop', label: 'bell', note: 'Attach the bell near the top loop or side edge.' },
+  'a weird charm clipped to it': { zone: 'sideAttach', label: 'charm', note: 'Clip the charm to one edge and keep it simple.' },
+  'a folded flap with personality': { zone: 'flapCenter', label: 'flap', note: 'Place the personality on the flap area so it feels part of the body.' },
+  'an attached dot that looks important': { zone: 'surfacePatch', label: 'dot', note: 'Attach the dot to the body and treat it like a tiny badge.' },
+  'a tiny droplet sidekick': { zone: 'sideFloat', label: 'droplet', note: 'Place the droplet beside the mascot and keep it much smaller.' },
+  'a small star buddy': { zone: 'upperRight', label: 'star buddy', note: 'Place the star buddy near the upper side so it feels like it is following.' },
+  'a nervous crumb companion': { zone: 'sideFloat', label: 'crumb', note: 'Place the crumb close beside the body with a tiny nervous cue.' },
+  'a mini ghost hiding behind it': { zone: 'sideFloat', label: 'ghost', note: 'Tuck the ghost partly behind the main body.' },
+  'a little button friend': { zone: 'sideFloat', label: 'button', note: 'Place the button friend beside the mascot as a tiny circle companion.' },
+  'a tiny moon follower': { zone: 'upperRight', label: 'moon', note: 'Place the moon follower slightly above or behind the mascot.' },
+  'a shy sticker sidekick': { zone: 'sideFloat', label: 'sticker', note: 'Place the sticker sidekick near the body edge, not on a full background.' },
+  'a small sprout copying its face': { zone: 'sideFloat', label: 'sprout', note: 'Place the sprout beside the mascot and echo the same face shape.' },
+  'a tiny cloud hovering nearby': { zone: 'upperRight', label: 'cloud', note: 'Float the cloud near the upper side of the mascot.' },
+  'a little dot creature': { zone: 'sideFloat', label: 'dot', note: 'Place the dot creature beside the body and keep it very simple.' },
+  'a mini charm following it': { zone: 'sideFloat', label: 'charm', note: 'Place the charm companion beside or behind the mascot.' },
+  'a tiny shadow buddy': { zone: 'underBody', label: 'shadow', note: 'Put the shadow buddy underneath or slightly behind the mascot.' },
+  'a small sparkle with opinions': { zone: 'upperRight', label: 'sparkle', note: 'Place the sparkle nearby and let its expression carry the opinion.' },
+  'a baby version of the mascot': { zone: 'sideFloat', label: 'baby', note: 'Place the baby version beside the mascot and make it a smaller echo shape.' },
+  'a tiny prop that thinks it is in charge': { zone: 'frontCenter', label: 'boss prop', note: 'Put the prop front-center so it feels bossy without adding a full scene.' },
+  'wearing an official badge': { zone: 'frontCenter', label: 'badge', note: 'Place the badge on the front where it reads instantly.' },
+  'standing beside a serious label': { zone: 'labelPatch', label: 'serious label', note: 'Use one serious label beside or on the body, no extra text clutter.' },
+  'guarding a useless object': { zone: 'frontCenter', label: 'object', note: 'Place the useless object in front like treasure.' },
+  'presenting a crumb like treasure': { zone: 'frontCenter', label: 'crumb', note: 'Put the crumb forward and make the mascot’s pose treat it as important.' },
+  'holding a tiny certificate': { zone: 'frontCenter', label: 'certificate', note: 'Place the certificate in front and keep it as a simple rectangle.' },
+  'wearing a museum tag': { zone: 'labelPatch', label: 'museum tag', note: 'Attach the museum tag to the body like a tiny official label.' },
+  'posing like royalty': { zone: 'topCenter', label: 'royal pose', note: 'Use a top mark like a crown or medal cue while keeping the body simple.' },
+  'protecting one ordinary dot': { zone: 'surfacePatch', label: 'dot', note: 'Place the dot on or near the body and treat it as precious.' },
+  'standing on a tiny pedestal': { zone: 'underBody', label: 'pedestal', note: 'Place the pedestal under the mascot as one simple base shape.' },
+  'displaying a very important sticker': { zone: 'labelPatch', label: 'sticker', note: 'Put the sticker on the body and make it the center of fake importance.' },
+  'holding a sign that says official': { zone: 'frontCenter', label: 'official sign', note: 'Place the sign in front and avoid lots of text.' },
+  'guarding a spoon like a relic': { zone: 'sideFloat', label: 'spoon relic', note: 'Place the spoon beside the mascot like a protected artifact.' },
+  'treating a button like a sacred artifact': { zone: 'frontCenter', label: 'button relic', note: 'Put the button in front and make it feel ceremonially important.' },
+  'wearing a dramatic tiny medal': { zone: 'frontCenter', label: 'medal', note: 'Place the medal on the front, near the chest or face zone.' },
+  'acting like the tiny prop is legally binding': { zone: 'frontCenter', label: 'legal prop', note: 'Put the prop in front like paperwork and keep the joke simple.' }
+};
+
+const twistBlueprintRules = { ...newTwistBlueprintRules };
+
+function twistToBlueprintZone(twist) {
+  const text = String(twist || '').toLowerCase();
+  if (text.includes('crown') || text.includes('hat') || text.includes('halo')) return 'topCenter';
+  if (text.includes('tag') || text.includes('label') || text.includes('badge')) return 'labelPatch';
+  if (text.includes('ribbon') || text.includes('string') || text.includes('bow')) return 'sideAttach';
+  if (text.includes('companion') || text.includes('buddy') || text.includes('sidekick')) return 'sideFloat';
+  if (text.includes('shadow')) return 'underBody';
+  if (text.includes('sparkle') || text.includes('star') || text.includes('moon')) return 'upperRight';
+  if (text.includes('drip') || text.includes('puddle')) return 'bottomEdge';
+  if (text.includes('corner') || text.includes('fold') || text.includes('flap')) return 'foldedCorner';
+  if (text.includes('eye') || text.includes('face')) return 'faceZone';
+  if (text.includes('certificate') || text.includes('official') || text.includes('sign')) return 'frontCenter';
+  return 'surfacePatch';
+}
+
+function getTwistBlueprintRule(twist) {
+  if (!twist) {
+    return { zone: 'surfacePatch', label: 'twist', note: 'Place the tiny twist on the clearest body area.' };
+  }
+  const direct = twistBlueprintRules[twist];
+  if (direct) return direct;
+  return {
+    zone: twistToBlueprintZone(twist),
+    label: 'twist',
+    note: 'Use the twist marker to place the small extra without adding a full scene.'
+  };
+}
 
 
 const speciesBlueprints = {
@@ -1327,6 +1687,24 @@ function updateSpeciesSelect() {
   if (hint) hint.textContent = speciesHints[laneValue] || speciesHints.surprise;
 }
 
+function updateTwistSelect() {
+  const twistSelect = $('#twistSelect');
+  if (!twistSelect) return;
+  const sparkValue = $('#sparkSelect')?.value || 'surprise';
+  let options = [];
+
+  if (sparkValue === 'surprise') {
+    options = Object.values(twistsBySpark).flat();
+  } else {
+    options = twistsBySpark[sparkValue] || [];
+  }
+
+  twistSelect.innerHTML = [
+    '<option value="surprise">Surprise me</option>',
+    ...options.map((item) => `<option value="${escapeHtml(item)}">${titleCase(item)}</option>`)
+  ].join('');
+}
+
 function titleCase(text) {
   return text.split(' ').map((part) => part ? part[0].toUpperCase() + part.slice(1) : part).join(' ');
 }
@@ -1355,6 +1733,8 @@ function rollCard({ fullSurprise = false, mutate = null, daily = false } = {}) {
     $('#speciesSelect').value = 'surprise';
     $('#moodSelect').value = 'surprise';
     $('#sparkSelect').value = 'surprise';
+    updateTwistSelect();
+    $('#twistSelect').value = 'surprise';
     $('#shapeSelect').value = choice(shapes).value;
     $('#packSelect').value = 'surprise';
   }
@@ -1392,8 +1772,16 @@ function rollCard({ fullSurprise = false, mutate = null, daily = false } = {}) {
   const mood = moodData[moodKey];
   const extra = choice(extraPool);
   const spark = sparkData[sparkKey];
+  const twistChoice = $('#twistSelect')?.value || 'surprise';
+  const allTwists = Object.values(twistsBySpark).flat();
+  const twist = twistChoice !== 'surprise'
+    ? twistChoice
+    : choice(twistsBySpark[sparkKey] || allTwists);
   const template = choice(spark.templates);
-  const oddThing = template.replaceAll('{extra}', extra);
+  const baseOddThing = template.replaceAll('{extra}', extra);
+  const oddThing = twist
+    ? `${baseOddThing}. Tiny twist: ${twist}`
+    : baseOddThing;
 
   const title = makeName(moodKey, mascot, sparkKey);
   const build = [...(shapeRecipes[shapeLimit] || shapeRecipes['5'])];
@@ -1420,6 +1808,8 @@ function rollCard({ fullSurprise = false, mutate = null, daily = false } = {}) {
     mood: mood.label,
     sparkKey,
     spark: spark.label,
+    twistChoice,
+    twist,
     shapeLimit,
     extra,
     title,
@@ -1472,6 +1862,9 @@ function chooseDailyControls() {
   $('#speciesSelect').value = dailySpecies.length ? seededPick(dailySpecies.map((item) => ({ value: item })), `${today}:species`).value : 'surprise';
   $('#moodSelect').value = seededPick(moods.filter(x => x.value !== 'surprise'), `${today}:mood`).value;
   $('#sparkSelect').value = seededPick(sparks.filter(x => x.value !== 'surprise'), `${today}:spark`).value;
+  updateTwistSelect();
+  const dailyTwists = twistsBySpark[$('#sparkSelect').value] || [];
+  $('#twistSelect').value = dailyTwists.length ? seededPick(dailyTwists.map((item) => ({ value: item })), `${today}:twist`).value : 'surprise';
   $('#shapeSelect').value = seededPick(shapes, `${today}:shape`).value;
   $('#energySelect').value = seededPick(energies, `${today}:energy`).value;
   $('#packSelect').value = seededPick(packs, `${today}:pack`).value;
@@ -1533,7 +1926,7 @@ function refreshTinyOddlet(card) {
   card.oddletVersion = makeOddletVersion(card);
   card.extraWeirdVersion = makeExtraWeirdVersion(card);
   card.commentary = makeCommentary(card);
-  card.drawFirst = drawFirstFor(card.lane, card.mascot);
+  card.drawFirst = (card.blueprintSpecies || inferSpeciesBlueprint(card.species || card.mascot, card.lane)).bodyHint || drawFirstFor(card.lane, card.mascot);
   card.whyWorks = whyWorksFor(card);
   card.blueprint = buildBlueprintIntelligence(card);
   card.paletteMode = card.paletteMode || 'base';
@@ -1966,6 +2359,9 @@ function renderBlueprintBreakdown(card) {
   $('#blueMoodRead').textContent = blueprint.moodRead || 'The face, tilt, and prop placement reveal the mood.';
   const speciesBlueprint = card?.blueprintSpecies || inferSpeciesBlueprint(card?.species || card?.mascot, card?.lane);
   $('#blueSpeciesBodyNote').textContent = getSpeciesBodyNote(speciesBlueprint);
+  const twistRule = getTwistBlueprintRule(card?.twist);
+  const blueTwistNote = $('#blueTwistNote');
+  if (blueTwistNote) blueTwistNote.textContent = twistRule.note;
 }
 
 function guardrailFor(lane, spark, mutate) {
@@ -2217,6 +2613,10 @@ function blueprintPoint(zone) {
     pendantLoop: { x: 160, y: 70 },
     wishboneFork: { x: 160, y: 104 },
     glowRing: { x: 160, y: 120 },
+    sideAttach: { x: 214, y: 132 },
+    underBody: { x: 160, y: 194 },
+    bottomEdge: { x: 160, y: 176 },
+    faceZone: { x: 160, y: 122 },
   };
   return points[zone] || points.center;
 }
@@ -2648,6 +3048,8 @@ function renderBlueprint(card) {
   const faceZone = speciesRules.faceZone || 'lowerCenter';
   const propAnchor = speciesRules.propAnchor || 'topRight';
   const weirdZone = sparkAdjustedWeirdZone(speciesRules, card);
+  const twistRule = getTwistBlueprintRule(card?.twist);
+  const twistZone = twistRule.zone || weirdZone;
   const moodLabel = escapeHtml(card?.mood || 'mood');
   const bodyLabel = escapeHtml(speciesRules.bodyLabel || 'blueprint body');
   const moodRead = escapeHtml(card?.blueprint?.moodRead || moodData[card?.moodKey]?.moodRead || 'Face, tilt, and prop placement reveal the mood.');
@@ -2670,6 +3072,7 @@ function renderBlueprint(card) {
       ${blueprintFaceSvg(faceZone, card, colors)}
       ${blueprintMarkerSvg(propAnchor, 'prop', colors)}
       ${blueprintMarkerSvg(weirdZone, 'weird', colors)}
+      ${blueprintMarkerSvg(twistZone, twistRule.label || 'twist', colors)}
     </g>
     <g opacity="0.96">
       <rect x="20" y="18" width="280" height="42" rx="16" fill="rgba(17,20,38,.44)" />
@@ -2830,6 +3233,8 @@ Oddlet species: ${card.species || card.mascot}
 Species blueprint: ${(card.blueprintSpecies || inferSpeciesBlueprint(card.species || card.mascot, card.lane)).bodyLabel}
 Species start hint: ${(card.blueprintSpecies || inferSpeciesBlueprint(card.species || card.mascot, card.lane)).bodyHint}
 Species body note: ${getSpeciesBodyNote(card.blueprintSpecies || inferSpeciesBlueprint(card.species || card.mascot, card.lane))}
+Tiny twist: ${card.twist || 'surprise'}
+Tiny twist note: ${getTwistBlueprintRule(card.twist).note}
 
 Odd little thing: ${card.oddThing}
 
@@ -2850,6 +3255,7 @@ Blueprint breakdown:
 - Weird thing placement: ${blueprint.weirdThingPlacement}
 - What not to add: ${blueprint.doNotAdd.join(', ')}
 - Mood read: ${blueprint.moodRead || 'The face, tilt, and prop placement reveal the mood.'}
+- Tiny twist note: ${getTwistBlueprintRule(card.twist).note}
 
 Palette placement: ${palette.family} (${paletteModeLabel(palette.mode)})
 - Main body: ${palette.body}
@@ -3159,6 +3565,7 @@ async function resetApp() {
 function initEvents() {
   $$('.tab').forEach((button) => button.addEventListener('click', () => switchTab(button.dataset.tab)));
   $('#laneSelect').addEventListener('change', updateSpeciesSelect);
+  $('#sparkSelect').addEventListener('change', updateTwistSelect);
   $('#rollBtn').addEventListener('click', () => rollCard());
   $('#surpriseBtn').addEventListener('click', () => rollCard({ fullSurprise: true }));
   $('#dailyBtn').addEventListener('click', () => rollCard({ daily: true }));
@@ -3195,6 +3602,7 @@ function init() {
   updateSpeciesSelect();
   fillSelect('#moodSelect', moods);
   fillSelect('#sparkSelect', sparks);
+  updateTwistSelect();
   fillSelect('#shapeSelect', shapes);
   fillSelect('#energySelect', energies);
   fillSelect('#packSelect', packs);

@@ -144,3 +144,15 @@ Adds the full species body atlas:
 - species body note in the Blueprint Breakdown
 - safer fallback matching for new species/body shapes
 - service worker cache bumped to oddlet-v2-0-0
+
+
+## V2.1 Tiny Twist Blueprint Pins
+
+Adds:
+- Tiny Twist dropdown after Spark Type
+- 150 twist choices across the 10 spark types
+- 150 twist blueprint behavior rules
+- visible Tiny Twist marker on the SVG blueprint
+- Tiny twist teaching note in Blueprint Breakdown
+- copy/export includes twist and twist note
+- service worker cache bumped to oddlet-v2-1-0
