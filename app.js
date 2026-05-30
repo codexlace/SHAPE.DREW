@@ -51,6 +51,16 @@ const shapes = [
   { value: 'loose', label: 'loose but simple' }
 ];
 
+const packs = [
+  { value: 'surprise', label: 'Surprise pack' },
+  { value: 'notebook', label: 'Notebook creatures' },
+  { value: 'artDesk', label: 'Art desk oddlets' },
+  { value: 'softCryptid', label: 'Soft cryptids' },
+  { value: 'snack', label: 'Snack gremlins' },
+  { value: 'symbolPet', label: 'Symbol pets' },
+  { value: 'lostObject', label: 'Lost object club' }
+];
+
 const mascotDeck = {
   object: ['paint palette', 'tiny mailbox', 'teacup', 'button', 'sock', 'candle', 'mirror', 'key', 'paper bag', 'bottle cap', 'little clock', 'spoon', 'tiny door'],
   food: ['toast slice', 'lemon wedge', 'mushroom', 'jellybean', 'strawberry', 'pancake stack', 'dumpling', 'cupcake liner', 'blueberry', 'marshmallow', 'noodle cup', 'tiny pickle'],
@@ -62,9 +72,42 @@ const mascotDeck = {
   charm: ['lucky charm', 'tiny bell', 'ribbon charm', 'locket', 'glass bead', 'mini crown', 'toy mask', 'pocket talisman', 'button badge', 'little relic']
 };
 
+const packDecks = {
+  notebook: {
+    mascots: ['sticky note', 'question mark', 'arrow sign', 'paper scrap', 'margin ghost', 'doodle blob', 'X mark', 'label sticker'],
+    extras: ['question mark patch', 'tiny sign', 'arrow label', 'sticker scar', 'scribble star', 'folded note'],
+    sparks: ['secretSymbol', 'livingDetail', 'fakeImportance', 'attachedOddity']
+  },
+  artDesk: {
+    mascots: ['paint palette', 'paint brush', 'ink bottle', 'eraser', 'pencil stub', 'marker cap', 'tape roll', 'crayon'],
+    extras: ['paint drop', 'tiny brush', 'glow dot', 'sticker scar', 'sealed envelope', 'crumb'],
+    sparks: ['livingDetail', 'microProblem', 'wrongScale', 'attachedOddity']
+  },
+  softCryptid: {
+    mascots: ['sheet ghost', 'mask blob', 'soft cryptid', 'tiny shadow', 'pillow goblin', 'fog puff', 'blanket creature'],
+    extras: ['moon', 'spark', 'tiny sign', 'heart', 'question mark patch', 'mini crown'],
+    sparks: ['quietMagic', 'microProblem', 'secretSymbol', 'tinyCompanion']
+  },
+  snack: {
+    mascots: ['toast slice', 'lemon wedge', 'mushroom', 'jellybean', 'dumpling', 'marshmallow', 'tiny pickle', 'cupcake liner'],
+    extras: ['crumb', 'spoon', 'button', 'ribbon', 'mini crown', 'flower'],
+    sparks: ['wrongScale', 'tinyJob', 'microProblem', 'fakeImportance']
+  },
+  symbolPet: {
+    mascots: ['star sticker', 'heart stamp', 'tiny moon', 'question mark', 'warning triangle', 'sparkle', 'map pin'],
+    extras: ['heart', 'star', 'key', 'moon', 'question mark patch', 'spark'],
+    sparks: ['tinyCompanion', 'secretSymbol', 'quietMagic', 'livingDetail']
+  },
+  lostObject: {
+    mascots: ['paper bag', 'tiny mailbox', 'sock', 'button', 'key', 'mirror', 'bottle cap', 'little clock'],
+    extras: ['tiny sign', 'sealed envelope', 'key', 'note', 'ribbon', 'button'],
+    sparks: ['fakeImportance', 'tinyJob', 'microProblem', 'wrongScale']
+  }
+};
+
 const oddBiasMascots = ['paint palette', 'paper bag', 'question mark', 'mask blob', 'ink bottle', 'warning triangle', 'X mark', 'sticky note', 'tiny shadow', 'map pin', 'paint brush', 'arrow sign'];
 
-const extras = ['heart', 'star', 'key', 'note', 'tiny sign', 'moon', 'spoon', 'flower', 'button', 'ribbon', 'spark', 'mini crown', 'glow dot', 'sealed envelope', 'paint drop', 'crumb', 'question mark patch', 'sticker scar'];
+const extras = ['heart', 'star', 'key', 'note', 'tiny sign', 'moon', 'spoon', 'flower', 'button', 'ribbon', 'spark', 'mini crown', 'glow dot', 'sealed envelope', 'paint drop', 'crumb', 'question mark patch', 'sticker scar', 'arrow label', 'tiny brush', 'folded note', 'scribble star'];
 
 const moodData = {
   bashful: { label: 'bashful', face: 'low eyes, tiny mouth, cheeks doing most of the talking', pose: 'tilted inward, like it is trying to occupy less space' },
@@ -219,6 +262,58 @@ const oddletVersionTemplates = [
   'Promote the {extra} into the joke. It should feel like the second thing you notice and the first thing you remember.'
 ];
 
+const drawFirstByLane = {
+  object: 'Start with the plain object silhouette before adding eyes. Let the object be boring for one brave minute.',
+  food: 'Draw the snack shape first: one toast block, lemon wedge, dumpling blob, or mushroom cap. Toppings wait outside.',
+  symbol: 'Draw the symbol large and readable first. The face should sneak in after the symbol survives.',
+  ghost: 'Start with one soft blob or sheet shape. Wobbles are allowed, but the outside edge should read clearly.',
+  stationery: 'Draw the desk-object shape first, like a tiny tool pretending to have a soul.',
+  weather: 'Draw the puff, drop, swirl, or moon shape first. Keep floating bits for last.',
+  plant: 'Start with one plant mass: sprout, cactus nub, leaf pile, or bud. Group leaves like they know each other.',
+  charm: 'Draw one charm silhouette first, then hang the face and symbol inside it.'
+};
+
+const whyTemplates = [
+  'It works because the {mascot} gives you the readable shape, while the {extra} gives you the little reason to care.',
+  'The idea stays drawable because there is one main body and one tiny spark, not a whole parade of background chores.',
+  'The {spark} makes the mascot feel alive without needing a full scene. It is character energy in miniature.',
+  'The mood does most of the acting, so you can keep the drawing simple and still make it feel specific.',
+  'This works as a sticker because the silhouette can stay clean while the tiny detail does the storytelling.'
+];
+
+const notFeelingFixes = {
+  boring: {
+    label: 'Less boring',
+    oddLine: 'One detail now has a tiny opinion, secret job, or suspicious label so the drawing has a second read.',
+    ideaLine: 'Keep the same mascot, but make one tiny part act like it knows something the mascot does not.',
+    guardrail: 'Do not add more objects. Add one clearer attitude.'
+  },
+  complex: {
+    label: 'Simplified',
+    oddLine: 'The twist is reduced to one readable prop, mark, or expression change.',
+    ideaLine: 'Use the easiest mascot version: big body, face, one tiny spark. Everything else gets politely evicted.',
+    guardrail: 'Three shapes first. If it is cute there, stop or add only one detail.'
+  },
+  normal: {
+    label: 'Less normal',
+    oddLine: 'The mascot now has one wrong-scale, living, or oddly official detail that nudges it out of ordinary.',
+    ideaLine: 'Make it slightly stranger by changing what one detail means, not by building a bigger scene.',
+    guardrail: 'One unusual meaning beats five random decorations.'
+  },
+  cute: {
+    label: 'Less sweet',
+    oddLine: 'The cute part gets a dry little attitude: suspicious, blank-faced, too official, or mildly haunted.',
+    ideaLine: 'Keep the softness, but give the expression one tiny contradiction.',
+    guardrail: 'Do not erase the cute. Give it a weird eyebrow and let it suffer elegantly.'
+  },
+  hard: {
+    label: 'Starter path',
+    oddLine: 'The twist waits until the end. First draw the mascot as one large simple shape with a face.',
+    ideaLine: 'Begin with the body only, then add the face, then add the spark as the final small note.',
+    guardrail: 'First mark: largest shape. Second mark: face zone. Third mark: tiny spark.'
+  }
+};
+
 const moodRemixes = {
   cuter: {
     label: 'Cuter',
@@ -304,24 +399,37 @@ function makeName(mood, mascot, spark) {
   return `${choice(prefixes[spark] || ['Odd'])} ${noun}`;
 }
 
-function rollCard({ fullSurprise = false, mutate = null } = {}) {
+function rollCard({ fullSurprise = false, mutate = null, daily = false } = {}) {
   if (fullSurprise) {
     $('#laneSelect').value = 'surprise';
     $('#moodSelect').value = 'surprise';
     $('#sparkSelect').value = 'surprise';
     $('#shapeSelect').value = choice(shapes).value;
+    $('#packSelect').value = 'surprise';
   }
+
+  if (daily) chooseDailyControls();
 
   let lane = pickValue($('#laneSelect').value, lanes);
   let mascotPool = mascotDeck[lane] || Object.values(mascotDeck).flat();
+  const packKey = $('#packSelect')?.value || 'surprise';
+  const pack = packDecks[packKey];
+  let extraPool = [...extras];
+  let forcedSpark = null;
+
+  if (pack) {
+    mascotPool = [...mascotPool, ...pack.mascots];
+    extraPool = [...extraPool, ...pack.extras];
+    if ($('#sparkSelect').value === 'surprise') forcedSpark = choice(pack.sparks);
+  }
   if (biasOn && Math.random() < 0.42) mascotPool = [...mascotPool, ...oddBiasMascots];
 
   const moodKey = pickValue($('#moodSelect').value, moods);
-  const sparkKey = pickValue($('#sparkSelect').value, sparks);
+  const sparkKey = forcedSpark || pickValue($('#sparkSelect').value, sparks);
   const shapeLimit = $('#shapeSelect').value || '5';
   const mascot = choice(mascotPool);
   const mood = moodData[moodKey];
-  const extra = choice(extras);
+  const extra = choice(extraPool);
   const spark = sparkData[sparkKey];
   const template = choice(spark.templates);
   const oddThing = template.replaceAll('{extra}', extra);
@@ -351,6 +459,9 @@ function rollCard({ fullSurprise = false, mutate = null } = {}) {
     build,
     poseCue: `${mood.pose}. Expression cue: ${mood.face}.`,
     guardrail: guardrailFor(lane, sparkKey, mutate),
+    drawFirst: drawFirstFor(lane, mascot),
+    whyWorks: whyWorksFor({ mascot, extra, spark: spark.label }),
+    pack: packKey,
     coach: choice(coachLines),
     tinyVersion: makeTinyVersion({ lane, mascot, extra, mood: mood.label }),
     oddletVersion: makeOddletVersion({ lane, mascot, extra, mood: mood.label, spark: spark.label }),
@@ -362,9 +473,40 @@ function rollCard({ fullSurprise = false, mutate = null } = {}) {
   animateRoll();
   renderCard();
   renderBlueprint(currentCard);
-  showToast('Oddlet rolled. It is small, strange, and employable.');
+  showToast(daily ? 'Daily Oddlet opened. No streak monster, just a tiny visitor.' : 'Oddlet rolled. It is small, strange, and employable.');
 }
 
+
+function hashNumber(text) {
+  let hash = 0;
+  for (let i = 0; i < text.length; i += 1) hash = ((hash << 5) - hash + text.charCodeAt(i)) | 0;
+  return Math.abs(hash);
+}
+
+function seededPick(list, seedText) {
+  return list[hashNumber(seedText) % list.length];
+}
+
+function chooseDailyControls() {
+  const today = new Date().toISOString().slice(0, 10);
+  $('#laneSelect').value = seededPick(lanes.filter(x => x.value !== 'surprise'), `${today}:lane`).value;
+  $('#moodSelect').value = seededPick(moods.filter(x => x.value !== 'surprise'), `${today}:mood`).value;
+  $('#sparkSelect').value = seededPick(sparks.filter(x => x.value !== 'surprise'), `${today}:spark`).value;
+  $('#shapeSelect').value = seededPick(shapes, `${today}:shape`).value;
+  $('#packSelect').value = seededPick(packs, `${today}:pack`).value;
+  $('#dailyHint').textContent = `Today’s drawer omen is ${$('#moodSelect').selectedOptions[0].textContent} + ${$('#packSelect').selectedOptions[0].textContent}.`;
+}
+
+function drawFirstFor(lane, mascot) {
+  return drawFirstByLane[lane] || `Start with one simple ${mascot} shape. No face, no prop, no tiny nonsense until the silhouette reads.`;
+}
+
+function whyWorksFor({ mascot, extra, spark }) {
+  return choice(whyTemplates)
+    .replaceAll('{mascot}', mascot)
+    .replaceAll('{extra}', extra)
+    .replaceAll('{spark}', spark);
+}
 
 function bodyWordFor(lane, mascot) {
   const words = {
@@ -404,6 +546,8 @@ function refreshTinyOddlet(card) {
   card.tinyVersion = makeTinyVersion(card);
   card.oddletVersion = makeOddletVersion(card);
   card.commentary = makeCommentary(card);
+  card.drawFirst = drawFirstFor(card.lane, card.mascot);
+  card.whyWorks = whyWorksFor(card);
   return card;
 }
 
@@ -449,6 +593,8 @@ function renderCard() {
   $('#ideaTitle').textContent = currentCard.title;
   $('#ideaText').textContent = currentCard.idea;
   $('#oddThing').textContent = currentCard.oddThing;
+  $('#drawFirst').textContent = currentCard.drawFirst || drawFirstFor(currentCard.lane, currentCard.mascot);
+  $('#whyWorks').textContent = currentCard.whyWorks || whyWorksFor(currentCard);
   $('#tinyVersion').textContent = currentCard.tinyVersion || makeTinyVersion(currentCard);
   $('#oddletVersion').textContent = currentCard.oddletVersion || makeOddletVersion(currentCard);
   $('#creatureCommentary').textContent = currentCard.commentary || makeCommentary(currentCard);
@@ -549,6 +695,13 @@ function getStash() {
 function renderStash() {
   const stash = getStash();
   const list = $('#stashList');
+  const stats = $('#museumStats');
+  if (stats) {
+    const drawn = stash.filter((item) => item.status === 'drawn').length;
+    const favorites = stash.filter((item) => item.favorite).length;
+    const packsFound = new Set(stash.map((item) => item.pack).filter(Boolean)).size;
+    stats.innerHTML = `<span><strong>${stash.length}</strong> found</span><span><strong>${drawn}</strong> drawn</span><span><strong>${favorites}</strong> favorites</span><span><strong>${packsFound}</strong> packs</span>`;
+  }
   if (!stash.length) {
     list.innerHTML = '<div class="empty">No saved Oddlets yet. Roll one tiny creature and trap it lovingly in the jar.</div>';
     return;
@@ -560,6 +713,7 @@ function renderStash() {
         <p>${escapeHtml(item.idea)}</p>
       </div>
       <p><strong>Odd thing:</strong> ${escapeHtml(item.oddThing)}</p>
+      <div class="stash-tags"><span>${escapeHtml(item.lane || 'odd')}</span><span>${escapeHtml(item.spark || 'spark')}</span><span>${escapeHtml(item.shapeLimit || 'simple')} shapes</span></div>
       <div class="stash-actions">
         <button class="ghost-btn" data-action="load">Load</button>
         <button class="ghost-btn" data-action="drawn">${item.status === 'drawn' ? 'Drawn ✓' : 'Mark drawn'}</button>
@@ -711,6 +865,40 @@ function remixCurrent(mode) {
   showToast(`${remix.label} remix applied.`);
 }
 
+function handleFeelingFix(event) {
+  const button = event.target.closest('button[data-fix]');
+  if (!button) return;
+  fixCurrent(button.dataset.fix);
+}
+
+function fixCurrent(reason) {
+  if (!currentCard) {
+    rollCard({ fullSurprise: true });
+    return;
+  }
+  const fix = notFeelingFixes[reason];
+  if (!fix) return;
+  const simplerBuild = reason === 'complex' || reason === 'hard'
+    ? ['one big mascot body', 'one face zone', 'one tiny spark']
+    : [...new Set([...currentCard.build.slice(0, 5), 'one clearer attitude cue'])];
+
+  currentCard = refreshTinyOddlet({
+    ...currentCard,
+    id: crypto.randomUUID ? crypto.randomUUID() : String(Date.now()),
+    createdAt: new Date().toISOString(),
+    title: `${currentCard.title} · ${fix.label}`,
+    idea: `Draw a ${currentCard.mood} ${currentCard.mascot} mascot. ${fix.ideaLine}`,
+    oddThing: fix.oddLine,
+    build: simplerBuild,
+    guardrail: fix.guardrail,
+    status: 'adjusted'
+  });
+  renderCard();
+  renderBlueprint(currentCard);
+  animateRoll();
+  showToast(`${fix.label}. Same creature, better flavor.`);
+}
+
 function switchTab(tabId) {
   $$('.tab').forEach((button) => button.classList.toggle('active', button.dataset.tab === tabId));
   $$('.view').forEach((view) => view.classList.toggle('active', view.id === tabId));
@@ -797,7 +985,9 @@ function initEvents() {
   $$('.tab').forEach((button) => button.addEventListener('click', () => switchTab(button.dataset.tab)));
   $('#rollBtn').addEventListener('click', () => rollCard());
   $('#surpriseBtn').addEventListener('click', () => rollCard({ fullSurprise: true }));
+  $('#dailyBtn').addEventListener('click', () => rollCard({ daily: true }));
   $('#remixBar').addEventListener('click', handleMoodRemix);
+  $('#feelingBar').addEventListener('click', handleFeelingFix);
   $('#saveBtn').addEventListener('click', saveCurrent);
   $('#copyBtn').addEventListener('click', copyCard);
   $('#exportBtn').addEventListener('click', exportStash);
@@ -824,6 +1014,7 @@ function init() {
   fillSelect('#moodSelect', moods);
   fillSelect('#sparkSelect', sparks);
   fillSelect('#shapeSelect', shapes);
+  fillSelect('#packSelect', packs);
   loadSettings();
   initEvents();
   initInstallPrompt();

@@ -51,3 +51,12 @@ All saved cards are stored locally in the browser with `localStorage`. OpenRoute
 ## V1.2 Tiny Spark Update
 
 Added Tiny Version / Oddlet Version so every prompt has an easy starter build and a stranger, still-simple version. Added Creature Commentary for a small entertaining observation on every rolled or remixed card.
+
+
+## V1.3 Delight Drawer Update
+
+- Added Prompt Packs so rolls can lean into Notebook Creatures, Art Desk Oddlets, Soft Cryptids, Snack Gremlins, Symbol Pets, or Lost Object Club.
+- Added Daily Oddlet for one no-pressure tiny creature of the day.
+- Added Draw This First and Why This Works to make cards easier to start and quietly more educational.
+- Added Not Feeling It buttons: Too boring, Too complex, Too normal, Too cute, and Hard to start.
+- Added Sketch Stash museum stats and compact tags so saved ideas feel more collectible.
