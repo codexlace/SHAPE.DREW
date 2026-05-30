@@ -6,6 +6,49 @@ const SETTINGS_KEY = 'oddlet:v1:settings';
 const FAVORITES_KEY = 'oddlet:v1:favorites';
 const OPENROUTER_MODEL = 'openrouter/free';
 
+
+const simpleTypes = [
+  { value: 'surprise', label: 'Surprise me' },
+  { value: 'food', label: 'Snack creature' },
+  { value: 'object', label: 'Object creature' },
+  { value: 'ghost', label: 'Soft monster' },
+  { value: 'weather', label: 'Weather blob' },
+  { value: 'plant', label: 'Plant thing' },
+  { value: 'charm', label: 'Charm creature' },
+  { value: 'stationery', label: 'Stationery creature' },
+  { value: 'symbol', label: 'Symbol creature' }
+];
+
+const simpleMoods = [
+  { value: 'surprise', label: 'Surprise me' },
+  { value: 'bashful', label: 'Cute / bashful' },
+  { value: 'sleepy', label: 'Sleepy' },
+  { value: 'suspicious', label: 'Suspicious' },
+  { value: 'tinyPanic', label: 'Tiny panic' },
+  { value: 'smug', label: 'Smug' },
+  { value: 'softlyHaunted', label: 'Softly haunted' },
+  { value: 'proud', label: 'Proud' },
+  { value: 'confused', label: 'Confused' },
+  { value: 'dramatic', label: 'Dramatic' }
+];
+
+const simpleWeirdness = [
+  { value: 'surprise', label: 'Surprise me' },
+  { value: 'gentle', label: 'Gentle' },
+  { value: 'silly', label: 'Silly' },
+  { value: 'odd', label: 'Odd' },
+  { value: 'chaoticCute', label: 'Chaotic-cute' }
+];
+
+const weirdnessRules = {
+  gentle: { spark: 'quietMagic', energy: 'low', shape: '3', pack: 'softCryptid' },
+  silly: { spark: 'fakeImportance', energy: 'playful', shape: '5', pack: 'lostObject' },
+  odd: { spark: 'attachedOddity', energy: 'normal', shape: '5', pack: 'symbolPet' },
+  chaoticCute: { spark: 'wrongScale', energy: 'wild', shape: '5', pack: 'notebook' },
+  surprise: { spark: 'surprise', energy: 'normal', shape: '5', pack: 'surprise' }
+};
+
+
 const lanes = [
   { value: 'surprise', label: 'Surprise me' },
   { value: 'object', label: 'Object gremlin' },
@@ -1753,6 +1796,71 @@ function updateObjectSelect() {
   if (hint) hint.textContent = littleObjectHints[laneValue] || littleObjectHints.surprise;
 }
 
+
+function isAdvancedOpen() {
+  return Boolean($('#advancedDrawer')?.open);
+}
+
+function syncSimpleControlsToAdvanced() {
+  if (isAdvancedOpen()) return;
+
+  const simpleType = $('#simpleTypeSelect')?.value || 'surprise';
+  const simpleMood = $('#simpleMoodSelect')?.value || 'surprise';
+  const simpleWeird = $('#simpleWeirdSelect')?.value || 'surprise';
+  const rule = weirdnessRules[simpleWeird] || weirdnessRules.surprise;
+
+  $('#laneSelect').value = simpleType;
+  updateSpeciesSelect();
+  updateObjectSelect();
+  $('#speciesSelect').value = 'surprise';
+  $('#moodSelect').value = simpleMood;
+  $('#sparkSelect').value = rule.spark;
+  updateTwistSelect();
+  $('#twistSelect').value = 'surprise';
+  $('#objectSelect').value = 'surprise';
+  $('#shapeSelect').value = rule.shape;
+  $('#energySelect').value = rule.energy;
+  $('#packSelect').value = rule.pack;
+}
+
+function setSimpleControlsToSurprise() {
+  if ($('#simpleTypeSelect')) $('#simpleTypeSelect').value = 'surprise';
+  if ($('#simpleMoodSelect')) $('#simpleMoodSelect').value = 'surprise';
+  if ($('#simpleWeirdSelect')) $('#simpleWeirdSelect').value = 'surprise';
+}
+
+function makeDrawAlongSteps(card) {
+  const blueprint = card?.blueprint || buildBlueprintIntelligence(card);
+  const species = card?.blueprintSpecies || inferSpeciesBlueprint(card?.species || card?.mascot, card?.lane);
+  const face = (blueprint.faceZone || 'Put the face where the mood reads best.').split('.')[0];
+  const objectLine = blueprint.propAnchor || littleObjectPlacementNote(card?.extra, littleObjectToBlueprintZone(card?.extra, species));
+  const weirdLine = blueprint.weirdThingPlacement || 'Place one weird detail where it supports the silhouette.';
+  return [
+    species?.bodyHint || blueprint.easiestStartingShape || 'Draw the main body as one soft shape.',
+    face || 'Add the face where the mood reads best.',
+    objectLine,
+    weirdLine,
+    'Redraw it smaller. Keep the silhouette readable and remove one extra detail.'
+  ];
+}
+
+function renderDrawAlongSteps(card) {
+  const list = $('#drawSteps');
+  if (!list || !card) return;
+  list.innerHTML = makeDrawAlongSteps(card).map((step) => `<li>${escapeHtml(step)}</li>`).join('');
+}
+
+function handleStepDone(event) {
+  const button = event.target.closest('[data-step-done]');
+  if (!button) return;
+  const value = button.dataset.stepDone;
+  const line = value === 'done'
+    ? 'Finished counts. The tiny creature has left a footprint in the notebook.'
+    : `Step ${value} done. Keep it simple. The details can wait their turn.`;
+  showToast(line);
+}
+
+
 function littleObjectToBlueprintZone(littleObject, speciesRules = null) {
   const text = String(littleObject || '').toLowerCase();
   if (text.includes('crown') || text.includes('hat') || text.includes('halo')) return 'topCenter';
@@ -2502,6 +2610,7 @@ function renderCard() {
   $('#buildList').innerHTML = currentCard.build.map((item) => `<li>${item}</li>`).join('');
   $('#currentNote').value = currentCard.notes || '';
   renderBlueprintBreakdown(currentCard);
+  renderDrawAlongSteps(currentCard);
   renderPalettePlacement(currentCard);
 }
 
@@ -3613,7 +3722,10 @@ function fixCurrent(reason) {
 
 function switchTab(tabId) {
   $$('.tab').forEach((button) => button.classList.toggle('active', button.dataset.tab === tabId));
-  $$('.view').forEach((view) => view.classList.toggle('active', view.id === tabId));
+  $$('.view').forEach((view) => {
+    const shouldShow = view.id === tabId || (tabId === 'roll' && view.id === 'card');
+    view.classList.toggle('active', shouldShow);
+  });
 }
 
 function saveSettings() {
@@ -3721,8 +3833,8 @@ function initEvents() {
     updateObjectSelect();
   });
   $('#sparkSelect').addEventListener('change', updateTwistSelect);
-  $('#rollBtn').addEventListener('click', () => rollCard());
-  $('#surpriseBtn').addEventListener('click', () => rollCard({ fullSurprise: true }));
+  $('#rollBtn').addEventListener('click', () => { syncSimpleControlsToAdvanced(); rollCard(); });
+  $('#surpriseBtn').addEventListener('click', () => { setSimpleControlsToSurprise(); rollCard({ fullSurprise: true }); });
   $('#dailyBtn').addEventListener('click', () => rollCard({ daily: true }));
   $('#remixBar').addEventListener('click', handleMoodRemix);
   $('#paletteBar').addEventListener('click', handlePaletteRemix);
@@ -3731,6 +3843,7 @@ function initEvents() {
   $('#copyBtn').addEventListener('click', copyCard);
   $('#favIngredientsBtn').addEventListener('click', favoriteCurrentIngredients);
   document.body.addEventListener('click', handleQuickNote);
+  document.body.addEventListener('click', handleStepDone);
   $('#favoriteList').addEventListener('click', handleFavoriteClick);
   $('#exportBtn').addEventListener('click', exportStash);
   $('#clearBtn').addEventListener('click', clearStash);
@@ -3753,6 +3866,9 @@ function initEvents() {
 }
 
 function init() {
+  fillSelect('#simpleTypeSelect', simpleTypes);
+  fillSelect('#simpleMoodSelect', simpleMoods);
+  fillSelect('#simpleWeirdSelect', simpleWeirdness);
   fillSelect('#laneSelect', lanes);
   updateSpeciesSelect();
   updateObjectSelect();
@@ -3771,6 +3887,7 @@ function init() {
   renderSpins();
   renderStash();
   rollCard({ fullSurprise: true });
+  switchTab('roll');
 }
 
 init();

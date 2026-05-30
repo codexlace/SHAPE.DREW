@@ -1,5 +1,5 @@
 {
-  "name": "Oddlet",
+  "name": "Oddlet Drawing Coach",
   "short_name": "Oddlet",
   "description": "A tiny mascot prompt arcade for drawing simple weird object-creatures with one drawable spark.",
   "start_url": "./index.html",

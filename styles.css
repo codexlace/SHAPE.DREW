@@ -854,3 +854,153 @@ ul { padding-left: 18px; margin: 0; }
     rgba(255,255,255,.045);
 }
 
+
+
+/* V3.0 Simple Drawing Coach */
+.simple-controls {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  margin: 18px 0;
+  padding: 14px;
+  border: 1px solid color-mix(in srgb, var(--mint) 30%, var(--line));
+  border-radius: var(--radius-lg);
+  background:
+    radial-gradient(circle at top left, rgba(120,224,194,.12), transparent 38%),
+    rgba(255,255,255,.045);
+}
+
+.advanced-drawer {
+  margin: 14px 0;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  background: rgba(255,255,255,.035);
+  overflow: hidden;
+}
+
+.advanced-drawer summary {
+  cursor: pointer;
+  padding: 14px 16px;
+  font-weight: 900;
+  color: var(--ink);
+  list-style: none;
+}
+
+.advanced-drawer summary::-webkit-details-marker {
+  display: none;
+}
+
+.advanced-drawer summary::after {
+  content: " +";
+  color: var(--mint);
+}
+
+.advanced-drawer[open] summary::after {
+  content: " −";
+}
+
+.advanced-drawer > .select-hint {
+  padding: 0 16px 8px;
+}
+
+.advanced-form {
+  padding: 0 16px 16px;
+}
+
+.draw-along-card {
+  margin: 18px 0;
+  padding: 18px;
+  border: 1px solid color-mix(in srgb, var(--primary) 30%, var(--line));
+  border-radius: var(--radius-lg);
+  background:
+    radial-gradient(circle at top right, rgba(255,127,115,.10), transparent 36%),
+    rgba(255,255,255,.045);
+}
+
+.draw-along-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  align-items: flex-start;
+  margin-bottom: 12px;
+}
+
+.draw-along-head h4 {
+  margin: 0;
+}
+
+.draw-along-head small {
+  color: var(--soft);
+  text-align: right;
+}
+
+.draw-steps {
+  margin: 0;
+  padding-left: 1.2rem;
+}
+
+.draw-steps li {
+  margin: 8px 0;
+  color: var(--ink);
+  font-weight: 750;
+  line-height: 1.45;
+}
+
+.step-actions {
+  margin-top: 14px;
+}
+
+#card.active {
+  margin-top: 18px;
+}
+
+#card .version-strip,
+#card .commentary-card,
+#card .palette-placement,
+#card .palette-bar,
+#card #remixBar,
+#card #feelingBar,
+#card .quick-note,
+#card .mood-remix,
+#card .feeling-fix {
+  display: none;
+}
+
+#card .blueprint-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+#card .blueprint-item:nth-child(4),
+#card .blueprint-item:nth-child(5),
+#card .blueprint-item:nth-child(9),
+#card .blueprint-item:nth-child(10),
+#card .blueprint-item:nth-child(11),
+#card .blueprint-item:nth-child(13) {
+  display: none;
+}
+
+#card .card-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+#card .card-grid section:nth-child(2),
+#card .card-grid section:nth-child(5) {
+  display: none;
+}
+
+@media (max-width: 920px) {
+  .simple-controls,
+  #card .blueprint-grid,
+  #card .card-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .draw-along-head {
+    flex-direction: column;
+  }
+
+  .draw-along-head small {
+    text-align: left;
+  }
+}
+

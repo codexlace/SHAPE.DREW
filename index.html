@@ -20,7 +20,7 @@
         <div>
           <p class="eyebrow">tiny mascot sparks</p>
           <h1>Oddlet</h1>
-          <p class="tagline">Roll simple object-creatures with tiny twists worth drawing.</p>
+          <p class="tagline">A fun little drawing coach for cute weird mascots, simple shapes, and tiny practice wins.</p>
         </div>
       </div>
       <div class="hero-actions">
@@ -32,21 +32,38 @@
 
     <nav class="tabbar" aria-label="Primary">
       <button class="tab active" data-tab="roll" type="button">Roll</button>
-      <button class="tab" data-tab="card" type="button">Card</button>
-      <button class="tab" data-tab="redraw" type="button">Redraw</button>
-      <button class="tab" data-tab="stash" type="button">Stash</button>
-      <button class="tab" data-tab="oracle" type="button">AI</button>
+      <button class="tab" data-tab="redraw" type="button">Practice</button>
+      <button class="tab" data-tab="stash" type="button">Saved</button>
+      <button class="tab" data-tab="oracle" type="button">Settings</button>
     </nav>
 
     <main>
       <section class="view active" id="roll" aria-labelledby="rollTitle">
         <div class="grid two">
           <article class="panel glass control-panel">
-            <p class="eyebrow">idea arcade</p>
-            <h2 id="rollTitle">Roll an Oddlet</h2>
-            <p class="soft-copy">Pick a lane or let the drawer-creature decide. No full scenes. Just a mascot, one spark, and a drawable little moment.</p>
+            <p class="eyebrow">simple drawing coach</p>
+            <h2 id="rollTitle">Roll something drawable</h2>
+            <p class="soft-copy">Pick three easy things. Oddlet handles the hidden creature logic and gives you a tiny mascot to practice, not a homework hydra.</p>
 
-            <div class="form-grid">
+            <div class="simple-controls">
+              <label>
+                What do you want to draw?
+                <select id="simpleTypeSelect"></select>
+              </label>
+              <label>
+                What mood should it have?
+                <select id="simpleMoodSelect"></select>
+              </label>
+              <label>
+                How weird should it be?
+                <select id="simpleWeirdSelect"></select>
+              </label>
+            </div>
+
+            <details class="advanced-drawer" id="advancedDrawer">
+              <summary>Advanced creature controls</summary>
+              <p class="select-hint">Open this when you want the full creature taxonomy drawer. Leave it closed for easy practice.</p>
+              <div class="form-grid advanced-form">
               <label>
                 Mascot lane
                 <select id="laneSelect"></select>
@@ -91,8 +108,9 @@
                 <select id="packSelect"></select>
               </label>
             </div>
+            </details>
 
-            <div class="toggle-card">
+            <div class="toggle-card advanced-extra">
               <div>
                 <strong>Notebook oddball bias</strong>
                 <span>More symbols, X eyes, signs, object-creatures, and sketchy little weirdness.</span>
@@ -101,8 +119,8 @@
             </div>
 
             <div class="button-row">
-              <button class="primary-btn" id="rollBtn" type="button">Roll Oddlet</button>
-              <button class="secondary-btn" id="surpriseBtn" type="button">Full surprise</button>
+              <button class="primary-btn" id="rollBtn" type="button">Roll drawing idea</button>
+              <button class="secondary-btn" id="surpriseBtn" type="button">Surprise me</button>
               <button class="secondary-btn" id="dailyBtn" type="button">Daily Oddlet</button>
             </div>
 
@@ -134,7 +152,7 @@
         </div>
       </section>
 
-      <section class="view" id="card" aria-labelledby="cardTitle">
+      <section class="view active" id="card" aria-labelledby="cardTitle">
         <article class="panel card-output glass">
           <div class="card-topper">
             <div>
@@ -146,8 +164,30 @@
 
           <div class="idea-hero">
             <h3 id="ideaTitle">Roll something charmingly suspicious.</h3>
-            <p id="ideaText">Tap Roll Oddlet to generate a simple mascot idea with a tiny spark.</p>
+            <p id="ideaText">Tap Roll drawing idea to generate a simple mascot idea with a tiny spark.</p>
           </div>
+
+          <section class="draw-along-card" aria-label="Draw along steps">
+            <div class="draw-along-head">
+              <div>
+                <p class="eyebrow">draw along</p>
+                <h4>Five tiny steps</h4>
+              </div>
+              <small>Keep it bite-sized. Redraws count.</small>
+            </div>
+            <ol class="draw-steps" id="drawSteps">
+              <li>Draw the main body as one soft shape.</li>
+              <li>Add the face where the mood reads best.</li>
+              <li>Add one little object.</li>
+              <li>Add one fun weird detail.</li>
+              <li>Redraw it smaller and cleaner.</li>
+            </ol>
+            <div class="button-row step-actions">
+              <button class="secondary-btn" type="button" data-step-done="1">I drew step 1</button>
+              <button class="secondary-btn" type="button" data-step-done="2">I drew step 2</button>
+              <button class="primary-btn" type="button" data-step-done="done">I finished it</button>
+            </div>
+          </section>
 
           <div class="version-strip" aria-label="Tiny, Oddlet, and Extra Weird versions">
             <section class="version-card tiny-version">
@@ -348,8 +388,8 @@
       <section class="view" id="redraw" aria-labelledby="redrawTitle">
         <div class="grid two">
           <article class="panel glass">
-            <p class="eyebrow">same mascot, new acting</p>
-            <h2 id="redrawTitle">Redraw Spins</h2>
+            <p class="eyebrow">practice without boredom</p>
+            <h2 id="redrawTitle">Practice Spins</h2>
             <p class="soft-copy">Practice without boredom. Keep the same Oddlet, change one deliciously tiny thing.</p>
             <div class="spin-grid" id="spinGrid"></div>
           </article>

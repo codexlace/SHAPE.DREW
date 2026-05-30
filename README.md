@@ -189,3 +189,29 @@ Improves blueprint understanding:
 - species, mood, spark, twist, and little object all feed one unified blueprint plan
 - export text includes drawing order and clarity rule
 - service worker cache bumped to oddlet-v2-4-0
+
+
+## V3.0 Simple Drawing Coach
+
+Major simplification build:
+- Simple Mode front door with 3 choices:
+  - What do you want to draw?
+  - What mood should it have?
+  - How weird should it be?
+- Advanced creature controls are tucked into an expandable drawer
+- Roll page now shows the current draw card directly underneath the blueprint
+- Adds Draw Along Steps for beginner-friendly practice
+- Simplifies visible card output by hiding heavier panels from the main flow
+- Keeps previous engine modules internally:
+  - species drawer
+  - species body atlas
+  - moodprint logic
+  - palette placement
+  - tiny twist pins
+  - little object drawer
+  - object preview
+  - stash/export/reset/OpenRouter settings
+- Practice tab replaces Redraw wording
+- Saved tab replaces Stash wording
+- Settings tab contains optional AI/settings
+- service worker cache bumped to oddlet-v3-0-0
