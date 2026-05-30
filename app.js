@@ -3,6 +3,8 @@ const $$ = (selector) => [...document.querySelectorAll(selector)];
 
 const STORAGE_KEY = 'oddlet:v1:stash';
 const SETTINGS_KEY = 'oddlet:v1:settings';
+const FAVORITES_KEY = 'oddlet:v1:favorites';
+const OPENROUTER_MODEL = 'openrouter/free';
 
 const lanes = [
   { value: 'surprise', label: 'Surprise me' },
@@ -60,6 +62,22 @@ const packs = [
   { value: 'symbolPet', label: 'Symbol pets' },
   { value: 'lostObject', label: 'Lost object club' }
 ];
+
+const energies = [
+  { value: 'low', label: 'Low energy' },
+  { value: 'normal', label: 'Normal' },
+  { value: 'playful', label: 'Feeling playful' },
+  { value: 'wild', label: 'Unhinged but drawable' }
+];
+
+const energyRules = {
+  low: { label: 'low energy', shape: '3', extraLine: 'Keep it almost embarrassingly simple.', build: ['one big body shape', 'one simple face', 'one tiny spark'] },
+  normal: { label: 'normal', shape: null, extraLine: 'Let it be odd, but do not make it a scene.', build: [] },
+  playful: { label: 'feeling playful', shape: null, extraLine: 'Add one playful acting cue or tiny contradiction.', build: ['one playful acting cue'] },
+  wild: { label: 'unhinged but drawable', shape: null, extraLine: 'Give it one strange logic rule, but keep the body simple.', build: ['one strange-but-simple logic cue'] }
+};
+
+const defaultFavoriteSeeds = ['X eye', 'question mark', 'tiny sign', 'paint palette', 'ghost', 'brush', 'heart', 'star', 'living detail', 'wrong scale'];
 
 const mascotDeck = {
   object: ['paint palette', 'tiny mailbox', 'teacup', 'button', 'sock', 'candle', 'mirror', 'key', 'paper bag', 'bottle cap', 'little clock', 'spoon', 'tiny door'],
@@ -262,6 +280,26 @@ const oddletVersionTemplates = [
   'Promote the {extra} into the joke. It should feel like the second thing you notice and the first thing you remember.'
 ];
 
+const extraWeirdTemplates = [
+  'The {extra} is now the boss, and the mascot is pretending that is normal. Keep it to one extra expression cue.',
+  'Add one impossible-but-small rule: the {extra} floats, points the wrong way, has boots, or looks suspiciously official.',
+  'Make the mascot misunderstand its own {extra}. Same simple shapes, stranger little logic.',
+  'Give the {extra} a tiny job title, label, crown, or eyebrow. Do not add a background.',
+  'Turn one mark into a clue: an arrow, X, question mark, sticker scar, or little label that changes the joke.'
+];
+
+const bingoGoals = [
+  { id: 'xeye', label: 'Draw an X-eye', test: c => cardText(c).toLowerCase().includes('x') },
+  { id: 'living', label: 'Draw a living prop', test: c => /living|awake|face|companion|sidekick|buddy/i.test(cardText(c)) },
+  { id: 'ghost', label: 'Draw a ghost/blob', test: c => c.lane === 'ghost' || /ghost|blob|cryptid|shadow/i.test(cardText(c)) },
+  { id: 'sign', label: 'Draw a sign/note', test: c => /sign|note|label|envelope|arrow/i.test(cardText(c)) },
+  { id: 'object', label: 'Draw an object gremlin', test: c => c.lane === 'object' || /palette|bag|button|teacup|key|mirror/i.test(cardText(c)) },
+  { id: 'food', label: 'Draw a snack creature', test: c => c.lane === 'food' || /toast|lemon|mushroom|jellybean|dumpling|marshmallow/i.test(cardText(c)) },
+  { id: 'companion', label: 'Draw a tiny companion', test: c => /companion|sidekick|buddy|follows|peeking/i.test(cardText(c)) },
+  { id: 'dramatic', label: 'Draw something dramatic', test: c => /dramatic|crisis|official|important|catastrophe/i.test(cardText(c)) },
+  { id: 'question', label: 'Draw a question mark', test: c => cardText(c).includes('?') || /question mark/i.test(cardText(c)) }
+];
+
 const drawFirstByLane = {
   object: 'Start with the plain object silhouette before adding eyes. Let the object be boring for one brave minute.',
   food: 'Draw the snack shape first: one toast block, lemon wedge, dumpling blob, or mushroom cap. Toppings wait outside.',
@@ -362,6 +400,7 @@ const moodRemixes = {
 let currentCard = null;
 let biasOn = true;
 let deferredPrompt = null;
+let favoriteIngredients = [];
 
 function choice(list) {
   return list[Math.floor(Math.random() * list.length)];
@@ -412,6 +451,8 @@ function rollCard({ fullSurprise = false, mutate = null, daily = false } = {}) {
 
   let lane = pickValue($('#laneSelect').value, lanes);
   let mascotPool = mascotDeck[lane] || Object.values(mascotDeck).flat();
+  const energyKey = $('#energySelect')?.value || 'normal';
+  const energy = energyRules[energyKey] || energyRules.normal;
   const packKey = $('#packSelect')?.value || 'surprise';
   const pack = packDecks[packKey];
   let extraPool = [...extras];
@@ -423,10 +464,16 @@ function rollCard({ fullSurprise = false, mutate = null, daily = false } = {}) {
     if ($('#sparkSelect').value === 'surprise') forcedSpark = choice(pack.sparks);
   }
   if (biasOn && Math.random() < 0.42) mascotPool = [...mascotPool, ...oddBiasMascots];
+  const favoriteHints = favoriteIngredients.length ? favoriteIngredients : defaultFavoriteSeeds.filter(() => Math.random() < 0.16);
+  const favoriteMascots = favoriteHints.filter((hint) => Object.values(mascotDeck).flat().some((m) => m.toLowerCase().includes(hint.toLowerCase())));
+  const favoriteExtras = favoriteHints.filter((hint) => extras.some((x) => x.toLowerCase().includes(hint.toLowerCase())));
+  if (favoriteMascots.length) mascotPool = [...mascotPool, ...favoriteMascots, ...favoriteMascots];
+  if (favoriteExtras.length) extraPool = [...extraPool, ...favoriteExtras, ...favoriteExtras];
 
   const moodKey = pickValue($('#moodSelect').value, moods);
   const sparkKey = forcedSpark || pickValue($('#sparkSelect').value, sparks);
-  const shapeLimit = $('#shapeSelect').value || '5';
+  let shapeLimit = $('#shapeSelect').value || '5';
+  if (energy.shape) shapeLimit = energy.shape;
   const mascot = choice(mascotPool);
   const mood = moodData[moodKey];
   const extra = choice(extraPool);
@@ -443,18 +490,23 @@ function rollCard({ fullSurprise = false, mutate = null, daily = false } = {}) {
   if (mutate === 'weirder') {
     build.push('one odd mark that looks intentional, even if it is not');
   }
+  if (energy.build?.length) {
+    build.push(...energy.build);
+  }
 
   currentCard = {
     id: crypto.randomUUID ? crypto.randomUUID() : String(Date.now()),
     createdAt: new Date().toISOString(),
     lane,
     mascot,
+    moodKey,
     mood: mood.label,
+    sparkKey,
     spark: spark.label,
     shapeLimit,
     extra,
     title,
-    idea: `Draw a ${mood.label} ${mascot} mascot. ${capitalize(oddThing)}.`,
+    idea: `Draw a ${mood.label} ${mascot} mascot. ${capitalize(oddThing)}. ${energy.extraLine}`,
     oddThing: capitalize(oddThing),
     build,
     poseCue: `${mood.pose}. Expression cue: ${mood.face}.`,
@@ -462,13 +514,18 @@ function rollCard({ fullSurprise = false, mutate = null, daily = false } = {}) {
     drawFirst: drawFirstFor(lane, mascot),
     whyWorks: whyWorksFor({ mascot, extra, spark: spark.label }),
     pack: packKey,
+    energy: energyKey,
     coach: choice(coachLines),
     tinyVersion: makeTinyVersion({ lane, mascot, extra, mood: mood.label }),
     oddletVersion: makeOddletVersion({ lane, mascot, extra, mood: mood.label, spark: spark.label }),
-    commentary: makeCommentary({ mascot, extra, spark: spark.label, mood: mood.label }),
+    extraWeirdVersion: makeExtraWeirdVersion({ lane, mascot, extra, mood: mood.label, spark: spark.label }),
+    commentary: makeCommentary({ mascot, extra, spark: spark.label, mood: mood.label, energy: energy.label }),
+    blueprint: null,
     status: 'rolled',
     notes: ''
   };
+
+  currentCard.blueprint = buildBlueprintIntelligence(currentCard);
 
   animateRoll();
   renderCard();
@@ -493,6 +550,7 @@ function chooseDailyControls() {
   $('#moodSelect').value = seededPick(moods.filter(x => x.value !== 'surprise'), `${today}:mood`).value;
   $('#sparkSelect').value = seededPick(sparks.filter(x => x.value !== 'surprise'), `${today}:spark`).value;
   $('#shapeSelect').value = seededPick(shapes, `${today}:shape`).value;
+  $('#energySelect').value = seededPick(energies, `${today}:energy`).value;
   $('#packSelect').value = seededPick(packs, `${today}:pack`).value;
   $('#dailyHint').textContent = `Today’s drawer omen is ${$('#moodSelect').selectedOptions[0].textContent} + ${$('#packSelect').selectedOptions[0].textContent}.`;
 }
@@ -531,24 +589,250 @@ function makeOddletVersion({ extra }) {
   return choice(oddletVersionTemplates).replaceAll('{extra}', extra);
 }
 
-function makeCommentary({ mascot, extra, spark, mood }) {
+function makeExtraWeirdVersion({ extra }) {
+  return choice(extraWeirdTemplates).replaceAll('{extra}', extra);
+}
+
+function makeCommentary({ mascot, extra, spark, mood, energy }) {
   const closer = [
     `Keep the ${mascot} readable first; let the ${extra} be the tiny little narrator.`,
     `The ${spark} part should feel like a side-eye, not a second assignment.`,
     `Because it is ${mood}, the face and pose can do more work than extra details.`,
+    energy ? `The ${energy} setting says: let the card fit your hand today, not some imaginary art goblin.` : '',
     `Draw it like a sticker that escaped before quality control could ask questions.`,
     `The whole charm is one simple body plus one suspicious little decision.`
   ];
-  return `${choice(commentaryOpeners)} ${choice(closer)}`;
+  return `${choice(commentaryOpeners)} ${choice(closer.filter(Boolean))}`;
 }
 
 function refreshTinyOddlet(card) {
   card.tinyVersion = makeTinyVersion(card);
   card.oddletVersion = makeOddletVersion(card);
+  card.extraWeirdVersion = makeExtraWeirdVersion(card);
   card.commentary = makeCommentary(card);
   card.drawFirst = drawFirstFor(card.lane, card.mascot);
   card.whyWorks = whyWorksFor(card);
+  card.blueprint = buildBlueprintIntelligence(card);
   return card;
+}
+
+function buildBlueprintIntelligence(card) {
+  const lane = String(card?.lane || '').toLowerCase();
+  const mascot = String(card?.mascot || '').toLowerCase();
+  const sparkKey = String(card?.sparkKey || '').toLowerCase();
+  const sparkLabel = String(card?.spark || '').toLowerCase();
+  const mood = String(card?.mood || '').toLowerCase();
+  const energy = String(card?.energy || '').toLowerCase();
+  const shapeLimit = String(card?.shapeLimit || '5');
+
+  const blueprint = {
+    primarySilhouette: 'one main readable body shape',
+    faceZone: 'lower third',
+    propAnchor: 'one side edge, touching the body',
+    expressionWeight: 'eyes first, mouth second',
+    detailDanger: 'too many tiny details before the silhouette reads',
+    easiestStartingShape: 'large oval or bean blob',
+    weirdThingPlacement: 'near the face, hand, or chest area',
+    doNotAdd: ['background', 'shoes', 'extra face', 'second prop']
+  };
+
+  const laneRules = {
+    object: {
+      primarySilhouette: 'readable object silhouette first',
+      faceZone: 'middle-lower area',
+      propAnchor: 'right or left outer edge',
+      expressionWeight: 'eye shape plus one brow cue',
+      detailDanger: 'stacking labels, corners, and props too early',
+      easiestStartingShape: 'lumpy rectangle, rounded wedge, or bean object',
+      weirdThingPlacement: 'on the front face or attached to one side',
+      doNotAdd: ['background', 'shoes', 'third arm', 'second big prop']
+    },
+    food: {
+      primarySilhouette: 'one bold edible shape',
+      faceZone: 'lower third',
+      propAnchor: 'front center or one side edge',
+      expressionWeight: 'eyes and cheek spacing',
+      detailDanger: 'too many crumbs, toppings, seeds, or texture marks',
+      easiestStartingShape: 'toast block, wedge, dumpling blob, or rounded cap',
+      weirdThingPlacement: 'tucked near the hand, chest, or bite edge',
+      doNotAdd: ['plate', 'background kitchen', 'extra toppings', 'second prop']
+    },
+    symbol: {
+      primarySilhouette: 'large readable symbol shape',
+      faceZone: 'center-lower zone',
+      propAnchor: 'one outer edge or lower side',
+      expressionWeight: 'eye placement relative to the symbol',
+      detailDanger: 'letting the face swallow the symbol',
+      easiestStartingShape: 'one big question mark, star, moon, or sign',
+      weirdThingPlacement: 'inside the symbol or attached right beside it',
+      doNotAdd: ['extra symbols everywhere', 'background pattern', 'second face', 'complex limbs']
+    },
+    ghost: {
+      primarySilhouette: 'one soft blob or sheet silhouette',
+      faceZone: 'upper-middle for spooky, lower third for cute',
+      propAnchor: 'tucked under one side or floating just beside it',
+      expressionWeight: 'eye angle and body tilt',
+      detailDanger: 'too many folds or ragged edges before the body reads',
+      easiestStartingShape: 'large wobbly oval or sheet blob',
+      weirdThingPlacement: 'close enough to feel protected by the body',
+      doNotAdd: ['background fog', 'extra limbs', 'big costume', 'tiny texture lines']
+    },
+    stationery: {
+      primarySilhouette: 'clean desk-object silhouette',
+      faceZone: 'center or lower center',
+      propAnchor: 'clip, corner, side edge, or tip end',
+      expressionWeight: 'one eye shape plus a prop tilt',
+      detailDanger: 'too many little desk bits around the mascot',
+      easiestStartingShape: 'simple rectangle, stub, cylinder, or page shape',
+      weirdThingPlacement: 'on the corner, cap, label, or near the hand',
+      doNotAdd: ['whole desk scene', 'extra supplies', 'second prop', 'full text blocks']
+    },
+    weather: {
+      primarySilhouette: 'puffy cloud, drop, swirl, or moon-like mass',
+      faceZone: 'middle-lower area',
+      propAnchor: 'just under or beside the main weather mass',
+      expressionWeight: 'eyes plus a small tilt or droop',
+      detailDanger: 'too many floating sparkles and weather bits',
+      easiestStartingShape: 'single puff, drop, or swirl',
+      weirdThingPlacement: 'hovering close to the main body',
+      doNotAdd: ['full sky scene', 'extra clouds', 'lightning everywhere', 'second prop']
+    },
+    plant: {
+      primarySilhouette: 'one grouped plant mass',
+      faceZone: 'pot/body center or lower third',
+      propAnchor: 'leaf edge, stem side, or pot front',
+      expressionWeight: 'face simplicity plus leaf tilt',
+      detailDanger: 'scattering leaves and sprouts everywhere',
+      easiestStartingShape: 'bud, nub, leaf pile, or rounded pot blob',
+      weirdThingPlacement: 'nestled in the leaves or attached to the stem area',
+      doNotAdd: ['background garden', 'too many leaves', 'second plant', 'surface texture']
+    },
+    charm: {
+      primarySilhouette: 'small icon-like charm body',
+      faceZone: 'center-lower area',
+      propAnchor: 'hanger loop, side edge, or center front',
+      expressionWeight: 'eyes and one tiny symbol cue',
+      detailDanger: 'too many decorative dangly extras',
+      easiestStartingShape: 'simple charm blob, bead, badge, or relic shape',
+      weirdThingPlacement: 'inside the body shape or hanging directly from it',
+      doNotAdd: ['background chain', 'full outfit', 'second charm', 'extra face']
+    }
+  };
+
+  Object.assign(blueprint, laneRules[lane] || {});
+
+  if (mascot.includes('wedge') || mascot.includes('triangle')) {
+    blueprint.primarySilhouette = 'rounded wedge';
+    blueprint.easiestStartingShape = 'squashed triangle or rounded wedge';
+  }
+  if (mascot.includes('question mark') || mascot.includes('mark') || mascot.includes('exclamation')) {
+    blueprint.primarySilhouette = 'big readable symbol stem + hook';
+    blueprint.easiestStartingShape = 'one large symbol outline';
+  }
+  if (mascot.includes('palette')) {
+    blueprint.primarySilhouette = 'big bean palette shape';
+    blueprint.easiestStartingShape = 'bean blob with one thumb notch';
+  }
+  if (mascot.includes('paper bag') || mascot.includes('notebook page') || mascot.includes('sticky note')) {
+    blueprint.easiestStartingShape = 'lumpy rectangle';
+  }
+
+  const sparkText = `${sparkKey} ${sparkLabel}`;
+  if (sparkText.includes('livingdetail') || sparkText.includes('living detail')) {
+    blueprint.propAnchor = 'on the body surface where you will notice it early';
+    blueprint.weirdThingPlacement = 'on a spot, mark, patch, or detail attached to the mascot';
+    blueprint.doNotAdd = ['second living detail', 'background action', 'extra prop', 'extra face'];
+  }
+  if (sparkText.includes('tinycompanion') || sparkText.includes('tiny companion')) {
+    blueprint.propAnchor = 'beside the body or tucked under one arm';
+    blueprint.weirdThingPlacement = 'touching or almost touching the mascot';
+    blueprint.doNotAdd = ['multiple companions', 'background scene', 'second prop', 'tiny crowd'];
+  }
+  if (sparkText.includes('attachedoddity') || sparkText.includes('attached oddity')) {
+    blueprint.propAnchor = 'upper edge, side corner, handle, ribbon, or tag point';
+    blueprint.weirdThingPlacement = 'attached directly to the mascot body';
+    blueprint.doNotAdd = ['detached second weird thing', 'extra companion', 'background', 'busy costume'];
+  }
+  if (sparkText.includes('wrongscale') || sparkText.includes('wrong scale')) {
+    blueprint.propAnchor = 'one strong side anchor';
+    blueprint.expressionWeight = 'body tilt plus one stressed eye shape';
+    blueprint.weirdThingPlacement = 'close to the body so the size contrast is obvious';
+    blueprint.detailDanger = 'an oversized prop plus too many other extras';
+    blueprint.doNotAdd = ['second oversized prop', 'background', 'tiny clutter', 'full environment'];
+  }
+  if (sparkText.includes('secretsymbol') || sparkText.includes('secret symbol')) {
+    blueprint.weirdThingPlacement = 'chest, face patch, label area, or sign front';
+    blueprint.doNotAdd = ['many symbols', 'background clues', 'extra text', 'second prop'];
+  }
+  if (sparkText.includes('microproblem') || sparkText.includes('mini problem')) {
+    blueprint.expressionWeight = 'eyes, mouth, and a slight body lean';
+    blueprint.weirdThingPlacement = 'where it can visibly wobble, slip, or annoy the mascot';
+    blueprint.doNotAdd = ['background accident', 'second problem', 'too many effects', 'crowd energy'];
+  }
+  if (sparkText.includes('tinyjob') || sparkText.includes('tiny job')) {
+    blueprint.propAnchor = 'front center or one presenting hand';
+    blueprint.weirdThingPlacement = 'where it reads like a job marker: sign, badge, prop, or tiny station';
+    blueprint.doNotAdd = ['full workplace scene', 'extra tools', 'second costume cue', 'background signage'];
+  }
+  if (sparkText.includes('quietmagic') || sparkText.includes('almost magic')) {
+    blueprint.propAnchor = 'hovering close to the body';
+    blueprint.weirdThingPlacement = 'near the face or chest so the magic feels intimate';
+    blueprint.doNotAdd = ['spell circle', 'giant glow effects', 'background stars', 'extra magic props'];
+  }
+  if (sparkText.includes('costumelogic') || sparkText.includes('costume logic')) {
+    blueprint.propAnchor = 'top edge or body front';
+    blueprint.weirdThingPlacement = 'hat, badge, cape edge, or one costume piece only';
+    blueprint.doNotAdd = ['full outfit set', 'lots of accessories', 'background stage', 'second prop'];
+  }
+  if (sparkText.includes('fakeimportance') || sparkText.includes('fake importance')) {
+    blueprint.propAnchor = 'front center like a presentation';
+    blueprint.weirdThingPlacement = 'label, sign, crown, or presented object area';
+    blueprint.doNotAdd = ['full museum scene', 'extra labels', 'background display', 'second trophy'];
+  }
+
+  if (mood.includes('bashful') || mood.includes('nervous') || mood.includes('hopeful')) {
+    blueprint.faceZone = 'lower third';
+    blueprint.expressionWeight = 'low eyes and a tiny mouth';
+  }
+  if (mood.includes('sleepy')) blueprint.expressionWeight = 'half-lidded eyes and droop';
+  if (mood.includes('dramatic') || mood.includes('proud')) {
+    blueprint.faceZone = 'middle to upper-middle';
+    blueprint.expressionWeight = 'brows, mouth, and pose tilt';
+  }
+  if (mood.includes('blank')) blueprint.expressionWeight = 'one simple eye difference and stillness';
+  if (mood.includes('confused') || mood.includes('suspicious')) blueprint.expressionWeight = 'uneven eyes plus one brow cue';
+  if (mood.includes('secretly powerful')) blueprint.weirdThingPlacement = 'close to the chest or floating beside the face';
+
+  if (shapeLimit === '3') {
+    blueprint.detailDanger = 'trying to squeeze too much into a 3-shape drawing';
+    blueprint.doNotAdd = ['background', 'second prop', 'extra limbs', 'tiny texture'];
+  } else if (shapeLimit === '7') {
+    blueprint.detailDanger = 'using all seven shapes on clutter instead of readability';
+  }
+
+  if (energy === 'low') {
+    blueprint.detailDanger = 'too many parts for a low-energy sketch';
+    blueprint.doNotAdd = ['background', 'texture', 'second prop', 'surface details'];
+  }
+  if (energy === 'wild') {
+    blueprint.detailDanger = 'letting the joke overpower the silhouette';
+    blueprint.doNotAdd = ['third weird thing', 'extra character', 'full environment', 'tiny clutter'];
+  }
+
+  return blueprint;
+}
+
+function renderBlueprintBreakdown(card) {
+  const blueprint = card?.blueprint || buildBlueprintIntelligence(card);
+  if (card) card.blueprint = blueprint;
+  $('#bluePrimarySilhouette').textContent = blueprint.primarySilhouette;
+  $('#blueFaceZone').textContent = blueprint.faceZone;
+  $('#bluePropAnchor').textContent = blueprint.propAnchor;
+  $('#blueExpressionWeight').textContent = blueprint.expressionWeight;
+  $('#blueDetailDanger').textContent = blueprint.detailDanger;
+  $('#blueStartShape').textContent = blueprint.easiestStartingShape;
+  $('#blueWeirdPlacement').textContent = blueprint.weirdThingPlacement;
+  $('#blueDoNotAdd').textContent = blueprint.doNotAdd.join(', ');
 }
 
 function guardrailFor(lane, spark, mutate) {
@@ -597,11 +881,14 @@ function renderCard() {
   $('#whyWorks').textContent = currentCard.whyWorks || whyWorksFor(currentCard);
   $('#tinyVersion').textContent = currentCard.tinyVersion || makeTinyVersion(currentCard);
   $('#oddletVersion').textContent = currentCard.oddletVersion || makeOddletVersion(currentCard);
+  $('#extraWeirdVersion').textContent = currentCard.extraWeirdVersion || makeExtraWeirdVersion(currentCard);
   $('#creatureCommentary').textContent = currentCard.commentary || makeCommentary(currentCard);
   $('#poseCue').textContent = currentCard.poseCue;
   $('#guardrail').textContent = currentCard.guardrail;
   $('#difficultyPill').textContent = currentCard.shapeLimit === 'loose' ? 'loose simple' : `${currentCard.shapeLimit} shapes`;
   $('#buildList').innerHTML = currentCard.build.map((item) => `<li>${item}</li>`).join('');
+  $('#currentNote').value = currentCard.notes || '';
+  renderBlueprintBreakdown(currentCard);
 }
 
 function renderBlueprint(card) {
@@ -681,6 +968,7 @@ function saveCurrent() {
     showToast('Roll an Oddlet first. Empty jars make no noise.');
     return;
   }
+  currentCard.notes = $('#currentNote')?.value.trim() || currentCard.notes || '';
   const stash = getStash();
   stash.unshift({ ...currentCard, status: 'saved' });
   localStorage.setItem(STORAGE_KEY, JSON.stringify(stash.slice(0, 80)));
@@ -700,8 +988,10 @@ function renderStash() {
     const drawn = stash.filter((item) => item.status === 'drawn').length;
     const favorites = stash.filter((item) => item.favorite).length;
     const packsFound = new Set(stash.map((item) => item.pack).filter(Boolean)).size;
-    stats.innerHTML = `<span><strong>${stash.length}</strong> found</span><span><strong>${drawn}</strong> drawn</span><span><strong>${favorites}</strong> favorites</span><span><strong>${packsFound}</strong> packs</span>`;
+    const notes = stash.filter((item) => item.notes).length;
+    stats.innerHTML = `<span><strong>${stash.length}</strong> found</span><span><strong>${drawn}</strong> drawn</span><span><strong>${favorites}</strong> favorites</span><span><strong>${packsFound}</strong> packs</span><span><strong>${notes}</strong> notes</span>`;
   }
+  renderBingo(stash);
   if (!stash.length) {
     list.innerHTML = '<div class="empty">No saved Oddlets yet. Roll one tiny creature and trap it lovingly in the jar.</div>';
     return;
@@ -713,7 +1003,8 @@ function renderStash() {
         <p>${escapeHtml(item.idea)}</p>
       </div>
       <p><strong>Odd thing:</strong> ${escapeHtml(item.oddThing)}</p>
-      <div class="stash-tags"><span>${escapeHtml(item.lane || 'odd')}</span><span>${escapeHtml(item.spark || 'spark')}</span><span>${escapeHtml(item.shapeLimit || 'simple')} shapes</span></div>
+      ${item.notes ? `<p class="stash-note"><strong>Note:</strong> ${escapeHtml(item.notes)}</p>` : ''}
+      <div class="stash-tags"><span>${escapeHtml(item.lane || 'odd')}</span><span>${escapeHtml(item.spark || 'spark')}</span><span>${escapeHtml(item.energy || 'normal')}</span><span>${escapeHtml(item.shapeLimit || 'simple')} shapes</span></div>
       <div class="stash-actions">
         <button class="ghost-btn" data-action="load">Load</button>
         <button class="ghost-btn" data-action="drawn">${item.status === 'drawn' ? 'Drawn ✓' : 'Mark drawn'}</button>
@@ -765,13 +1056,15 @@ function handleStashClick(event) {
 
 async function copyCard() {
   if (!currentCard) return showToast('Roll first, copy later. The order matters to the jar.');
+  currentCard.notes = $('#currentNote')?.value.trim() || currentCard.notes || '';
   const text = formatCard(currentCard);
   await navigator.clipboard.writeText(text);
   showToast('Copied draw card.');
 }
 
 function formatCard(card) {
-  return `${card.title}\n\n${card.idea}\n\nTiny version: ${card.tinyVersion || makeTinyVersion(card)}\n\nOddlet version: ${card.oddletVersion || makeOddletVersion(card)}\n\nCreature commentary: ${card.commentary || makeCommentary(card)}\n\nOdd little thing: ${card.oddThing}\n\nBuild it from:\n- ${card.build.join('\n- ')}\n\nPose + expression: ${card.poseCue}\n\nBeginner guardrail: ${card.guardrail}\n\nRedraw spin: ${choice(redrawSpins).text}`;
+  const blueprint = card.blueprint || buildBlueprintIntelligence(card);
+  return `${card.title}\n\n${card.idea}\n\nTiny version: ${card.tinyVersion || makeTinyVersion(card)}\n\nOddlet version: ${card.oddletVersion || makeOddletVersion(card)}\n\nCreature commentary: ${card.commentary || makeCommentary(card)}\n\nOdd little thing: ${card.oddThing}\n\nBuild it from:\n- ${card.build.join('\n- ')}\n\nPose + expression: ${card.poseCue}\n\nBeginner guardrail: ${card.guardrail}\n\nBlueprint breakdown:\n- Primary silhouette: ${blueprint.primarySilhouette}\n- Face zone: ${blueprint.faceZone}\n- Prop anchor: ${blueprint.propAnchor}\n- Expression weight: ${blueprint.expressionWeight}\n- Detail danger: ${blueprint.detailDanger}\n- Easiest starting shape: ${blueprint.easiestStartingShape}\n- Weird thing placement: ${blueprint.weirdThingPlacement}\n- What not to add: ${blueprint.doNotAdd.join(', ')}\n\nRedraw spin: ${choice(redrawSpins).text}`;
 }
 
 function exportStash() {
@@ -789,6 +1082,69 @@ function clearStash() {
   localStorage.removeItem(STORAGE_KEY);
   renderStash();
   showToast('Stash cleared. A fresh drawer appears.');
+}
+
+
+function cardText(card) {
+  return [card.title, card.idea, card.oddThing, card.extra, card.spark, card.mood, card.notes].filter(Boolean).join(' ');
+}
+
+function renderBingo(stash = getStash()) {
+  const grid = $('#bingoGrid');
+  if (!grid) return;
+  grid.innerHTML = bingoGoals.map((goal) => {
+    const complete = stash.some(goal.test);
+    return `<div class="bingo-tile ${complete ? 'complete' : ''}"><span>${complete ? '✓' : '·'}</span>${escapeHtml(goal.label)}</div>`;
+  }).join('');
+}
+
+function loadFavorites() {
+  try { favoriteIngredients = JSON.parse(localStorage.getItem(FAVORITES_KEY) || '[]'); } catch { favoriteIngredients = []; }
+}
+
+function saveFavorites() {
+  localStorage.setItem(FAVORITES_KEY, JSON.stringify([...new Set(favoriteIngredients)].slice(0, 30)));
+}
+
+function renderFavorites() {
+  const wrap = $('#favoriteList');
+  if (!wrap) return;
+  const source = favoriteIngredients.length ? favoriteIngredients : defaultFavoriteSeeds;
+  wrap.innerHTML = source.map((item) => `<button class="fav-chip ${favoriteIngredients.includes(item) ? 'active' : ''}" type="button" data-favorite="${escapeHtml(item)}">${escapeHtml(item)}</button>`).join('');
+}
+
+function favoriteCurrentIngredients() {
+  if (!currentCard) return showToast('Roll a creature first, then steal its ingredients.');
+  const adds = [currentCard.mascot, currentCard.extra, currentCard.spark].filter(Boolean);
+  favoriteIngredients = [...new Set([...favoriteIngredients, ...adds])].slice(0, 30);
+  saveFavorites();
+  renderFavorites();
+  showToast('Ingredients favorited. Future rolls will lean toward this little flavor cupboard.');
+}
+
+function handleFavoriteClick(event) {
+  const chip = event.target.closest('[data-favorite]');
+  if (!chip) return;
+  const value = chip.dataset.favorite;
+  if (favoriteIngredients.includes(value)) {
+    favoriteIngredients = favoriteIngredients.filter((item) => item !== value);
+  } else {
+    favoriteIngredients = [...new Set([...favoriteIngredients, value])].slice(0, 30);
+  }
+  saveFavorites();
+  renderFavorites();
+  showToast(favoriteIngredients.includes(value) ? 'Favorite bias added.' : 'Favorite bias removed.');
+}
+
+function handleQuickNote(event) {
+  const chip = event.target.closest('[data-note]');
+  if (!chip) return;
+  const note = chip.dataset.note;
+  const box = $('#currentNote');
+  const existing = box.value.trim();
+  box.value = existing ? `${existing}; ${note}` : note;
+  if (currentCard) currentCard.notes = box.value.trim();
+  showToast('Tiny note added. Evidence collected.');
 }
 
 function renderSpins() {
@@ -905,7 +1261,7 @@ function switchTab(tabId) {
 }
 
 function saveSettings() {
-  const settings = { apiKey: $('#apiKey').value.trim(), modelName: $('#modelName').value.trim(), theme: document.body.classList.contains('light') ? 'light' : 'dark' };
+  const settings = { apiKey: $('#apiKey').value.trim(), modelName: OPENROUTER_MODEL, theme: document.body.classList.contains('light') ? 'light' : 'dark' };
   localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings));
   showToast('Settings saved on this device.');
 }
@@ -914,7 +1270,7 @@ function loadSettings() {
   try {
     const settings = JSON.parse(localStorage.getItem(SETTINGS_KEY) || '{}');
     if (settings.apiKey) $('#apiKey').value = settings.apiKey;
-    if (settings.modelName) $('#modelName').value = settings.modelName;
+    $('#modelName').value = OPENROUTER_MODEL;
     if (settings.theme === 'light') document.body.classList.add('light');
   } catch {}
   updateThemeButton();
@@ -927,9 +1283,9 @@ function updateThemeButton() {
 async function runAI() {
   if (!currentCard) return showToast('Roll a card first so the AI has a creature to bother.');
   const apiKey = $('#apiKey').value.trim();
-  const model = $('#modelName').value.trim();
+  const model = OPENROUTER_MODEL;
+  $('#modelName').value = OPENROUTER_MODEL;
   if (!apiKey) return showToast('Add your OpenRouter key first.');
-  if (!model) return showToast('Add the model you want to use. I left it empty on purpose.');
 
   $('#aiOutput').textContent = 'Asking the tiny oracle...';
   const prompt = `${$('#aiPrompt').value.trim()}\n\nCurrent card:\n${formatCard(currentCard)}`;
@@ -990,6 +1346,9 @@ function initEvents() {
   $('#feelingBar').addEventListener('click', handleFeelingFix);
   $('#saveBtn').addEventListener('click', saveCurrent);
   $('#copyBtn').addEventListener('click', copyCard);
+  $('#favIngredientsBtn').addEventListener('click', favoriteCurrentIngredients);
+  document.body.addEventListener('click', handleQuickNote);
+  $('#favoriteList').addEventListener('click', handleFavoriteClick);
   $('#exportBtn').addEventListener('click', exportStash);
   $('#clearBtn').addEventListener('click', clearStash);
   $('#stashList').addEventListener('click', handleStashClick);
@@ -1014,11 +1373,14 @@ function init() {
   fillSelect('#moodSelect', moods);
   fillSelect('#sparkSelect', sparks);
   fillSelect('#shapeSelect', shapes);
+  fillSelect('#energySelect', energies);
   fillSelect('#packSelect', packs);
   loadSettings();
   initEvents();
   initInstallPrompt();
   initServiceWorker();
+  loadFavorites();
+  renderFavorites();
   renderSpins();
   renderStash();
   rollCard({ fullSurprise: true });

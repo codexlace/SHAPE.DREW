@@ -60,3 +60,29 @@ Added Tiny Version / Oddlet Version so every prompt has an easy starter build an
 - Added Draw This First and Why This Works to make cards easier to start and quietly more educational.
 - Added Not Feeling It buttons: Too boring, Too complex, Too normal, Too cute, and Hard to start.
 - Added Sketch Stash museum stats and compact tags so saved ideas feel more collectible.
+
+
+## V1.4 Sketch Ritual upgrades
+
+- Drawing Energy selector: Low Energy, Normal, Feeling Playful, and Unhinged but Drawable.
+- Tiny / Oddlet / Extra Weird versions for each prompt.
+- Creature Notes on the current card, saved into Sketch Stash.
+- Quick note chips for fast drawing reflections.
+- Favorite Ingredients bias, so future rolls can lean toward your recurring symbols, objects, and sparks.
+- Oddlet Bingo in Sketch Stash for tiny drawing goals.
+- OpenRouter helper model is prefilled and locked to `openrouter/free` for ease.
+
+The app is still fully static and GitHub Pages-ready.
+
+
+## V1.5 Blueprint Intelligence
+
+Each card now includes a Blueprint Breakdown with:
+- primary silhouette
+- face zone
+- prop anchor
+- expression weight
+- detail danger
+- easiest starting shape
+- where to place the weird thing
+- what not to add

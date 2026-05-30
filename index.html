@@ -63,6 +63,10 @@
                 <select id="shapeSelect"></select>
               </label>
               <label>
+                Drawing energy
+                <select id="energySelect"></select>
+              </label>
+              <label>
                 Prompt pack
                 <select id="packSelect"></select>
               </label>
@@ -86,6 +90,14 @@
               <strong>Today’s tiny drawer omen</strong>
               <span id="dailyHint">One bite-sized creature for today, no pressure-streak goblin attached.</span>
             </aside>
+
+            <section class="micro-panel favorite-drawer" aria-label="Favorite ingredients">
+              <div>
+                <strong>Favorite ingredient bias</strong>
+                <span>Save ingredients from cards, then let future rolls lean toward your recurring little weirds.</span>
+              </div>
+              <div class="favorite-list" id="favoriteList"></div>
+            </section>
           </article>
 
           <article class="panel stage-card" aria-live="polite">
@@ -117,7 +129,7 @@
             <p id="ideaText">Tap Roll Oddlet to generate a simple mascot idea with a tiny spark.</p>
           </div>
 
-          <div class="version-strip" aria-label="Tiny and Oddlet versions">
+          <div class="version-strip" aria-label="Tiny, Oddlet, and Extra Weird versions">
             <section class="version-card tiny-version">
               <span>Tiny version</span>
               <p id="tinyVersion">The easiest 3-shape version will appear here.</p>
@@ -125,6 +137,10 @@
             <section class="version-card oddlet-version">
               <span>Oddlet version</span>
               <p id="oddletVersion">The stranger-but-still-simple version will appear here.</p>
+            </section>
+            <section class="version-card weird-version">
+              <span>Extra weird version</span>
+              <p id="extraWeirdVersion">A wilder but still drawable version will appear here.</p>
             </section>
           </div>
 
@@ -160,6 +176,50 @@
             </section>
           </div>
 
+          <section class="blueprint-breakdown panel-subtle" aria-label="Blueprint breakdown">
+            <div class="breakdown-head">
+              <div>
+                <p class="eyebrow">blueprint intelligence layer</p>
+                <h4>Blueprint Breakdown</h4>
+              </div>
+              <small>tiny construction logic for this exact Oddlet</small>
+            </div>
+            <div class="blueprint-grid" id="blueprintBreakdown">
+              <div class="blueprint-item">
+                <span>Primary silhouette</span>
+                <p id="bluePrimarySilhouette">One main readable shape.</p>
+              </div>
+              <div class="blueprint-item">
+                <span>Face zone</span>
+                <p id="blueFaceZone">Lower third, soft and simple.</p>
+              </div>
+              <div class="blueprint-item">
+                <span>Prop anchor</span>
+                <p id="bluePropAnchor">One side of the body.</p>
+              </div>
+              <div class="blueprint-item">
+                <span>Expression weight</span>
+                <p id="blueExpressionWeight">Eyes and mouth carry the mood.</p>
+              </div>
+              <div class="blueprint-item">
+                <span>Detail danger</span>
+                <p id="blueDetailDanger">Too many tiny details too early.</p>
+              </div>
+              <div class="blueprint-item">
+                <span>Easiest starting shape</span>
+                <p id="blueStartShape">Start with one large simple blob.</p>
+              </div>
+              <div class="blueprint-item">
+                <span>Where to place the weird thing</span>
+                <p id="blueWeirdPlacement">Close to the face or one side.</p>
+              </div>
+              <div class="blueprint-item">
+                <span>What not to add</span>
+                <p id="blueDoNotAdd">Background, second prop, extra face, texture.</p>
+              </div>
+            </div>
+          </section>
+
           <section class="remix-bar" id="remixBar" aria-label="Mood remix bar">
             <div class="remix-title">
               <span>mood remix bar</span>
@@ -190,8 +250,23 @@
             </div>
           </section>
 
+          <section class="notes-panel" aria-label="Creature notes">
+            <label class="wide-label">
+              Creature notes
+              <textarea id="currentNote" rows="3" placeholder="What I liked, what was hard, redraw idea, little creature gossip..."></textarea>
+            </label>
+            <div class="quick-note-row" aria-label="Quick notes">
+              <button class="remix-chip" type="button" data-note="face was weird">face was weird</button>
+              <button class="remix-chip" type="button" data-note="body was hard">body was hard</button>
+              <button class="remix-chip" type="button" data-note="fun idea">fun idea</button>
+              <button class="remix-chip" type="button" data-note="too many details">too many details</button>
+              <button class="remix-chip" type="button" data-note="want to redraw">want to redraw</button>
+            </div>
+          </section>
+
           <div class="button-row sticky-actions">
             <button class="secondary-btn" id="copyBtn" type="button">Copy card</button>
+            <button class="secondary-btn" id="favIngredientsBtn" type="button">Favorite ingredients</button>
             <button class="primary-btn" id="saveBtn" type="button">Save to Stash</button>
           </div>
         </article>
@@ -233,6 +308,13 @@
             </div>
           </div>
           <div class="museum-stats" id="museumStats"></div>
+          <section class="bingo-panel" aria-label="Oddlet bingo">
+            <div class="remix-title">
+              <span>oddlet bingo</span>
+              <small>tiny drawing goals, no pressure goblin</small>
+            </div>
+            <div class="bingo-grid" id="bingoGrid"></div>
+          </section>
           <div class="stash-list" id="stashList"></div>
         </article>
       </section>
@@ -241,7 +323,7 @@
         <article class="panel glass">
           <p class="eyebrow">optional openrouter helper</p>
           <h2 id="oracleTitle">Oddlet AI Polish</h2>
-          <p class="soft-copy">Optional text-only helper. Paste your OpenRouter key, choose your own model, and let it remix the current card. The model field is intentionally empty.</p>
+          <p class="soft-copy">Optional text-only helper. Paste your OpenRouter key and let it remix the current card. The model is prefilled as OpenRouter’s free router for ease.</p>
 
           <div class="form-grid ai-grid">
             <label>
@@ -250,7 +332,7 @@
             </label>
             <label>
               Model
-              <input id="modelName" type="text" placeholder="leave empty until you choose one" autocomplete="off" />
+              <input id="modelName" type="text" value="openrouter/free" readonly autocomplete="off" />
             </label>
           </div>
           <label class="wide-label">
@@ -266,7 +348,7 @@
       </section>
     </main>
 
-    <footer class="footer-note">Oddlet saves only to this device unless you export. Built for quick iPad drawing sparks.</footer>
+    <footer class="footer-note">Oddlet saves only to this device unless you export. Built for quick iPad drawing sparks, tiny creature evidence, and drawable nonsense.</footer>
   </div>
 
   <div class="toast" id="toast" role="status" aria-live="polite"></div>

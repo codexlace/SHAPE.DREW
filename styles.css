@@ -547,3 +547,164 @@ ul { padding-left: 18px; margin: 0; }
 @media (max-width: 820px) {
   .museum-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
+
+/* V1.4 sketch ritual upgrades */
+.weird-version {
+  background:
+    radial-gradient(circle at 0 0, rgba(255,179,110,.16), transparent 12rem),
+    rgba(255,255,255,.055);
+}
+.notes-panel {
+  margin-top: 16px;
+  padding: 14px;
+  border: 1px solid var(--line);
+  border-radius: 24px;
+  background:
+    linear-gradient(135deg, rgba(145,183,255,.10), rgba(255,143,189,.08)),
+    rgba(255,255,255,.045);
+}
+.notes-panel textarea,
+.wide-label textarea {
+  width: 100%;
+  margin-top: 8px;
+  resize: vertical;
+}
+.quick-note-row,
+.favorite-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 10px;
+}
+.favorite-drawer {
+  display: grid;
+  gap: 10px;
+}
+.fav-chip {
+  min-height: 34px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: rgba(255,255,255,.055);
+  color: var(--ink);
+  font-weight: 850;
+  padding: 0 12px;
+  cursor: pointer;
+}
+.fav-chip.active {
+  border-color: rgba(120,224,194,.55);
+  background: linear-gradient(135deg, rgba(120,224,194,.24), rgba(255,179,110,.12));
+  color: var(--primary-2);
+}
+.bingo-panel {
+  margin: 14px 0;
+  padding: 14px;
+  border: 1px solid var(--line);
+  border-radius: 24px;
+  background: rgba(255,255,255,.045);
+}
+.bingo-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 9px;
+  margin-top: 12px;
+}
+.bingo-tile {
+  min-height: 72px;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  padding: 10px;
+  color: var(--muted);
+  background: rgba(0,0,0,.08);
+  font-weight: 850;
+  display: grid;
+  align-content: center;
+  gap: 6px;
+}
+.bingo-tile span {
+  width: 24px;
+  height: 24px;
+  display: inline-grid;
+  place-items: center;
+  border-radius: 999px;
+  background: rgba(255,255,255,.08);
+  color: var(--soft);
+}
+.bingo-tile.complete {
+  color: var(--ink);
+  border-color: rgba(120,224,194,.42);
+  background: linear-gradient(135deg, rgba(120,224,194,.18), rgba(255,179,110,.10));
+}
+.bingo-tile.complete span {
+  background: rgba(120,224,194,.22);
+  color: var(--mint);
+}
+.stash-note {
+  border-left: 3px solid rgba(255,179,110,.55);
+  padding-left: 10px;
+  color: var(--muted);
+}
+@media (min-width: 960px) {
+  .version-strip { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+@media (max-width: 640px) {
+  .bingo-grid { grid-template-columns: 1fr; }
+}
+
+
+.panel-subtle {
+  margin-top: 14px;
+  padding: 18px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  background: rgba(255,255,255,.05);
+}
+
+.breakdown-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 14px;
+  margin-bottom: 14px;
+}
+
+.breakdown-head small {
+  color: var(--soft);
+  max-width: 18rem;
+  text-align: right;
+}
+
+.blueprint-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.blueprint-item {
+  min-height: 100%;
+  padding: 12px 14px;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: rgba(255,255,255,.04);
+}
+
+.blueprint-item span {
+  display: block;
+  margin-bottom: 5px;
+  color: var(--primary-2);
+  font-size: .78rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+}
+
+.blueprint-item p {
+  margin: 0;
+  color: var(--muted);
+  font-weight: 700;
+}
+
+@media (max-width: 920px) {
+  .blueprint-grid { grid-template-columns: 1fr; }
+  .breakdown-head { flex-direction: column; }
+  .breakdown-head small { text-align: left; max-width: none; }
+}
