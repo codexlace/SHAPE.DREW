@@ -29,7 +29,22 @@ const moods = [
   { value: 'grumpy', label: 'grumpy-soft' },
   { value: 'hopeful', label: 'hopeful' },
   { value: 'blank', label: 'blank-faced' },
-  { value: 'secret', label: 'secretly powerful' }
+  { value: 'secret', label: 'secretly powerful' },
+  { value: 'tinyPanic', label: 'tiny panic' },
+  { value: 'smug', label: 'smug' },
+  { value: 'melancholyCute', label: 'melancholy-cute' },
+  { value: 'feralCute', label: 'feral-cute' },
+  { value: 'tooOfficial', label: 'too official' },
+  { value: 'secretlyGuilty', label: 'secretly guilty' },
+  { value: 'delightedGoblin', label: 'delighted goblin' },
+  { value: 'dramaticallyOffended', label: 'dramatically offended' },
+  { value: 'cosmicBlank', label: 'cosmic blank' },
+  { value: 'clingy', label: 'clingy' },
+  { value: 'overprepared', label: 'overprepared' },
+  { value: 'softlyHaunted', label: 'softly haunted' },
+  { value: 'sneaky', label: 'sneaky' },
+  { value: 'starstruck', label: 'starstruck' },
+  { value: 'mildlyCursed', label: 'mildly cursed' }
 ];
 
 const sparks = [
@@ -128,16 +143,31 @@ const oddBiasMascots = ['paint palette', 'paper bag', 'question mark', 'mask blo
 const extras = ['heart', 'star', 'key', 'note', 'tiny sign', 'moon', 'spoon', 'flower', 'button', 'ribbon', 'spark', 'mini crown', 'glow dot', 'sealed envelope', 'paint drop', 'crumb', 'question mark patch', 'sticker scar', 'arrow label', 'tiny brush', 'folded note', 'scribble star'];
 
 const moodData = {
-  bashful: { label: 'bashful', face: 'low eyes, tiny mouth, cheeks doing most of the talking', pose: 'tilted inward, like it is trying to occupy less space' },
-  dramatic: { label: 'dramatic', face: 'arched brows, open mouth, one detail treated like a catastrophe', pose: 'leaning back or presenting the prop like evidence' },
-  sleepy: { label: 'sleepy', face: 'half-lidded eyes, relaxed mouth, soft sagging posture', pose: 'slouched with one part drooping' },
-  suspicious: { label: 'suspicious', face: 'one narrowed eye, one dot eye, mouth held hostage by doubt', pose: 'leaning toward the odd thing, inspecting it' },
-  proud: { label: 'proud but tiny', face: 'small smile, lifted brow, face sitting a bit high', pose: 'chest forward, prop displayed like a trophy' },
-  confused: { label: 'deeply confused', face: 'uneven eyes, question energy, mouth slightly open', pose: 'body tilted away from the thing it is holding' },
-  grumpy: { label: 'grumpy-soft', face: 'heavy brows, tiny frown, round cheeks betraying the grumpiness', pose: 'arms close to body, prop held too tightly' },
-  hopeful: { label: 'hopeful', face: 'wide eyes, tiny smile, one sparkle or soft cheek mark', pose: 'reaching forward just a little' },
-  blank: { label: 'blank-faced', face: 'simple dots or one dot plus one X, expression painfully unreadable', pose: 'standing still while something absurd happens nearby' },
-  secret: { label: 'secretly powerful', face: 'small calm smile, one strange eye symbol, quiet confidence', pose: 'still body, odd thing floating or glowing nearby' }
+  bashful: { label: 'bashful', face: 'low eyes, tiny mouth, cheeks doing most of the talking', pose: 'tilted inward, like it is trying to occupy less space', faceZone: 'lower third', eyeStyle: 'lowDots', browStyle: 'softWorry', mouthStyle: 'tinySmile', bodyTilt: -5, propBehavior: 'held close', expressionWeight: 'low eyes + tiny mouth + inward tilt', moodRead: 'Low face + inward tilt makes it feel shy and small.' },
+  dramatic: { label: 'dramatic', face: 'arched brows, open mouth, one detail treated like a catastrophe', pose: 'leaning back or presenting the prop like evidence', faceZone: 'middle to upper-middle', eyeStyle: 'wide', browStyle: 'arched', mouthStyle: 'openOval', bodyTilt: 8, propBehavior: 'presented like evidence', expressionWeight: 'arched brows + open mouth + leaned-back pose', moodRead: 'Theatrical brows and a tilted-back body make the tiny problem feel huge.' },
+  sleepy: { label: 'sleepy', face: 'half-lidded eyes, relaxed mouth, soft sagging posture', pose: 'slouched with one part drooping', faceZone: 'lower-middle', eyeStyle: 'halfLidded', browStyle: 'none', mouthStyle: 'softLine', bodyTilt: 3, propBehavior: 'drooping nearby', expressionWeight: 'half-lidded eyes + soft slouch', moodRead: 'Flat eyelids and a droopy body instantly read sleepy.' },
+  suspicious: { label: 'suspicious', face: 'one narrowed eye, one dot eye, mouth held hostage by doubt', pose: 'leaning toward the odd thing, inspecting it', faceZone: 'middle', eyeStyle: 'sideEye', browStyle: 'oneRaised', mouthStyle: 'flatLine', bodyTilt: -3, propBehavior: 'inspected from a slight distance', expressionWeight: 'side-eye + one raised brow', moodRead: 'Sideways eyes make the mascot look like it distrusts its own prop.' },
+  proud: { label: 'proud but tiny', face: 'small smile, lifted brow, face sitting a bit high', pose: 'chest forward, prop displayed like a trophy', faceZone: 'upper-middle', eyeStyle: 'confidentDots', browStyle: 'lifted', mouthStyle: 'smallSmile', bodyTilt: 0, propBehavior: 'trophy pose', expressionWeight: 'upright pose + small confident smile', moodRead: 'A higher face and still body make the little creature look very sure of itself.' },
+  confused: { label: 'deeply confused', face: 'uneven eyes, question energy, mouth slightly open', pose: 'body tilted away from the thing it is holding', faceZone: 'middle', eyeStyle: 'uneven', browStyle: 'tilted', mouthStyle: 'smallOpen', bodyTilt: -8, propBehavior: 'nearby but emotionally unclear', expressionWeight: 'uneven eyes + tilted-away body', moodRead: 'Uneven eyes and a small open mouth create instant “wait, what?” energy.' },
+  grumpy: { label: 'grumpy-soft', face: 'heavy brows, tiny frown, round cheeks betraying the grumpiness', pose: 'arms close to body, prop held too tightly', faceZone: 'lower-middle', eyeStyle: 'smallDots', browStyle: 'heavy', mouthStyle: 'tinyFrown', bodyTilt: 0, propBehavior: 'clutched close', expressionWeight: 'heavy brows + tiny frown', moodRead: 'The brow does the grump work while the soft shape keeps it cute.' },
+  hopeful: { label: 'hopeful', face: 'wide eyes, tiny smile, one sparkle or soft cheek mark', pose: 'reaching forward just a little', faceZone: 'lower-middle', eyeStyle: 'wideSoft', browStyle: 'softLift', mouthStyle: 'smallSmile', bodyTilt: 4, propBehavior: 'offered forward', expressionWeight: 'wide eyes + tiny smile + reach', moodRead: 'A small reach and open eyes make the mascot feel like it believes in the tiny spark.' },
+  blank: { label: 'blank-faced', face: 'simple dots or one dot plus one X, expression painfully unreadable', pose: 'standing still while something absurd happens nearby', faceZone: 'center', eyeStyle: 'blankDots', browStyle: 'none', mouthStyle: 'flatLine', bodyTilt: 0, propBehavior: 'odd thing does the acting', expressionWeight: 'stillness + simple dot eyes', moodRead: 'The joke comes from the mascot not reacting while the weird thing does too much.' },
+  secret: { label: 'secretly powerful', face: 'small calm smile, one strange eye symbol, quiet confidence', pose: 'still body, odd thing floating or glowing nearby', faceZone: 'center', eyeStyle: 'starCalm', browStyle: 'none', mouthStyle: 'tinySmile', bodyTilt: 0, propBehavior: 'floating close', expressionWeight: 'calm face + one strange eye symbol', moodRead: 'Stillness plus one magical eye makes it feel quietly dangerous.' },
+  tinyPanic: { label: 'tiny panic', face: 'wide uneven eyes, tiny open mouth', pose: 'leaning backward like the prop got too close', faceZone: 'middle-high', eyeStyle: 'panicWide', browStyle: 'worriedHigh', mouthStyle: 'openOval', bodyTilt: -10, propBehavior: 'too close or too big', expressionWeight: 'wide eyes + open mouth + backward tilt', moodRead: 'Big eyes and a backward lean make a small problem feel urgent.' },
+  smug: { label: 'smug', face: 'half-lidded eyes, one raised brow, tiny curved smile', pose: 'tilted like it knows something', faceZone: 'upper-middle', eyeStyle: 'halfLidded', browStyle: 'oneRaised', mouthStyle: 'smirk', bodyTilt: 5, propBehavior: 'held casually', expressionWeight: 'half-lidded eyes + smirk', moodRead: 'A tiny smirk and one raised brow make the mascot look annoyingly pleased.' },
+  melancholyCute: { label: 'melancholy-cute', face: 'low droopy eyes, soft frown, tired cheeks', pose: 'compressed and slightly sinking', faceZone: 'lower third', eyeStyle: 'droopy', browStyle: 'softWorry', mouthStyle: 'softFrown', bodyTilt: -2, propBehavior: 'low and near the body', expressionWeight: 'droopy eyes + downward mouth + low face', moodRead: 'Downward curves and a low face create soft sadness without complexity.' },
+  feralCute: { label: 'feral-cute', face: 'big eyes, tiny fang or bitey mouth', pose: 'leaning forward with round-body chaos', faceZone: 'middle', eyeStyle: 'bigFeral', browStyle: 'sharpCute', mouthStyle: 'fang', bodyTilt: 7, propBehavior: 'close to the face', expressionWeight: 'big eyes + one tiny fang + forward lean', moodRead: 'Round body plus one sharp detail makes it cute but bitey.' },
+  tooOfficial: { label: 'too official', face: 'serious dot eyes, flat mouth, no nonsense', pose: 'stiff and upright', faceZone: 'center', eyeStyle: 'seriousDots', browStyle: 'flat', mouthStyle: 'flatLine', bodyTilt: 0, propBehavior: 'front-center like a badge or sign', expressionWeight: 'stiff posture + flat mouth + serious dots', moodRead: 'A rigid pose makes the tiny mascot look hilariously overqualified.' },
+  secretlyGuilty: { label: 'secretly guilty', face: 'side-looking eyes, tiny nervous mouth', pose: 'angled away from the evidence', faceZone: 'middle', eyeStyle: 'guiltySide', browStyle: 'worriedSoft', mouthStyle: 'wobble', bodyTilt: -7, propBehavior: 'slightly hidden or behind the body', expressionWeight: 'side glance + tiny wobble mouth', moodRead: 'Eye direction tells the whole secret before any extra detail does.' },
+  delightedGoblin: { label: 'delighted goblin', face: 'excited eyes and a too-happy open smile', pose: 'reaching forward like it found treasure', faceZone: 'middle', eyeStyle: 'brightWide', browStyle: 'lifted', mouthStyle: 'openSmile', bodyTilt: 8, propBehavior: 'close and active', expressionWeight: 'wide eyes + open smile + reach', moodRead: 'The reach makes the joy feel physical instead of just facial.' },
+  dramaticallyOffended: { label: 'dramatically offended', face: 'arched brows, tiny insulted frown', pose: 'leaning back like the prop said something rude', faceZone: 'upper-middle', eyeStyle: 'offended', browStyle: 'archedAngry', mouthStyle: 'offendedFrown', bodyTilt: 10, propBehavior: 'held like evidence', expressionWeight: 'arched brows + leaned-back pose + offended mouth', moodRead: 'Treat the tiny spark like a scandal and the whole drawing becomes theatrical.' },
+  cosmicBlank: { label: 'cosmic blank', face: 'empty dot eyes or one star eye, barely any mouth', pose: 'very still', faceZone: 'center', eyeStyle: 'cosmic', browStyle: 'none', mouthStyle: 'tinyLine', bodyTilt: 0, propBehavior: 'floating nearby', expressionWeight: 'still body + star/dot eyes', moodRead: 'Stillness plus a star eye makes it funny in a quiet, spacey way.' },
+  clingy: { label: 'clingy', face: 'worried eyes, tiny pleading smile', pose: 'pressed close to the prop or extra', faceZone: 'lower third', eyeStyle: 'worriedWide', browStyle: 'softWorry', mouthStyle: 'tinySmile', bodyTilt: -4, propBehavior: 'touching the body', expressionWeight: 'worried eyes + prop touching body', moodRead: 'Physical closeness turns the weird thing into a relationship.' },
+  overprepared: { label: 'overprepared', face: 'determined eyes, small serious mouth', pose: 'standing proud while carrying too much', faceZone: 'middle', eyeStyle: 'determined', browStyle: 'heavy', mouthStyle: 'smallLine', bodyTilt: 2, propBehavior: 'oversized or stacked', expressionWeight: 'determined eyes + overloaded prop', moodRead: 'One oversized object tells the joke better than many little tools.' },
+  softlyHaunted: { label: 'softly haunted', face: 'tired eyes, uncertain tiny mouth', pose: 'floating or slightly sagging', faceZone: 'upper-middle', eyeStyle: 'tiredDots', browStyle: 'none', mouthStyle: 'uncertain', bodyTilt: 2, propBehavior: 'shadow or spark nearby', expressionWeight: 'tired eyes + soft sag + empty space', moodRead: 'Soft shapes and quiet spacing create gentle haunted energy.' },
+  sneaky: { label: 'sneaky', face: 'sideways eyes and a tiny smirk', pose: 'peeking or tucked inward', faceZone: 'middle-low', eyeStyle: 'sneakySide', browStyle: 'oneRaised', mouthStyle: 'smirk', bodyTilt: -6, propBehavior: 'partly hidden', expressionWeight: 'side-eye + smirk + partial hiding', moodRead: 'Hiding part of the weird thing creates curiosity with almost no scene.' },
+  starstruck: { label: 'starstruck', face: 'one star eye, open tiny smile', pose: 'reaching upward toward the spark', faceZone: 'upper-middle', eyeStyle: 'starstruck', browStyle: 'softLift', mouthStyle: 'openSmile', bodyTilt: 6, propBehavior: 'above or near the face', expressionWeight: 'star eye + upward reach', moodRead: 'The gaze direction points the viewer toward the exciting part.' },
+  mildlyCursed: { label: 'mildly cursed', face: 'mismatched eyes, calm tiny mouth', pose: 'normal body with one wrong-feeling detail', faceZone: 'center', eyeStyle: 'mismatched', browStyle: 'none', mouthStyle: 'tinyLine', bodyTilt: 0, propBehavior: 'one off-detail', expressionWeight: 'mismatched eyes + calm mouth', moodRead: 'One wrong detail is funny. Five wrong details is a drawer accident.' }
 };
 
 const sparkData = {
@@ -318,6 +348,83 @@ const whyTemplates = [
   'The mood does most of the acting, so you can keep the drawing simple and still make it feel specific.',
   'This works as a sticker because the silhouette can stay clean while the tiny detail does the storytelling.'
 ];
+
+
+const paletteFamilies = {
+  milkglassToybox: { name: 'Milkglass Toybox', colors: { body: '#F3DDCF', accent: '#E59C87', face: '#352A39', prop: '#92ABD7', spark: '#FFD46E', outline: '#2A2230', shadow: '#A593A8', bg: '#ECE6F5' } },
+  lostNotebook: { name: 'Lost Notebook', colors: { body: '#E9DFD2', accent: '#D9897D', face: '#2E2A35', prop: '#7A8FB3', spark: '#E0B14B', outline: '#3A3240', shadow: '#8C7A86', bg: '#EEE6DD' } },
+  candyDusk: { name: 'Candy Dusk', colors: { body: '#F4B8C8', accent: '#C987D1', face: '#33253E', prop: '#8AB8E8', spark: '#FFE17A', outline: '#2A1E33', shadow: '#8E7A95', bg: '#F6E9F2' } },
+  jamBiscuit: { name: 'Jam Biscuit', colors: { body: '#E9C39F', accent: '#C66A74', face: '#402B31', prop: '#8E9AC8', spark: '#F4D86C', outline: '#35272C', shadow: '#9F8680', bg: '#F6E9D9' } },
+  signalSticker: { name: 'Signal Sticker', colors: { body: '#B7D7FB', accent: '#FF8BA8', face: '#2B2940', prop: '#FFD166', spark: '#7CF0D6', outline: '#232437', shadow: '#7C8EAE', bg: '#EAF2FF' } },
+  velvetFog: { name: 'Velvet Fog', colors: { body: '#C9C2E1', accent: '#8D7AAF', face: '#261F34', prop: '#7DA1C8', spark: '#F3C766', outline: '#1E1828', shadow: '#7D7390', bg: '#E8E3F0' } },
+  mossRelic: { name: 'Moss Relic', colors: { body: '#C7D2B1', accent: '#6F8A6E', face: '#2D2D2A', prop: '#9AA4D6', spark: '#F4C96D', outline: '#262824', shadow: '#7F8A78', bg: '#E6EAD9' } },
+  moonSticker: { name: 'Moon Sticker', colors: { body: '#C9D5F4', accent: '#8E93C9', face: '#24283B', prop: '#F4B5D0', spark: '#FAE37F', outline: '#1F2230', shadow: '#7C84A5', bg: '#EEF2FB' } },
+  spookySyrup: { name: 'Spooky Syrup', colors: { body: '#B7A8C7', accent: '#714D85', face: '#1F1B2C', prop: '#D48C9D', spark: '#7CE0CB', outline: '#181520', shadow: '#62586E', bg: '#E8DFF0' } },
+  peachStatic: { name: 'Peach Static', colors: { body: '#F3C8B8', accent: '#F38A73', face: '#312630', prop: '#8ECFE0', spark: '#FFE07A', outline: '#2A202A', shadow: '#AA8D8B', bg: '#FBEEE7' } },
+  chalkToy: { name: 'Chalk Toy', colors: { body: '#DCDAD4', accent: '#A8B8C2', face: '#34323A', prop: '#D58FA3', spark: '#E3C46A', outline: '#29272E', shadow: '#9D9A99', bg: '#F2F1ED' } },
+  beetleBerry: { name: 'Beetle Berry', colors: { body: '#D8A1BA', accent: '#8C3A61', face: '#241B29', prop: '#7AA8A1', spark: '#FFCB6B', outline: '#1D1621', shadow: '#806278', bg: '#F1DFE8' } }
+};
+
+const lanePaletteMap = {
+  object: ['lostNotebook', 'chalkToy', 'signalSticker', 'peachStatic'],
+  food: ['jamBiscuit', 'peachStatic', 'candyDusk', 'milkglassToybox'],
+  symbol: ['signalSticker', 'moonSticker', 'candyDusk', 'velvetFog'],
+  ghost: ['velvetFog', 'spookySyrup', 'moonSticker', 'milkglassToybox'],
+  stationery: ['lostNotebook', 'chalkToy', 'signalSticker', 'peachStatic'],
+  weather: ['moonSticker', 'signalSticker', 'velvetFog', 'candyDusk'],
+  plant: ['mossRelic', 'milkglassToybox', 'peachStatic', 'chalkToy'],
+  charm: ['candyDusk', 'moonSticker', 'milkglassToybox', 'beetleBerry']
+};
+
+const moodPaletteMap = {
+  bashful: ['milkglassToybox', 'candyDusk', 'moonSticker'],
+  dramatic: ['beetleBerry', 'jamBiscuit', 'signalSticker'],
+  sleepy: ['velvetFog', 'moonSticker', 'chalkToy'],
+  suspicious: ['mossRelic', 'spookySyrup', 'signalSticker'],
+  proud: ['jamBiscuit', 'signalSticker', 'beetleBerry'],
+  confused: ['chalkToy', 'signalSticker', 'candyDusk'],
+  grumpy: ['spookySyrup', 'mossRelic', 'velvetFog'],
+  hopeful: ['milkglassToybox', 'peachStatic', 'moonSticker'],
+  blank: ['chalkToy', 'velvetFog', 'lostNotebook'],
+  secret: ['moonSticker', 'spookySyrup', 'beetleBerry'],
+  tinyPanic: ['signalSticker', 'candyDusk', 'spookySyrup'],
+  smug: ['beetleBerry', 'mossRelic', 'signalSticker'],
+  melancholyCute: ['velvetFog', 'moonSticker', 'chalkToy'],
+  feralCute: ['peachStatic', 'beetleBerry', 'spookySyrup'],
+  tooOfficial: ['lostNotebook', 'chalkToy', 'signalSticker'],
+  secretlyGuilty: ['lostNotebook', 'spookySyrup', 'velvetFog'],
+  delightedGoblin: ['candyDusk', 'signalSticker', 'peachStatic'],
+  dramaticallyOffended: ['beetleBerry', 'jamBiscuit', 'candyDusk'],
+  cosmicBlank: ['moonSticker', 'velvetFog', 'signalSticker'],
+  clingy: ['milkglassToybox', 'candyDusk', 'moonSticker'],
+  overprepared: ['jamBiscuit', 'signalSticker', 'lostNotebook'],
+  softlyHaunted: ['velvetFog', 'spookySyrup', 'moonSticker'],
+  sneaky: ['mossRelic', 'spookySyrup', 'lostNotebook'],
+  starstruck: ['moonSticker', 'signalSticker', 'candyDusk'],
+  mildlyCursed: ['spookySyrup', 'chalkToy', 'beetleBerry']
+};
+
+const palettePartLabels = {
+  body: 'Main body',
+  accent: 'Accent',
+  face: 'Face / features',
+  prop: 'Prop / extra',
+  spark: 'Weird spark',
+  outline: 'Outline',
+  shadow: 'Shadow',
+  bg: 'Background blob'
+};
+
+const palettePartUses = {
+  body: 'Use on the main mascot shape.',
+  accent: 'Use on patches, cheeks, corners, or secondary body spots.',
+  face: 'Use on eyes, mouth, symbols, and tiny marks.',
+  prop: 'Use on the held thing, attached object, or tiny job prop.',
+  spark: 'Use on the weird little thing so it stands out.',
+  outline: 'Use on the outline and darkest little marks.',
+  shadow: 'Use for one side shadow or grounding shadow only.',
+  bg: 'Optional sticker backing or background blob behind the mascot.'
+};
 
 const notFeelingFixes = {
   boring: {
@@ -521,11 +628,14 @@ function rollCard({ fullSurprise = false, mutate = null, daily = false } = {}) {
     extraWeirdVersion: makeExtraWeirdVersion({ lane, mascot, extra, mood: mood.label, spark: spark.label }),
     commentary: makeCommentary({ mascot, extra, spark: spark.label, mood: mood.label, energy: energy.label }),
     blueprint: null,
+    paletteMode: 'base',
+    palette: null,
     status: 'rolled',
     notes: ''
   };
 
   currentCard.blueprint = buildBlueprintIntelligence(currentCard);
+  currentCard.palette = buildPalettePlacement(currentCard);
 
   animateRoll();
   renderCard();
@@ -613,7 +723,185 @@ function refreshTinyOddlet(card) {
   card.drawFirst = drawFirstFor(card.lane, card.mascot);
   card.whyWorks = whyWorksFor(card);
   card.blueprint = buildBlueprintIntelligence(card);
+  card.paletteMode = card.paletteMode || 'base';
+  card.palette = buildPalettePlacement(card);
   return card;
+}
+
+function hexToRgb(hex) {
+  const clean = hex.replace('#', '').trim();
+  const full = clean.length === 3 ? clean.split('').map((x) => x + x).join('') : clean;
+  const num = parseInt(full, 16);
+  return { r: (num >> 16) & 255, g: (num >> 8) & 255, b: num & 255 };
+}
+
+function rgbToHex(r, g, b) {
+  return '#' + [r, g, b].map((n) => Math.max(0, Math.min(255, Math.round(n))).toString(16).padStart(2, '0')).join('').toUpperCase();
+}
+
+function rgbToHsl(r, g, b) {
+  r /= 255; g /= 255; b /= 255;
+  const max = Math.max(r, g, b), min = Math.min(r, g, b);
+  let h, s, l = (max + min) / 2;
+  if (max === min) {
+    h = s = 0;
+  } else {
+    const d = max - min;
+    s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+    switch (max) {
+      case r: h = (g - b) / d + (g < b ? 6 : 0); break;
+      case g: h = (b - r) / d + 2; break;
+      default: h = (r - g) / d + 4;
+    }
+    h /= 6;
+  }
+  return { h: h * 360, s: s * 100, l: l * 100 };
+}
+
+function hslToRgb(h, s, l) {
+  h = ((h % 360) + 360) % 360; s /= 100; l /= 100;
+  if (s === 0) {
+    const v = l * 255;
+    return { r: v, g: v, b: v };
+  }
+  const hue2rgb = (p, q, t) => {
+    if (t < 0) t += 1;
+    if (t > 1) t -= 1;
+    if (t < 1/6) return p + (q - p) * 6 * t;
+    if (t < 1/2) return q;
+    if (t < 2/3) return p + (q - p) * (2/3 - t) * 6;
+    return p;
+  };
+  const q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+  const p = 2 * l - q;
+  const hk = h / 360;
+  return {
+    r: hue2rgb(p, q, hk + 1/3) * 255,
+    g: hue2rgb(p, q, hk) * 255,
+    b: hue2rgb(p, q, hk - 1/3) * 255
+  };
+}
+
+function adjustHex(hex, { h = 0, s = 0, l = 0 } = {}) {
+  const { r, g, b } = hexToRgb(hex);
+  const hsl = rgbToHsl(r, g, b);
+  const rgb = hslToRgb(hsl.h + h, Math.max(0, Math.min(100, hsl.s + s)), Math.max(0, Math.min(100, hsl.l + l)));
+  return rgbToHex(rgb.r, rgb.g, rgb.b);
+}
+
+function choosePaletteFamily(card) {
+  const laneList = lanePaletteMap[card.lane] || Object.keys(paletteFamilies);
+  const moodList = moodPaletteMap[card.moodKey] || [];
+  const candidates = [...new Set([...laneList, ...moodList])].map((key) => paletteFamilies[key]).filter(Boolean);
+  return seededPick(candidates.length ? candidates : Object.values(paletteFamilies), `${card.mascot}|${card.moodKey}|${card.sparkKey}|${card.pack || ''}`);
+}
+
+function transformPaletteColors(colors, mode = 'base') {
+  const next = { ...colors };
+  if (mode === 'base') return next;
+  const applyAll = (delta) => Object.keys(next).forEach((key) => { next[key] = adjustHex(next[key], delta); });
+  if (mode === 'softer') {
+    ['body', 'accent', 'prop', 'spark', 'bg'].forEach((key) => { next[key] = adjustHex(next[key], { s: -10, l: 8 }); });
+    next.shadow = adjustHex(next.shadow, { s: -8, l: 6 });
+  } else if (mode === 'darker') {
+    ['body', 'accent', 'prop', 'bg'].forEach((key) => { next[key] = adjustHex(next[key], { l: -12, s: 4 }); });
+    next.spark = adjustHex(next.spark, { l: -6, s: 6 });
+    next.face = adjustHex(next.face, { l: -4 });
+    next.outline = adjustHex(next.outline, { l: -6 });
+  } else if (mode === 'colorful') {
+    applyAll({ s: 12 });
+    next.body = adjustHex(next.body, { l: 3 });
+    next.spark = adjustHex(next.spark, { s: 18, l: 4 });
+    next.accent = adjustHex(next.accent, { s: 18 });
+  } else if (mode === 'muted') {
+    applyAll({ s: -20 });
+    next.spark = adjustHex(next.spark, { s: -8, l: 2 });
+    next.outline = adjustHex(next.outline, { l: 2 });
+  } else if (mode === 'spooky') {
+    ['body', 'accent', 'prop', 'bg'].forEach((key) => { next[key] = adjustHex(next[key], { h: 12, s: -2, l: -8 }); });
+    next.spark = adjustHex(next.spark, { h: 25, s: -4, l: -6 });
+    next.face = adjustHex(next.face, { h: 8, l: -6 });
+    next.outline = adjustHex(next.outline, { h: 8, l: -10 });
+    next.shadow = adjustHex(next.shadow, { h: 10, l: -8 });
+  } else if (mode === 'sticker') {
+    next.body = adjustHex(next.body, { s: 10, l: 10 });
+    next.accent = adjustHex(next.accent, { s: 18, l: 4 });
+    next.prop = adjustHex(next.prop, { s: 12, l: 6 });
+    next.spark = adjustHex(next.spark, { s: 22, l: 6 });
+    next.bg = adjustHex(next.bg, { l: 12, s: 2 });
+    next.outline = '#201B27';
+    next.face = '#2A2330';
+    next.shadow = adjustHex(next.shadow, { s: -10, l: 4 });
+  }
+  return next;
+}
+
+function colorWhisperFor(card, mode, paletteName) {
+  if (mode === 'sticker') return `Sticker simple mode: use clean flat fills, keep the outline darkest, and let the weird thing be the pop color in ${paletteName}.`;
+  if (mode === 'spooky') return 'Spookier mode: let the body stay moodier, keep the face dark, and use the spark color only where you want the eye to go first.';
+  if (card.sparkKey === 'wrongScale') return 'Let the oversized prop stay bolder than the body so the size joke reads fast.';
+  if (card.sparkKey === 'tinyCompanion') return 'Keep the companion or weird spark brighter than the body, but much smaller.';
+  if (card.moodKey === 'bashful' || card.moodKey === 'hopeful') return 'Keep the body soft. Use the darkest color only on the face and outline.';
+  if (card.moodKey === 'dramatic' || card.moodKey === 'proud') return 'Let the prop or weird spark hold the loudest color. The body can stay calmer.';
+  if (mode === 'muted') return 'If the palette starts feeling muddy, remove one accent and let the outline do more work.';
+  return 'Let the weird thing be the brightest color. Keep the outline darkest and use the shadow only once.';
+}
+
+function buildPalettePlacement(card) {
+  const family = choosePaletteFamily(card);
+  const mode = card.paletteMode || 'base';
+  const colors = transformPaletteColors(family.colors, mode);
+  return {
+    family: family.name,
+    mode,
+    ...colors,
+    whisper: colorWhisperFor(card, mode, family.name)
+  };
+}
+
+function paletteModeLabel(mode) {
+  const labels = {
+    base: 'base palette',
+    softer: 'softer palette',
+    darker: 'darker palette',
+    colorful: 'more colorful palette',
+    muted: 'more muted palette',
+    spooky: 'spookier palette',
+    sticker: 'sticker simple palette'
+  };
+  return labels[mode] || 'base palette';
+}
+
+function renderPalettePlacement(card) {
+  const palette = card?.palette || buildPalettePlacement(card);
+  if (card) card.palette = palette;
+  $('#paletteName').textContent = palette.family;
+  $('#paletteModeTag').textContent = paletteModeLabel(palette.mode);
+  $('#paletteWhisper').textContent = palette.whisper;
+  const order = ['body', 'accent', 'face', 'prop', 'spark', 'outline', 'shadow', 'bg'];
+  $('#paletteSwatches').innerHTML = order.map((key) => `
+    <div class="palette-swatch">
+      <span class="palette-chip" style="background:${palette[key]}"></span>
+      <b>${palettePartLabels[key]}</b>
+      <small>${palette[key]}</small>
+    </div>
+  `).join('');
+  $('#paletteAssignments').innerHTML = order.map((key) => `
+    <div class="palette-assign">
+      <div class="palette-assign-top"><span class="palette-dot" style="background:${palette[key]}"></span><b>${palettePartLabels[key]}</b></div>
+      <p>${palettePartUses[key]}</p>
+      <small>${palette[key]}</small>
+    </div>
+  `).join('');
+}
+
+function handlePaletteRemix(event) {
+  const button = event.target.closest('button[data-palette]');
+  if (!button || !currentCard) return;
+  currentCard.paletteMode = button.dataset.palette;
+  currentCard.palette = buildPalettePlacement(currentCard);
+  renderPalettePlacement(currentCard);
+  showToast(`${paletteModeLabel(currentCard.paletteMode)} applied.`);
 }
 
 function buildBlueprintIntelligence(card) {
@@ -622,6 +910,8 @@ function buildBlueprintIntelligence(card) {
   const sparkKey = String(card?.sparkKey || '').toLowerCase();
   const sparkLabel = String(card?.spark || '').toLowerCase();
   const mood = String(card?.mood || '').toLowerCase();
+  const moodKey = card?.moodKey || '';
+  const moodRule = moodData[moodKey];
   const energy = String(card?.energy || '').toLowerCase();
   const shapeLimit = String(card?.shapeLimit || '5');
 
@@ -633,7 +923,8 @@ function buildBlueprintIntelligence(card) {
     detailDanger: 'too many tiny details before the silhouette reads',
     easiestStartingShape: 'large oval or bean blob',
     weirdThingPlacement: 'near the face, hand, or chest area',
-    doNotAdd: ['background', 'shoes', 'extra face', 'second prop']
+    doNotAdd: ['background', 'shoes', 'extra face', 'second prop'],
+    moodRead: 'The face, tilt, and prop placement reveal the mood.'
   };
 
   const laneRules = {
@@ -803,6 +1094,13 @@ function buildBlueprintIntelligence(card) {
   if (mood.includes('confused') || mood.includes('suspicious')) blueprint.expressionWeight = 'uneven eyes plus one brow cue';
   if (mood.includes('secretly powerful')) blueprint.weirdThingPlacement = 'close to the chest or floating beside the face';
 
+  if (moodRule) {
+    blueprint.faceZone = moodRule.faceZone || blueprint.faceZone;
+    blueprint.expressionWeight = moodRule.expressionWeight || blueprint.expressionWeight;
+    blueprint.moodRead = moodRule.moodRead || blueprint.moodRead;
+    if (moodRule.propBehavior) blueprint.propAnchor = moodRule.propBehavior;
+  }
+
   if (shapeLimit === '3') {
     blueprint.detailDanger = 'trying to squeeze too much into a 3-shape drawing';
     blueprint.doNotAdd = ['background', 'second prop', 'extra limbs', 'tiny texture'];
@@ -833,6 +1131,7 @@ function renderBlueprintBreakdown(card) {
   $('#blueStartShape').textContent = blueprint.easiestStartingShape;
   $('#blueWeirdPlacement').textContent = blueprint.weirdThingPlacement;
   $('#blueDoNotAdd').textContent = blueprint.doNotAdd.join(', ');
+  $('#blueMoodRead').textContent = blueprint.moodRead || 'The face, tilt, and prop placement reveal the mood.';
 }
 
 function guardrailFor(lane, spark, mutate) {
@@ -889,6 +1188,111 @@ function renderCard() {
   $('#buildList').innerHTML = currentCard.build.map((item) => `<li>${item}</li>`).join('');
   $('#currentNote').value = currentCard.notes || '';
   renderBlueprintBreakdown(currentCard);
+  renderPalettePlacement(currentCard);
+}
+
+function moodVisualFor(card) {
+  const rule = moodData[card?.moodKey] || moodData.blank;
+  const propMap = {
+    'held close': { x: 190, y: 150, scale: 0.82 },
+    'presented like evidence': { x: 218, y: 120, scale: 1.05 },
+    'drooping nearby': { x: 208, y: 166, scale: 0.86 },
+    'inspected from a slight distance': { x: 224, y: 138, scale: 0.9 },
+    'trophy pose': { x: 216, y: 116, scale: 1 },
+    'nearby but emotionally unclear': { x: 218, y: 150, scale: 0.9 },
+    'clutched close': { x: 190, y: 148, scale: 0.78 },
+    'offered forward': { x: 218, y: 138, scale: 1 },
+    'odd thing does the acting': { x: 216, y: 144, scale: 1.05 },
+    'floating close': { x: 210, y: 92, scale: 0.9 },
+    'too close or too big': { x: 202, y: 132, scale: 1.32 },
+    'held casually': { x: 214, y: 148, scale: 0.88 },
+    'low and near the body': { x: 192, y: 166, scale: 0.8 },
+    'close to the face': { x: 206, y: 116, scale: 0.92 },
+    'front-center like a badge or sign': { x: 160, y: 158, scale: 0.82 },
+    'slightly hidden or behind the body': { x: 218, y: 160, scale: 0.72, opacity: 0.7 },
+    'close and active': { x: 216, y: 126, scale: 1 },
+    'held like evidence': { x: 222, y: 124, scale: 1.05 },
+    'floating nearby': { x: 214, y: 94, scale: 0.88 },
+    'touching the body': { x: 188, y: 148, scale: 0.78 },
+    'oversized or stacked': { x: 214, y: 130, scale: 1.26 },
+    'shadow or spark nearby': { x: 210, y: 156, scale: 0.82, opacity: 0.82 },
+    'partly hidden': { x: 208, y: 164, scale: 0.74, opacity: 0.76 },
+    'above or near the face': { x: 206, y: 88, scale: 0.94 },
+    'one off-detail': { x: 204, y: 148, scale: 0.88 }
+  };
+  const prop = propMap[rule.propBehavior] || { x: 206, y: 146, scale: 1 };
+  return {
+    ...rule,
+    faceY: rule.faceZone?.includes('lower') ? 10 : rule.faceZone?.includes('upper') ? -8 : 0,
+    prop,
+    tilt: rule.bodyTilt || 0
+  };
+}
+
+function renderMoodFace(card, ink = '#111426', blue = '#91b7ff') {
+  const visual = moodVisualFor(card);
+  const y = visual.faceY || 0;
+  const eye = (x, y0, r = 8) => `<circle cx="${x}" cy="${y0 + y}" r="${r}" fill="${ink}" />`;
+  const line = (d, w = 6) => `<path d="${d}" fill="none" stroke="${ink}" stroke-width="${w}" stroke-linecap="round" stroke-linejoin="round" />`;
+  const brows = {
+    none: '',
+    softWorry: `${line(`M122 ${96+y} q10 -7 22 0`, 4)}${line(`M178 ${96+y} q10 -7 22 0`, 4)}`,
+    arched: `${line(`M118 ${94+y} q16 -14 34 -2`, 4)}${line(`M176 ${92+y} q18 -10 36 4`, 4)}`,
+    archedAngry: `${line(`M118 ${94+y} q18 -12 36 4`, 4)}${line(`M176 ${98+y} q18 -16 36 -4`, 4)}`,
+    oneRaised: `${line(`M118 ${96+y} q16 -6 34 0`, 4)}${line(`M180 ${88+y} q16 -12 34 -2`, 4)}`,
+    lifted: `${line(`M120 ${92+y} q16 -8 32 -2`, 4)}${line(`M178 ${92+y} q16 -8 32 -2`, 4)}`,
+    tilted: `${line(`M120 ${94+y} l30 8`, 4)}${line(`M180 ${102+y} l30 -8`, 4)}`,
+    heavy: `${line(`M118 ${96+y} l34 -8`, 6)}${line(`M178 ${88+y} l34 8`, 6)}`,
+    softLift: `${line(`M120 ${92+y} q16 -10 32 -4`, 4)}${line(`M178 ${92+y} q16 -10 32 -4`, 4)}`,
+    flat: `${line(`M118 ${94+y} h34`, 5)}${line(`M178 ${94+y} h34`, 5)}`,
+    worriedHigh: `${line(`M118 ${86+y} q14 -12 32 -2`, 4)}${line(`M180 ${86+y} q14 -12 32 -2`, 4)}`,
+    sharpCute: `${line(`M118 ${94+y} l32 -10`, 4)}${line(`M180 ${84+y} l32 10`, 4)}`
+  };
+  const mouth = {
+    tinySmile: line(`M150 ${148+y} q12 8 26 0`, 6),
+    smallSmile: line(`M150 ${146+y} q14 10 30 0`, 6),
+    openOval: `<ellipse cx="163" cy="148" rx="10" ry="13" fill="${ink}" />`,
+    softLine: line(`M150 ${149+y} q13 4 28 0`, 5),
+    flatLine: line(`M150 ${150+y} h28`, 6),
+    smallOpen: `<ellipse cx="164" cy="149" rx="8" ry="9" fill="${ink}" />`,
+    tinyFrown: line(`M150 ${154+y} q14 -8 28 0`, 6),
+    smirk: line(`M150 ${150+y} q18 10 34 -2`, 6),
+    softFrown: line(`M150 ${154+y} q13 -7 28 0`, 5),
+    fang: `${line(`M150 ${148+y} q14 10 30 0`, 6)}<path d="M164 ${153+y} l5 11 l5 -11" fill="#fff8f1" stroke="${ink}" stroke-width="3" />`,
+    wobble: line(`M150 ${150+y} q8 -5 16 0 t16 0`, 5),
+    openSmile: `<path d="M148 ${143+y} q15 24 34 0 q-5 19 -17 20 q-12 -1 -17 -20z" fill="${ink}" />`,
+    offendedFrown: line(`M150 ${154+y} q14 -10 30 0`, 6),
+    tinyLine: line(`M154 ${150+y} h18`, 5),
+    smallLine: line(`M154 ${149+y} h22`, 5),
+    uncertain: line(`M150 ${151+y} q10 -4 18 2 t16 -2`, 5)
+  };
+  const eyes = {
+    lowDots: `${eye(132, 118, 8)}${eye(186, 118, 8)}`,
+    wide: `${eye(130, 110, 12)}${eye(190, 110, 12)}`,
+    halfLidded: `${line(`M120 ${112+y} q15 8 30 0`, 7)}${line(`M178 ${112+y} q15 8 30 0`, 7)}`,
+    sideEye: `${line(`M120 ${112+y} q16 -7 32 0`, 7)}${eye(190, 112, 7)}`,
+    confidentDots: `${eye(132, 106, 7)}${eye(188, 106, 7)}`,
+    uneven: `${eye(128, 110, 10)}${eye(190, 118, 7)}`,
+    smallDots: `${eye(132, 116, 7)}${eye(188, 116, 7)}`,
+    wideSoft: `${eye(130, 112, 11)}${eye(190, 112, 11)}`,
+    blankDots: `${eye(132, 112, 7)}<path d="M184 ${104+y} l18 18 M202 ${104+y} l-18 18" stroke="${ink}" stroke-width="7" stroke-linecap="round" />`,
+    starCalm: `${eye(132, 112, 10)}<path d="M190 ${100+y} l5 10 l11 2 l-8 7 l2 11 l-10 -6 l-10 6 l2 -11 l-8 -7 l11 -2z" fill="${ink}" />`,
+    panicWide: `${eye(128, 108, 13)}${eye(194, 114, 10)}`,
+    droopy: `${line(`M120 ${116+y} q15 10 30 0`, 7)}${line(`M178 ${118+y} q15 10 30 0`, 7)}`,
+    bigFeral: `${eye(130, 110, 13)}${eye(190, 110, 13)}`,
+    seriousDots: `${eye(132, 112, 7)}${eye(188, 112, 7)}`,
+    guiltySide: `${line(`M122 ${112+y} q15 -3 30 3`, 7)}${line(`M180 ${112+y} q15 -3 30 3`, 7)}`,
+    brightWide: `${eye(130, 108, 12)}${eye(190, 108, 12)}<circle cx="134" cy="104" r="4" fill="${blue}" />`,
+    offended: `${eye(130, 110, 9)}${eye(190, 110, 9)}`,
+    cosmic: `${eye(132, 112, 6)}<path d="M190 ${98+y} l5 12 l13 3 l-10 8 l2 13 l-10 -7 l-11 7 l3 -13 l-10 -8 l13 -3z" fill="${blue}" />`,
+    worriedWide: `${eye(130, 114, 11)}${eye(190, 114, 11)}`,
+    determined: `${line(`M120 ${112+y} q15 -8 30 0`, 8)}${line(`M178 ${112+y} q15 -8 30 0`, 8)}`,
+    tiredDots: `${line(`M124 ${114+y} h20`, 7)}${line(`M182 ${114+y} h20`, 7)}`,
+    sneakySide: `${line(`M120 ${112+y} q15 -6 30 0`, 7)}${line(`M178 ${112+y} q15 -6 30 0`, 7)}`,
+    starstruck: `<path d="M130 ${98+y} l5 12 l13 3 l-10 8 l2 13 l-10 -7 l-11 7 l3 -13 l-10 -8 l13 -3z" fill="${blue}" />${eye(190, 112, 11)}`,
+    mismatched: `${eye(130, 112, 9)}<path d="M184 ${104+y} l18 18 M202 ${104+y} l-18 18" stroke="${ink}" stroke-width="7" stroke-linecap="round" />`
+  };
+  return `${brows[visual.browStyle] || ''}${eyes[visual.eyeStyle] || eyes.blankDots}${mouth[visual.mouthStyle] || mouth.tinyLine}`;
 }
 
 function renderBlueprint(card) {
@@ -898,8 +1302,15 @@ function renderBlueprint(card) {
   const primary = color.getPropertyValue('--primary').trim() || '#ff7f73';
   const pink = color.getPropertyValue('--pink').trim() || '#ff8fbd';
   const blue = color.getPropertyValue('--blue').trim() || '#91b7ff';
+  const ink = '#111426';
   const bodyShape = bodyShapeFor(card?.lane);
   const symbol = symbolFor(card?.extra);
+  const visual = moodVisualFor(card);
+  const tilt = visual.tilt || 0;
+  const prop = visual.prop || { x: 206, y: 146, scale: 1, opacity: 1 };
+  const face = renderMoodFace(card, ink, blue);
+  const moodLabel = (card?.mood || 'mood').replace(/&/g, '&amp;');
+  const moodRead = (card?.blueprint?.moodRead || moodData[card?.moodKey]?.moodRead || 'Face, tilt, and prop placement reveal the mood.').replace(/&/g, '&amp;').replace(/</g, '&lt;');
 
   svg.innerHTML = `
     <defs>
@@ -916,15 +1327,17 @@ function renderBlueprint(card) {
       <path d="M160 34 V214" />
       <circle cx="160" cy="120" r="78" />
     </g>
-    <g filter="url(#softShadow)">
+    <g filter="url(#softShadow)" transform="translate(160 132) rotate(${tilt}) translate(-160 -132)">
       ${bodyShape}
-      <circle cx="132" cy="110" r="16" fill="#111426" />
-      <path d="M128 110 l4 -8 l4 8 l-4 8z" fill="${blue}" />
-      <path d="M184 100 l24 24 M208 100 l-24 24" stroke="#111426" stroke-width="10" stroke-linecap="round" />
-      <path d="M148 148 q12 12 26 0" fill="none" stroke="#111426" stroke-width="7" stroke-linecap="round" />
-      <g transform="translate(206 146)">${symbol}</g>
+      ${face}
+      <g transform="translate(${prop.x} ${prop.y}) scale(${prop.scale || 1})" opacity="${prop.opacity || 1}">${symbol}</g>
       <path d="M94 156 q-25 25 -2 44" fill="none" stroke="${pink}" stroke-width="12" stroke-linecap="round" opacity="0.9" />
       <path d="M224 156 q25 25 2 44" fill="none" stroke="${pink}" stroke-width="12" stroke-linecap="round" opacity="0.9" />
+    </g>
+    <g opacity="0.94">
+      <rect x="20" y="18" width="280" height="42" rx="16" fill="rgba(17,20,38,.44)" />
+      <text x="36" y="44" fill="${blue}" font-size="15" font-weight="900">Moodprint: ${moodLabel}</text>
+      <text x="36" y="224" fill="currentColor" font-size="11" opacity="0.74">${moodRead.slice(0, 70)}${moodRead.length > 70 ? '…' : ''}</text>
     </g>
   `;
 }
@@ -1064,7 +1477,49 @@ async function copyCard() {
 
 function formatCard(card) {
   const blueprint = card.blueprint || buildBlueprintIntelligence(card);
-  return `${card.title}\n\n${card.idea}\n\nTiny version: ${card.tinyVersion || makeTinyVersion(card)}\n\nOddlet version: ${card.oddletVersion || makeOddletVersion(card)}\n\nCreature commentary: ${card.commentary || makeCommentary(card)}\n\nOdd little thing: ${card.oddThing}\n\nBuild it from:\n- ${card.build.join('\n- ')}\n\nPose + expression: ${card.poseCue}\n\nBeginner guardrail: ${card.guardrail}\n\nBlueprint breakdown:\n- Primary silhouette: ${blueprint.primarySilhouette}\n- Face zone: ${blueprint.faceZone}\n- Prop anchor: ${blueprint.propAnchor}\n- Expression weight: ${blueprint.expressionWeight}\n- Detail danger: ${blueprint.detailDanger}\n- Easiest starting shape: ${blueprint.easiestStartingShape}\n- Weird thing placement: ${blueprint.weirdThingPlacement}\n- What not to add: ${blueprint.doNotAdd.join(', ')}\n\nRedraw spin: ${choice(redrawSpins).text}`;
+  const palette = card.palette || buildPalettePlacement(card);
+  return `${card.title}
+
+${card.idea}
+
+Tiny version: ${card.tinyVersion || makeTinyVersion(card)}
+
+Oddlet version: ${card.oddletVersion || makeOddletVersion(card)}
+
+Creature commentary: ${card.commentary || makeCommentary(card)}
+
+Odd little thing: ${card.oddThing}
+
+Build it from:
+- ${card.build.join('\n- ')}
+
+Pose + expression: ${card.poseCue}
+
+Beginner guardrail: ${card.guardrail}
+
+Blueprint breakdown:
+- Primary silhouette: ${blueprint.primarySilhouette}
+- Face zone: ${blueprint.faceZone}
+- Prop anchor: ${blueprint.propAnchor}
+- Expression weight: ${blueprint.expressionWeight}
+- Detail danger: ${blueprint.detailDanger}
+- Easiest starting shape: ${blueprint.easiestStartingShape}
+- Weird thing placement: ${blueprint.weirdThingPlacement}
+- What not to add: ${blueprint.doNotAdd.join(', ')}
+- Mood read: ${blueprint.moodRead || 'The face, tilt, and prop placement reveal the mood.'}
+
+Palette placement: ${palette.family} (${paletteModeLabel(palette.mode)})
+- Main body: ${palette.body}
+- Accent: ${palette.accent}
+- Face / features: ${palette.face}
+- Prop / extra: ${palette.prop}
+- Weird spark: ${palette.spark}
+- Outline: ${palette.outline}
+- Shadow: ${palette.shadow}
+- Background blob: ${palette.bg}
+- Color whisper: ${palette.whisper}
+
+Redraw spin: ${choice(redrawSpins).text}`;
 }
 
 function exportStash() {
@@ -1343,6 +1798,7 @@ function initEvents() {
   $('#surpriseBtn').addEventListener('click', () => rollCard({ fullSurprise: true }));
   $('#dailyBtn').addEventListener('click', () => rollCard({ daily: true }));
   $('#remixBar').addEventListener('click', handleMoodRemix);
+  $('#paletteBar').addEventListener('click', handlePaletteRemix);
   $('#feelingBar').addEventListener('click', handleFeelingFix);
   $('#saveBtn').addEventListener('click', saveCurrent);
   $('#copyBtn').addEventListener('click', copyCard);

@@ -86,3 +86,26 @@ Each card now includes a Blueprint Breakdown with:
 - easiest starting shape
 - where to place the weird thing
 - what not to add
+
+
+## V1.6 Palette Placement
+
+Each card now includes a Palette Placement Layer with:
+- a palette name
+- labeled swatches
+- color-to-part assignments
+- a color rule whisper
+- palette remix modes: base, softer, darker, more colorful, more muted, spookier, and sticker simple
+
+
+## V1.7 Moodprint Layer
+
+Added 15 new moods and upgraded every mood with its own drawing logic:
+- mood-specific face zone
+- mood-specific eye, brow, and mouth behavior
+- body tilt in the blueprint preview
+- prop/extra placement behavior
+- Mood read explanation in Blueprint Breakdown
+- Moodprint label inside the SVG blueprint preview
+
+New moods include tiny panic, smug, melancholy-cute, feral-cute, too official, secretly guilty, delighted goblin, dramatically offended, cosmic blank, clingy, overprepared, softly haunted, sneaky, starstruck, and mildly cursed.
