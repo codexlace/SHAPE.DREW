@@ -1,411 +1,70 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <meta name="theme-color" content="#171D2A" />
-  <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-  <title>Oddlet</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Oddlet – Tiny Creature Lab</title>
   <link rel="manifest" href="manifest.json" />
-  <link rel="apple-touch-icon" href="ICON-192x192.png" />
-  <link rel="icon" href="ICON-192x192.png" />
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <div class="app-shell">
-    <header class="hero panel glass">
-      <div class="brand-row">
-        <img class="app-icon" src="ICON-192x192.png" alt="Oddlet app icon" />
-        <div>
-          <p class="eyebrow">tiny mascot sparks</p>
-          <h1>Oddlet</h1>
-          <p class="tagline">Roll simple object-creatures with tiny twists worth drawing.</p>
-        </div>
+  <header>
+    <h1>Oddlet Lab</h1>
+    <p class="tagline">Roll a little creature, then draw it from shapes.</p>
+  </header>
+  <main>
+    <section id="controls">
+      <h2>Build your Oddlet</h2>
+      <div class="control-row">
+        <label>
+          Mascot lane
+          <select id="laneSelect"></select>
+        </label>
+        <label>
+          Oddlet species
+          <select id="speciesSelect"></select>
+        </label>
+        <label>
+          Mood
+          <select id="moodSelect"></select>
+        </label>
+        <label>
+          Spark type
+          <select id="sparkSelect"></select>
+        </label>
+        <label>
+          Tiny twist
+          <select id="twistSelect"></select>
+        </label>
+        <label>
+          Little object
+          <select id="objectSelect"></select>
+        </label>
+        <label>
+          Shape limit
+          <select id="shapeLimitSelect">
+            <option value="3">3 shapes</option>
+            <option value="5" selected>5 shapes</option>
+            <option value="7">7 shapes</option>
+            <option value="loose">Loose</option>
+          </select>
+        </label>
       </div>
-      <div class="hero-actions">
-        <button class="ghost-btn" id="themeBtn" type="button">Night desk</button>
-        <button class="ghost-btn" id="resetAppBtn" type="button">Reset app</button>
-        <button class="ghost-btn" id="installBtn" type="button" hidden>Install</button>
+      <button id="rollButton" type="button">Roll Oddlet</button>
+    </section>
+    <section id="output">
+      <div id="blueprint" class="panel">
+        <h2>Blueprint</h2>
+        <svg id="blueprintSvg" viewBox="0 0 200 200" width="200" height="200"></svg>
+        <div id="blueprintInfo"></div>
       </div>
-    </header>
-
-    <nav class="tabbar" aria-label="Primary">
-      <button class="tab active" data-tab="roll" type="button">Roll</button>
-      <button class="tab" data-tab="card" type="button">Card</button>
-      <button class="tab" data-tab="redraw" type="button">Redraw</button>
-      <button class="tab" data-tab="stash" type="button">Stash</button>
-      <button class="tab" data-tab="oracle" type="button">AI</button>
-    </nav>
-
-    <main>
-      <section class="view active" id="roll" aria-labelledby="rollTitle">
-        <div class="grid two">
-          <article class="panel glass control-panel">
-            <p class="eyebrow">idea arcade</p>
-            <h2 id="rollTitle">Roll an Oddlet</h2>
-            <p class="soft-copy">Pick a lane or let the drawer-creature decide. No full scenes. Just a mascot, one spark, and a drawable little moment.</p>
-
-            <div class="form-grid">
-              <label>
-                Mascot lane
-                <select id="laneSelect"></select>
-              </label>
-              <label>
-                Oddlet Species
-                <select id="speciesSelect"></select>
-                <span class="select-hint" id="speciesHint">Choose a specific Oddlet body, or let the drawer decide.</span>
-              </label>
-              <label>
-                Mood
-                <select id="moodSelect"></select>
-              </label>
-              <label>
-                Spark type
-                <select id="sparkSelect"></select>
-              </label>
-              <label>
-                Tiny Twist
-                <select id="twistSelect">
-                  <option value="surprise">Surprise me</option>
-                </select>
-                <span class="select-hint">Choose the exact little chaos pin for this spark.</span>
-              </label>
-              <label>
-                Shape limit
-                <select id="shapeSelect"></select>
-              </label>
-              <label>
-                Drawing energy
-                <select id="energySelect"></select>
-              </label>
-              <label>
-                Prompt pack
-                <select id="packSelect"></select>
-              </label>
-            </div>
-
-            <div class="toggle-card">
-              <div>
-                <strong>Notebook oddball bias</strong>
-                <span>More symbols, X eyes, signs, object-creatures, and sketchy little weirdness.</span>
-              </div>
-              <button class="switch on" id="biasSwitch" type="button" aria-pressed="true"><span></span></button>
-            </div>
-
-            <div class="button-row">
-              <button class="primary-btn" id="rollBtn" type="button">Roll Oddlet</button>
-              <button class="secondary-btn" id="surpriseBtn" type="button">Full surprise</button>
-              <button class="secondary-btn" id="dailyBtn" type="button">Daily Oddlet</button>
-            </div>
-
-            <aside class="micro-panel" id="dailyPanel">
-              <strong>Today’s tiny drawer omen</strong>
-              <span id="dailyHint">One bite-sized creature for today, no pressure-streak goblin attached.</span>
-            </aside>
-
-            <section class="micro-panel favorite-drawer" aria-label="Favorite ingredients">
-              <div>
-                <strong>Favorite ingredient bias</strong>
-                <span>Save ingredients from cards, then let future rolls lean toward your recurring little weirds.</span>
-              </div>
-              <div class="favorite-list" id="favoriteList"></div>
-            </section>
-          </article>
-
-          <article class="panel stage-card" aria-live="polite">
-            <div class="slot-window">
-              <span id="slotOne">object gremlin</span>
-              <span id="slotTwo">tiny trouble</span>
-              <span id="slotThree">drawable spark</span>
-            </div>
-            <div class="blueprint-frame">
-              <svg id="blueprintSvg" viewBox="0 0 320 240" role="img" aria-label="Simple abstract blueprint preview"></svg>
-            </div>
-            <p class="coach-line" id="coachLine">Big shape first. Details are dessert, not breakfast.</p>
-          </article>
-        </div>
-      </section>
-
-      <section class="view" id="card" aria-labelledby="cardTitle">
-        <article class="panel card-output glass">
-          <div class="card-topper">
-            <div>
-              <p class="eyebrow">current draw card</p>
-              <h2 id="cardTitle">Your Oddlet is waiting</h2>
-            </div>
-            <span class="pill" id="difficultyPill">easy-ish</span>
-          </div>
-
-          <div class="idea-hero">
-            <h3 id="ideaTitle">Roll something charmingly suspicious.</h3>
-            <p id="ideaText">Tap Roll Oddlet to generate a simple mascot idea with a tiny spark.</p>
-          </div>
-
-          <div class="version-strip" aria-label="Tiny, Oddlet, and Extra Weird versions">
-            <section class="version-card tiny-version">
-              <span>Tiny version</span>
-              <p id="tinyVersion">The easiest 3-shape version will appear here.</p>
-            </section>
-            <section class="version-card oddlet-version">
-              <span>Oddlet version</span>
-              <p id="oddletVersion">The stranger-but-still-simple version will appear here.</p>
-            </section>
-            <section class="version-card weird-version">
-              <span>Extra weird version</span>
-              <p id="extraWeirdVersion">A wilder but still drawable version will appear here.</p>
-            </section>
-          </div>
-
-          <section class="commentary-card" aria-label="Creature commentary">
-            <span>creature commentary</span>
-            <p id="creatureCommentary">A tiny observation from the drawer will appear here.</p>
-          </section>
-
-          <div class="card-grid">
-            <section class="focus-section">
-              <h4>Draw this first</h4>
-              <p id="drawFirst">Start with the biggest simple shape. The creature arrives after the blob behaves.</p>
-            </section>
-            <section class="focus-section">
-              <h4>Why this works</h4>
-              <p id="whyWorks">One readable mascot plus one tiny spark gives your drawing a reason to exist without needing a full scene.</p>
-            </section>
-            <section>
-              <h4>The odd little thing</h4>
-              <p id="oddThing">A small reveal, behavior, prop, symbol, or micro-interaction will appear here.</p>
-            </section>
-            <section>
-              <h4>Build it from</h4>
-              <ul id="buildList"></ul>
-            </section>
-            <section>
-              <h4>Pose + expression cue</h4>
-              <p id="poseCue">Simple acting direction, no complex scene.</p>
-            </section>
-            <section>
-              <h4>Beginner guardrail</h4>
-              <p id="guardrail">Keep the silhouette readable before decorating it.</p>
-            </section>
-          </div>
-
-          <section class="blueprint-breakdown panel-subtle" aria-label="Blueprint breakdown">
-            <div class="breakdown-head">
-              <div>
-                <p class="eyebrow">blueprint intelligence layer</p>
-                <h4>Blueprint Breakdown</h4>
-              </div>
-              <small>tiny construction logic for this exact Oddlet</small>
-            </div>
-            <div class="blueprint-grid" id="blueprintBreakdown">
-              <div class="blueprint-item">
-                <span>Primary silhouette</span>
-                <p id="bluePrimarySilhouette">One main readable shape.</p>
-              </div>
-              <div class="blueprint-item">
-                <span>Face zone</span>
-                <p id="blueFaceZone">Lower third, soft and simple.</p>
-              </div>
-              <div class="blueprint-item">
-                <span>Prop anchor</span>
-                <p id="bluePropAnchor">One side of the body.</p>
-              </div>
-              <div class="blueprint-item">
-                <span>Expression weight</span>
-                <p id="blueExpressionWeight">Eyes and mouth carry the mood.</p>
-              </div>
-              <div class="blueprint-item">
-                <span>Detail danger</span>
-                <p id="blueDetailDanger">Too many tiny details too early.</p>
-              </div>
-              <div class="blueprint-item">
-                <span>Easiest starting shape</span>
-                <p id="blueStartShape">Start with one large simple blob.</p>
-              </div>
-              <div class="blueprint-item">
-                <span>Where to place the weird thing</span>
-                <p id="blueWeirdPlacement">Close to the face or one side.</p>
-              </div>
-              <div class="blueprint-item">
-                <span>What not to add</span>
-                <p id="blueDoNotAdd">Background, second prop, extra face, texture.</p>
-              </div>
-              <div class="blueprint-item mood-read-item">
-                <span>Mood read</span>
-                <p id="blueMoodRead">The face, tilt, and prop placement reveal the mood.</p>
-              </div>
-              <div class="blueprint-item species-note-item">
-                <span>Species body note</span>
-                <p id="blueSpeciesBodyNote">Start with the largest simple shape first.</p>
-              </div>
-              <div class="blueprint-item twist-note-item">
-                <span>Tiny twist note</span>
-                <p id="blueTwistNote">Place the tiny twist where it supports the silhouette.</p>
-              </div>
-            </div>
-          </section>
-
-
-          <section class="palette-placement panel-subtle" aria-label="Palette placement layer">
-            <div class="breakdown-head">
-              <div>
-                <p class="eyebrow">palette placement layer</p>
-                <h4 id="paletteName">Palette Placement</h4>
-              </div>
-              <small id="paletteModeTag">base palette</small>
-            </div>
-            <p class="palette-whisper" id="paletteWhisper">Let the weird thing be the brightest color. Keep the outline darkest.</p>
-            <div class="palette-swatches" id="paletteSwatches"></div>
-            <div class="palette-assignments" id="paletteAssignments"></div>
-          </section>
-
-          <section class="palette-bar" id="paletteBar" aria-label="Palette remix bar">
-            <div class="remix-title">
-              <span>palette remix bar</span>
-              <small>keep the creature, bend the color mood</small>
-            </div>
-            <div class="remix-buttons">
-              <button class="remix-chip" type="button" data-palette="base">Base</button>
-              <button class="remix-chip" type="button" data-palette="softer">Softer</button>
-              <button class="remix-chip" type="button" data-palette="darker">Darker</button>
-              <button class="remix-chip" type="button" data-palette="colorful">More colorful</button>
-              <button class="remix-chip" type="button" data-palette="muted">More muted</button>
-              <button class="remix-chip" type="button" data-palette="spooky">Spookier</button>
-              <button class="remix-chip hot" type="button" data-palette="sticker">Sticker simple</button>
-            </div>
-          </section>
-          <section class="remix-bar" id="remixBar" aria-label="Mood remix bar">
-            <div class="remix-title">
-              <span>mood remix bar</span>
-              <small>keep the creature, bend the flavor</small>
-            </div>
-            <div class="remix-buttons">
-              <button class="remix-chip" type="button" data-remix="cuter">Cuter</button>
-              <button class="remix-chip" type="button" data-remix="weirder">Weirder</button>
-              <button class="remix-chip" type="button" data-remix="simpler">Simpler</button>
-              <button class="remix-chip" type="button" data-remix="dramatic">More dramatic</button>
-              <button class="remix-chip" type="button" data-remix="moreMe">More me</button>
-              <button class="remix-chip hot" type="button" data-remix="moreCreative">More creative</button>
-              <button class="remix-chip" type="button" data-remix="newTwist">New tiny twist</button>
-            </div>
-          </section>
-
-          <section class="feeling-bar" id="feelingBar" aria-label="Not feeling it adjustments">
-            <div class="remix-title">
-              <span>not feeling it?</span>
-              <small>adjust without losing the creature</small>
-            </div>
-            <div class="remix-buttons">
-              <button class="remix-chip" type="button" data-fix="boring">Too boring</button>
-              <button class="remix-chip" type="button" data-fix="complex">Too complex</button>
-              <button class="remix-chip" type="button" data-fix="normal">Too normal</button>
-              <button class="remix-chip" type="button" data-fix="cute">Too cute</button>
-              <button class="remix-chip" type="button" data-fix="hard">Hard to start</button>
-            </div>
-          </section>
-
-          <section class="notes-panel" aria-label="Creature notes">
-            <label class="wide-label">
-              Creature notes
-              <textarea id="currentNote" rows="3" placeholder="What I liked, what was hard, redraw idea, little creature gossip..."></textarea>
-            </label>
-            <div class="quick-note-row" aria-label="Quick notes">
-              <button class="remix-chip" type="button" data-note="face was weird">face was weird</button>
-              <button class="remix-chip" type="button" data-note="body was hard">body was hard</button>
-              <button class="remix-chip" type="button" data-note="fun idea">fun idea</button>
-              <button class="remix-chip" type="button" data-note="too many details">too many details</button>
-              <button class="remix-chip" type="button" data-note="want to redraw">want to redraw</button>
-            </div>
-          </section>
-
-          <div class="button-row sticky-actions">
-            <button class="secondary-btn" id="copyBtn" type="button">Copy card</button>
-            <button class="secondary-btn" id="favIngredientsBtn" type="button">Favorite ingredients</button>
-            <button class="primary-btn" id="saveBtn" type="button">Save to Stash</button>
-          </div>
-        </article>
-      </section>
-
-      <section class="view" id="redraw" aria-labelledby="redrawTitle">
-        <div class="grid two">
-          <article class="panel glass">
-            <p class="eyebrow">same mascot, new acting</p>
-            <h2 id="redrawTitle">Redraw Spins</h2>
-            <p class="soft-copy">Practice without boredom. Keep the same Oddlet, change one deliciously tiny thing.</p>
-            <div class="spin-grid" id="spinGrid"></div>
-          </article>
-          <article class="panel glass">
-            <p class="eyebrow">current spin</p>
-            <h2 id="spinTitle">Pick a redraw spin</h2>
-            <p id="spinText">A targeted redraw instruction will appear here.</p>
-            <div class="mini-checklist">
-              <h4>Self-check</h4>
-              <label><input type="checkbox" /> Big shape reads first</label>
-              <label><input type="checkbox" /> Face sits where I meant it to</label>
-              <label><input type="checkbox" /> One focal weird thing, not twelve</label>
-              <label><input type="checkbox" /> I redrew one part instead of restarting everything</label>
-            </div>
-          </article>
-        </div>
-      </section>
-
-      <section class="view" id="stash" aria-labelledby="stashTitle">
-        <article class="panel glass">
-          <div class="card-topper">
-            <div>
-              <p class="eyebrow">saved ideas</p>
-              <h2 id="stashTitle">Sketch Stash</h2>
-            </div>
-            <div class="button-row compact">
-              <button class="ghost-btn" id="exportBtn" type="button">Export</button>
-              <button class="ghost-btn danger" id="clearBtn" type="button">Clear</button>
-            </div>
-          </div>
-          <div class="museum-stats" id="museumStats"></div>
-          <section class="bingo-panel" aria-label="Oddlet bingo">
-            <div class="remix-title">
-              <span>oddlet bingo</span>
-              <small>tiny drawing goals, no pressure goblin</small>
-            </div>
-            <div class="bingo-grid" id="bingoGrid"></div>
-          </section>
-          <div class="stash-list" id="stashList"></div>
-        </article>
-      </section>
-
-      <section class="view" id="oracle" aria-labelledby="oracleTitle">
-        <article class="panel glass">
-          <p class="eyebrow">optional openrouter helper</p>
-          <h2 id="oracleTitle">Oddlet AI Polish</h2>
-          <p class="soft-copy">Optional text-only helper. Paste your OpenRouter key and let it remix the current card. The model is prefilled as OpenRouter’s free router for ease.</p>
-
-          <div class="form-grid ai-grid">
-            <label>
-              OpenRouter API key
-              <input id="apiKey" type="password" placeholder="sk-or-..." autocomplete="off" />
-            </label>
-            <label>
-              Model
-              <input id="modelName" type="text" value="openrouter/free" readonly autocomplete="off" />
-            </label>
-          </div>
-          <label class="wide-label">
-            Ask for a remix
-            <textarea id="aiPrompt" rows="4">Make this mascot idea funnier, simpler to draw, and more like a weird notebook sticker. Keep it beginner-friendly.</textarea>
-          </label>
-          <div class="button-row">
-            <button class="primary-btn" id="aiBtn" type="button">Remix current card</button>
-            <button class="secondary-btn" id="saveSettingsBtn" type="button">Save AI settings locally</button>
-          </div>
-          <pre class="ai-output" id="aiOutput">AI output will appear here.</pre>
-        </article>
-      </section>
-    </main>
-
-    <footer class="footer-note">Oddlet saves only to this device unless you export. Built for quick iPad drawing sparks, tiny creature evidence, and drawable nonsense.</footer>
-  </div>
-
-  <div class="toast" id="toast" role="status" aria-live="polite"></div>
-  <script type="module" src="app.js"></script>
+      <div id="card" class="panel">
+        <h2>Your Oddlet</h2>
+        <p id="cardIdea"></p>
+        <ul id="cardDetails"></ul>
+      </div>
+    </section>
+  </main>
+  <script src="app.js"></script>
 </body>
 </html>
