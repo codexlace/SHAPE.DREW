@@ -177,3 +177,15 @@ Adds:
 - object icon preview stays tied to the selected Little Object and its placement zone
 - keeps all previous modules, controls, logic, blueprint systems, palette logic, species atlas, moodprint layer, and tiny twist blueprint pins
 - service worker cache bumped to oddlet-v2-3-0
+
+
+## V2.4 Clear Blueprint Logic
+
+Improves blueprint understanding:
+- plan-based blueprint breakdown
+- clear drawing order: body → face → object → weird → twist
+- clearer marker meaning
+- object / weird / twist markers now use different visual roles
+- species, mood, spark, twist, and little object all feed one unified blueprint plan
+- export text includes drawing order and clarity rule
+- service worker cache bumped to oddlet-v2-4-0

@@ -843,3 +843,14 @@ ul { padding-left: 18px; margin: 0; }
   opacity: .38;
 }
 
+
+
+.logic-order-item,
+.logic-clarity-item,
+.logic-marker-item {
+  border-color: color-mix(in srgb, var(--mint) 34%, var(--line));
+  background:
+    radial-gradient(circle at top left, rgba(120,224,194,.10), transparent 42%),
+    rgba(255,255,255,.045);
+}
+

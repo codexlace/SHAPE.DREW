@@ -1794,6 +1794,153 @@ function littleObjectPlacementNote(littleObject, zone) {
   return `${name}: ${zoneNotes[zone] || 'Place it where it supports the silhouette first.'}`;
 }
 
+function friendlyZoneName(zone) {
+  const names = {
+    lowerCenter: 'lower center',
+    centerLow: 'low center',
+    middleLow: 'middle-lower area',
+    frontCenter: 'front center',
+    center: 'center',
+    middle: 'middle',
+    lowerCurve: 'lower curve',
+    seedCenter: 'seed center',
+    frontLow: 'front low area',
+    plainArea: 'plain body area',
+    insideSymbol: 'inside the symbol',
+    largestMass: 'largest body mass',
+    lowerThird: 'lower third',
+    topRight: 'top-right edge',
+    topLeft: 'top-left edge',
+    topCenter: 'top center',
+    topEdge: 'top edge',
+    upperCurve: 'upper curve',
+    foldedCorner: 'folded corner',
+    handleSide: 'handle side',
+    topLoop: 'top loop',
+    sideFloat: 'beside the body',
+    underCloud: 'under the cloud',
+    leafTip: 'leaf tip',
+    eraserEnd: 'eraser end',
+    toolEnd: 'tool end',
+    upperRight: 'upper-right area',
+    floatingNear: 'floating near the body',
+    surfacePatch: 'clear body patch',
+    buttonHole: 'button-hole area',
+    rim: 'rim',
+    waxDrip: 'wax drip',
+    crustCorner: 'crust corner',
+    seedSpot: 'seed spot',
+    gridCell: 'grid cell',
+    dot: 'dot area',
+    onePoint: 'one point',
+    lowerEdge: 'lower edge',
+    furTuft: 'fur tuft',
+    woodTip: 'wood tip',
+    cornerCurl: 'corner curl',
+    raindrop: 'raindrop area',
+    insideDrop: 'inside the drop',
+    leafMark: 'leaf mark',
+    sideArm: 'side arm',
+    spinePatch: 'spine patch',
+    bottomRim: 'bottom rim',
+    engraving: 'engraving area',
+    capEdge: 'cap edge',
+    capSpot: 'cap spot',
+    symbolTip: 'symbol tip',
+    edgeWobble: 'wobbly edge',
+    labelPatch: 'label patch',
+    orbitDetail: 'orbit detail',
+    innerCurve: 'inner curve',
+    eyePatch: 'eye patch',
+    keyTeeth: 'key teeth',
+    toeEnd: 'toe end',
+    heelPatch: 'heel patch',
+    knot: 'knot',
+    clockHand: 'clock hand',
+    petalEdge: 'petal edge',
+    capPattern: 'cap pattern',
+    ringEnd: 'ring end',
+    flapCenter: 'flap center',
+    flagSide: 'flag side',
+    bowlShine: 'bowl shine',
+    knobSpot: 'knob spot',
+    butteryStripe: 'croissant stripe',
+    seaweedPatch: 'seaweed patch',
+    bubbleTail: 'bubble tail',
+    bladeTip: 'blade tip',
+    wrapperBand: 'wrapper band',
+    innerHole: 'inner hole',
+    spiralCenter: 'spiral center',
+    tapeEdge: 'tape edge',
+    folderTab: 'folder tab',
+    lightningBend: 'lightning bend',
+    tornadoTip: 'tornado tip',
+    umbrellaHandle: 'umbrella handle',
+    seedLabel: 'seed label',
+    cloverCenter: 'clover center',
+    rosetteCenter: 'rosette center',
+    pendantLoop: 'pendant loop',
+    wishboneFork: 'wishbone fork',
+    glowRing: 'glow ring',
+    sideAttach: 'side attachment point',
+    underBody: 'under the body',
+    bottomEdge: 'bottom edge',
+    faceZone: 'face zone'
+  };
+  return names[zone] || String(zone || 'clear body area');
+}
+
+function readableShapeLimit(shapeLimit) {
+  if (shapeLimit === '3') return 'Use about three big shapes: body, face, one extra.';
+  if (shapeLimit === '5') return 'Use about five shapes: body, face, object, weird detail, one accent.';
+  if (shapeLimit === '7') return 'Use seven shapes only if every one has a job.';
+  if (shapeLimit === 'loose') return 'Keep it loose: readable first, decorative later.';
+  return 'Keep the drawing small, readable, and easy to redraw.';
+}
+
+function buildBlueprintPlan(card) {
+  const speciesRules = card?.blueprintSpecies || inferSpeciesBlueprint(card?.species || card?.mascot, card?.lane);
+  const littleObject = card?.extra || 'little object';
+  const objectZone = littleObjectToBlueprintZone(littleObject, speciesRules);
+  const weirdZone = sparkAdjustedWeirdZone(speciesRules, card);
+  const twistRule = getTwistBlueprintRule(card?.twist);
+  const twistZone = twistRule.zone || weirdZone;
+  const moodRule = moodData[card?.moodKey] || {};
+  const faceZone = moodRule.faceZone || speciesRules?.faceZone || 'lowerCenter';
+  const objectName = titleCase(littleObject);
+  const twistName = card?.twist ? titleCase(card.twist) : 'Tiny twist';
+  const speciesName = titleCase(card?.species || card?.mascot || 'Oddlet');
+
+  const drawingOrder = [
+    `1. Body: ${speciesRules?.bodyLabel || speciesName}.`,
+    `2. Face: place the ${card?.mood || 'mood'} expression in the ${friendlyZoneName(faceZone)}.`,
+    `3. Little object: ${objectName} goes at the ${friendlyZoneName(objectZone)}.`,
+    `4. Weird spark: use the ${friendlyZoneName(weirdZone)} for the spark idea.`,
+    `5. Tiny twist: ${twistName} lands at the ${friendlyZoneName(twistZone)}.`
+  ].join(' ');
+
+  const clarityRule = `${readableShapeLimit(card?.shapeLimit)} Do not draw a full scene. Let ${speciesName} stay the biggest shape, then add the ${objectName} and the twist as small readable accents.`;
+
+  const markerMeaning = `Object = ${objectName} placement. Weird = broad spark area. Twist = exact little joke/detail: ${card?.twist || 'surprise twist'}.`;
+
+  return {
+    speciesRules,
+    littleObject,
+    objectZone,
+    weirdZone,
+    twistRule,
+    twistZone,
+    faceZone,
+    drawingOrder,
+    clarityRule,
+    markerMeaning,
+    objectPlacement: littleObjectPlacementNote(littleObject, objectZone),
+    weirdPlacement: `Spark area: place the ${card?.spark || 'spark'} detail at the ${friendlyZoneName(weirdZone)}.`,
+    twistPlacement: twistRule.note,
+    doNotAdd: [...new Set([...(speciesRules?.avoid || []), ...(card?.blueprint?.doNotAdd || [])])].slice(0, 5)
+  };
+}
+
 function titleCase(text) {
   return text.split(' ').map((part) => part ? part[0].toUpperCase() + part.slice(1) : part).join(' ');
 }
@@ -2210,244 +2357,74 @@ function handlePaletteRemix(event) {
 
 function buildBlueprintIntelligence(card) {
   const lane = String(card?.lane || '').toLowerCase();
-  const mascot = String(card?.mascot || '').toLowerCase();
-  const sparkKey = String(card?.sparkKey || '').toLowerCase();
-  const sparkLabel = String(card?.spark || '').toLowerCase();
-  const mood = String(card?.mood || '').toLowerCase();
   const moodKey = card?.moodKey || '';
-  const moodRule = moodData[moodKey];
+  const moodRule = moodData[moodKey] || {};
   const energy = String(card?.energy || '').toLowerCase();
   const shapeLimit = String(card?.shapeLimit || '5');
-
-  const blueprint = {
-    primarySilhouette: 'one main readable body shape',
-    faceZone: 'lower third',
-    propAnchor: 'one side edge, touching the body',
-    expressionWeight: 'eyes first, mouth second',
-    detailDanger: 'too many tiny details before the silhouette reads',
-    easiestStartingShape: 'large oval or bean blob',
-    weirdThingPlacement: 'near the face, hand, or chest area',
-    doNotAdd: ['background', 'shoes', 'extra face', 'second prop'],
-    moodRead: 'The face, tilt, and prop placement reveal the mood.'
-  };
-
-  const inferredSpeciesRules = inferSpeciesBlueprint(card?.species || card?.mascot, card?.lane);
-  const littleObject = card?.extra || 'little object';
-
-  const laneRules = {
-    object: {
-      primarySilhouette: 'readable object silhouette first',
-      faceZone: 'middle-lower area',
-      propAnchor: 'right or left outer edge',
-      expressionWeight: 'eye shape plus one brow cue',
-      detailDanger: 'stacking labels, corners, and props too early',
-      easiestStartingShape: 'lumpy rectangle, rounded wedge, or bean object',
-      weirdThingPlacement: 'on the front face or attached to one side',
-      doNotAdd: ['background', 'shoes', 'third arm', 'second big prop']
-    },
-    food: {
-      primarySilhouette: 'one bold edible shape',
-      faceZone: 'lower third',
-      propAnchor: 'front center or one side edge',
-      expressionWeight: 'eyes and cheek spacing',
-      detailDanger: 'too many crumbs, toppings, seeds, or texture marks',
-      easiestStartingShape: 'toast block, wedge, dumpling blob, or rounded cap',
-      weirdThingPlacement: 'tucked near the hand, chest, or bite edge',
-      doNotAdd: ['plate', 'background kitchen', 'extra toppings', 'second prop']
-    },
-    symbol: {
-      primarySilhouette: 'large readable symbol shape',
-      faceZone: 'center-lower zone',
-      propAnchor: 'one outer edge or lower side',
-      expressionWeight: 'eye placement relative to the symbol',
-      detailDanger: 'letting the face swallow the symbol',
-      easiestStartingShape: 'one big question mark, star, moon, or sign',
-      weirdThingPlacement: 'inside the symbol or attached right beside it',
-      doNotAdd: ['extra symbols everywhere', 'background pattern', 'second face', 'complex limbs']
-    },
-    ghost: {
-      primarySilhouette: 'one soft blob or sheet silhouette',
-      faceZone: 'upper-middle for spooky, lower third for cute',
-      propAnchor: 'tucked under one side or floating just beside it',
-      expressionWeight: 'eye angle and body tilt',
-      detailDanger: 'too many folds or ragged edges before the body reads',
-      easiestStartingShape: 'large wobbly oval or sheet blob',
-      weirdThingPlacement: 'close enough to feel protected by the body',
-      doNotAdd: ['background fog', 'extra limbs', 'big costume', 'tiny texture lines']
-    },
-    stationery: {
-      primarySilhouette: 'clean desk-object silhouette',
-      faceZone: 'center or lower center',
-      propAnchor: 'clip, corner, side edge, or tip end',
-      expressionWeight: 'one eye shape plus a prop tilt',
-      detailDanger: 'too many little desk bits around the mascot',
-      easiestStartingShape: 'simple rectangle, stub, cylinder, or page shape',
-      weirdThingPlacement: 'on the corner, cap, label, or near the hand',
-      doNotAdd: ['whole desk scene', 'extra supplies', 'second prop', 'full text blocks']
-    },
-    weather: {
-      primarySilhouette: 'puffy cloud, drop, swirl, or moon-like mass',
-      faceZone: 'middle-lower area',
-      propAnchor: 'just under or beside the main weather mass',
-      expressionWeight: 'eyes plus a small tilt or droop',
-      detailDanger: 'too many floating sparkles and weather bits',
-      easiestStartingShape: 'single puff, drop, or swirl',
-      weirdThingPlacement: 'hovering close to the main body',
-      doNotAdd: ['full sky scene', 'extra clouds', 'lightning everywhere', 'second prop']
-    },
-    plant: {
-      primarySilhouette: 'one grouped plant mass',
-      faceZone: 'pot/body center or lower third',
-      propAnchor: 'leaf edge, stem side, or pot front',
-      expressionWeight: 'face simplicity plus leaf tilt',
-      detailDanger: 'scattering leaves and sprouts everywhere',
-      easiestStartingShape: 'bud, nub, leaf pile, or rounded pot blob',
-      weirdThingPlacement: 'nestled in the leaves or attached to the stem area',
-      doNotAdd: ['background garden', 'too many leaves', 'second plant', 'surface texture']
-    },
-    charm: {
-      primarySilhouette: 'small icon-like charm body',
-      faceZone: 'center-lower area',
-      propAnchor: 'hanger loop, side edge, or center front',
-      expressionWeight: 'eyes and one tiny symbol cue',
-      detailDanger: 'too many decorative dangly extras',
-      easiestStartingShape: 'simple charm blob, bead, badge, or relic shape',
-      weirdThingPlacement: 'inside the body shape or hanging directly from it',
-      doNotAdd: ['background chain', 'full outfit', 'second charm', 'extra face']
-    }
-  };
-
-  Object.assign(blueprint, laneRules[lane] || {});
-
   const speciesRules = card?.blueprintSpecies || inferSpeciesBlueprint(card?.species || card?.mascot, card?.lane);
-  if (speciesRules) {
-    blueprint.primarySilhouette = speciesRules.bodyLabel || blueprint.primarySilhouette;
-    blueprint.faceZone = speciesRules.faceZone || blueprint.faceZone;
-    blueprint.propAnchor = speciesRules.propAnchor || blueprint.propAnchor;
-    blueprint.easiestStartingShape = speciesRules.bodyHint || blueprint.easiestStartingShape;
-    blueprint.weirdThingPlacement = speciesRules.weirdZone || blueprint.weirdThingPlacement;
-    blueprint.doNotAdd = [...new Set([...(speciesRules.avoid || []), ...(blueprint.doNotAdd || [])])].slice(0, 5);
-  }
+  const planSeed = { ...card, blueprint: null };
+  const littleObject = card?.extra || 'little object';
+  const objectZone = littleObjectToBlueprintZone(littleObject, speciesRules);
+  const weirdZone = sparkAdjustedWeirdZone(speciesRules, card);
+  const twistRule = getTwistBlueprintRule(card?.twist);
+  const twistZone = twistRule.zone || weirdZone;
+  const faceZone = moodRule.faceZone || speciesRules?.faceZone || 'lowerCenter';
 
-  if (mascot.includes('wedge') || mascot.includes('triangle')) {
-    blueprint.primarySilhouette = 'rounded wedge';
-    blueprint.easiestStartingShape = 'squashed triangle or rounded wedge';
-  }
-  if (mascot.includes('question mark') || mascot.includes('mark') || mascot.includes('exclamation')) {
-    blueprint.primarySilhouette = 'big readable symbol stem + hook';
-    blueprint.easiestStartingShape = 'one large symbol outline';
-  }
-  if (mascot.includes('palette')) {
-    blueprint.primarySilhouette = 'big bean palette shape';
-    blueprint.easiestStartingShape = 'bean blob with one thumb notch';
-  }
-  if (mascot.includes('paper bag') || mascot.includes('notebook page') || mascot.includes('sticky note')) {
-    blueprint.easiestStartingShape = 'lumpy rectangle';
-  }
+  const laneDoNot = {
+    object: ['background', 'extra objects', 'second face', 'realistic texture'],
+    food: ['plate', 'full meal scene', 'too many toppings', 'realistic crumbs'],
+    symbol: ['extra symbols', 'busy decoration', 'hidden face', 'background pattern'],
+    ghost: ['haunted house', 'extra ghosts', 'too many folds', 'complex arms'],
+    stationery: ['desk background', 'extra tools', 'tiny text', 'brand labels'],
+    weather: ['full sky', 'weather pileup', 'too many floating bits', 'realistic effects'],
+    plant: ['garden scene', 'too many leaves', 'realistic botany', 'extra plants'],
+    charm: ['full chain', 'extra charms', 'tiny unreadable symbols', 'jewelry realism']
+  };
 
-  const sparkText = `${sparkKey} ${sparkLabel}`;
-  if (sparkText.includes('livingdetail') || sparkText.includes('living detail')) {
-    blueprint.propAnchor = 'on the body surface where you will notice it early';
-    blueprint.weirdThingPlacement = 'on a spot, mark, patch, or detail attached to the mascot';
-    blueprint.doNotAdd = ['second living detail', 'background action', 'extra prop', 'extra face'];
-  }
-  if (sparkText.includes('tinycompanion') || sparkText.includes('tiny companion')) {
-    blueprint.propAnchor = 'beside the body or tucked under one arm';
-    blueprint.weirdThingPlacement = 'touching or almost touching the mascot';
-    blueprint.doNotAdd = ['multiple companions', 'background scene', 'second prop', 'tiny crowd'];
-  }
-  if (sparkText.includes('attachedoddity') || sparkText.includes('attached oddity')) {
-    blueprint.propAnchor = 'upper edge, side corner, handle, ribbon, or tag point';
-    blueprint.weirdThingPlacement = 'attached directly to the mascot body';
-    blueprint.doNotAdd = ['detached second weird thing', 'extra companion', 'background', 'busy costume'];
-  }
-  if (sparkText.includes('wrongscale') || sparkText.includes('wrong scale')) {
-    blueprint.propAnchor = 'one strong side anchor';
-    blueprint.expressionWeight = 'body tilt plus one stressed eye shape';
-    blueprint.weirdThingPlacement = 'close to the body so the size contrast is obvious';
-    blueprint.detailDanger = 'an oversized prop plus too many other extras';
-    blueprint.doNotAdd = ['second oversized prop', 'background', 'tiny clutter', 'full environment'];
-  }
-  if (sparkText.includes('secretsymbol') || sparkText.includes('secret symbol')) {
-    blueprint.weirdThingPlacement = 'chest, face patch, label area, or sign front';
-    blueprint.doNotAdd = ['many symbols', 'background clues', 'extra text', 'second prop'];
-  }
-  if (sparkText.includes('microproblem') || sparkText.includes('mini problem')) {
-    blueprint.expressionWeight = 'eyes, mouth, and a slight body lean';
-    blueprint.weirdThingPlacement = 'where it can visibly wobble, slip, or annoy the mascot';
-    blueprint.doNotAdd = ['background accident', 'second problem', 'too many effects', 'crowd energy'];
-  }
-  if (sparkText.includes('tinyjob') || sparkText.includes('tiny job')) {
-    blueprint.propAnchor = 'front center or one presenting hand';
-    blueprint.weirdThingPlacement = 'where it reads like a job marker: sign, badge, prop, or tiny station';
-    blueprint.doNotAdd = ['full workplace scene', 'extra tools', 'second costume cue', 'background signage'];
-  }
-  if (sparkText.includes('quietmagic') || sparkText.includes('almost magic')) {
-    blueprint.propAnchor = 'hovering close to the body';
-    blueprint.weirdThingPlacement = 'near the face or chest so the magic feels intimate';
-    blueprint.doNotAdd = ['spell circle', 'giant glow effects', 'background stars', 'extra magic props'];
-  }
-  if (sparkText.includes('costumelogic') || sparkText.includes('costume logic')) {
-    blueprint.propAnchor = 'top edge or body front';
-    blueprint.weirdThingPlacement = 'hat, badge, cape edge, or one costume piece only';
-    blueprint.doNotAdd = ['full outfit set', 'lots of accessories', 'background stage', 'second prop'];
-  }
-  if (sparkText.includes('fakeimportance') || sparkText.includes('fake importance')) {
-    blueprint.propAnchor = 'front center like a presentation';
-    blueprint.weirdThingPlacement = 'label, sign, crown, or presented object area';
-    blueprint.doNotAdd = ['full museum scene', 'extra labels', 'background display', 'second trophy'];
-  }
+  let detailDanger = 'medium: body, face, little object, weird detail, and twist all need their own space.';
+  if (shapeLimit === '3') detailDanger = 'high: choose only body, face, and one extra detail.';
+  if (shapeLimit === '5') detailDanger = 'medium: keep one body, one face, one little object, one weird detail, one accent.';
+  if (shapeLimit === '7') detailDanger = 'medium-high: seven shapes is enough only if every shape has a job.';
+  if (shapeLimit === 'loose') detailDanger = 'high: loose mode gets messy fast, so draw silhouette first and decorate last.';
+  if (energy === 'low') detailDanger = 'low-energy warning: remove texture and keep the idea tiny.';
+  if (energy === 'wild') detailDanger = 'wild warning: the joke can overpower the silhouette, so simplify the extras.';
 
-  if (mood.includes('bashful') || mood.includes('nervous') || mood.includes('hopeful')) {
-    blueprint.faceZone = 'lower third';
-    blueprint.expressionWeight = 'low eyes and a tiny mouth';
-  }
-  if (mood.includes('sleepy')) blueprint.expressionWeight = 'half-lidded eyes and droop';
-  if (mood.includes('dramatic') || mood.includes('proud')) {
-    blueprint.faceZone = 'middle to upper-middle';
-    blueprint.expressionWeight = 'brows, mouth, and pose tilt';
-  }
-  if (mood.includes('blank')) blueprint.expressionWeight = 'one simple eye difference and stillness';
-  if (mood.includes('confused') || mood.includes('suspicious')) blueprint.expressionWeight = 'uneven eyes plus one brow cue';
-  if (mood.includes('secretly powerful')) blueprint.weirdThingPlacement = 'close to the chest or floating beside the face';
+  const plan = buildBlueprintPlan({
+    ...planSeed,
+    blueprintSpecies: speciesRules,
+    shapeLimit
+  });
 
-  if (moodRule) {
-    blueprint.faceZone = moodRule.faceZone || blueprint.faceZone;
-    blueprint.expressionWeight = moodRule.expressionWeight || blueprint.expressionWeight;
-    blueprint.moodRead = moodRule.moodRead || blueprint.moodRead;
-    if (moodRule.propBehavior) blueprint.propAnchor = moodRule.propBehavior;
-  }
+  const avoid = [
+    ...(speciesRules?.avoid || []),
+    ...(laneDoNot[lane] || []),
+    ...(twistRule?.zone === 'sideFloat' ? ['tiny crowd'] : []),
+    ...(String(card?.sparkKey || '').toLowerCase() === 'tinycompanion' ? ['multiple companions'] : []),
+    ...(shapeLimit === '3' ? ['second object', 'surface texture'] : [])
+  ];
 
-  if (shapeLimit === '3') {
-    blueprint.detailDanger = 'trying to squeeze too much into a 3-shape drawing';
-    blueprint.doNotAdd = ['background', 'second prop', 'extra limbs', 'tiny texture'];
-  } else if (shapeLimit === '7') {
-    blueprint.detailDanger = 'using all seven shapes on clutter instead of readability';
-  }
-
-  if (energy === 'low') {
-    blueprint.detailDanger = 'too many parts for a low-energy sketch';
-    blueprint.doNotAdd = ['background', 'texture', 'second prop', 'surface details'];
-  }
-  if (energy === 'wild') {
-    blueprint.detailDanger = 'letting the joke overpower the silhouette';
-    blueprint.doNotAdd = ['third weird thing', 'extra character', 'full environment', 'tiny clutter'];
-  }
-
-  if (speciesRules) {
-    blueprint.primarySilhouette = speciesRules.bodyLabel || blueprint.primarySilhouette;
-    blueprint.easiestStartingShape = speciesRules.bodyHint || blueprint.easiestStartingShape;
-    blueprint.weirdThingPlacement = speciesRules.weirdZone || blueprint.weirdThingPlacement;
-    if (!moodRule?.faceZone) blueprint.faceZone = speciesRules.faceZone || blueprint.faceZone;
-    if (!moodRule?.propBehavior) blueprint.propAnchor = speciesRules.propAnchor || blueprint.propAnchor;
-    blueprint.doNotAdd = [...new Set([...(speciesRules.avoid || []), ...(blueprint.doNotAdd || [])])].slice(0, 5);
-  }
-
-  return blueprint;
+  return {
+    primarySilhouette: speciesRules?.bodyLabel || 'one main readable body shape',
+    faceZone: `${friendlyZoneName(faceZone)}. ${moodRule.moodRead || 'Put the face where the mood reads fastest.'}`,
+    propAnchor: plan.objectPlacement,
+    expressionWeight: moodRule.expressionWeight || 'eyes first, mouth second, body tilt third',
+    detailDanger,
+    easiestStartingShape: speciesRules?.bodyHint || 'Start with the largest simple shape first.',
+    weirdThingPlacement: plan.weirdPlacement,
+    doNotAdd: [...new Set(avoid)].slice(0, 5),
+    moodRead: moodRule.moodRead || 'The face, tilt, and placement reveal the mood.',
+    drawingOrder: plan.drawingOrder,
+    clarityRule: plan.clarityRule,
+    markerMeaning: plan.markerMeaning,
+    twistNote: twistRule.note,
+    objectZone,
+    weirdZone,
+    twistZone
+  };
 }
 
 function renderBlueprintBreakdown(card) {
-  const blueprint = card?.blueprint || buildBlueprintIntelligence(card);
+  const blueprint = buildBlueprintIntelligence(card);
   if (card) card.blueprint = blueprint;
   $('#bluePrimarySilhouette').textContent = blueprint.primarySilhouette;
   $('#blueFaceZone').textContent = blueprint.faceZone;
@@ -2457,12 +2434,18 @@ function renderBlueprintBreakdown(card) {
   $('#blueStartShape').textContent = blueprint.easiestStartingShape;
   $('#blueWeirdPlacement').textContent = blueprint.weirdThingPlacement;
   $('#blueDoNotAdd').textContent = blueprint.doNotAdd.join(', ');
-  $('#blueMoodRead').textContent = blueprint.moodRead || 'The face, tilt, and prop placement reveal the mood.';
+  $('#blueMoodRead').textContent = blueprint.moodRead || 'The face, tilt, and placement reveal the mood.';
   const speciesBlueprint = card?.blueprintSpecies || inferSpeciesBlueprint(card?.species || card?.mascot, card?.lane);
   $('#blueSpeciesBodyNote').textContent = getSpeciesBodyNote(speciesBlueprint);
   const twistRule = getTwistBlueprintRule(card?.twist);
   const blueTwistNote = $('#blueTwistNote');
-  if (blueTwistNote) blueTwistNote.textContent = twistRule.note;
+  if (blueTwistNote) blueTwistNote.textContent = blueprint.twistNote || twistRule.note;
+  const order = $('#blueDrawingOrder');
+  if (order) order.textContent = blueprint.drawingOrder || 'Body → face → little object → weird detail → tiny twist.';
+  const clarity = $('#blueClarityRule');
+  if (clarity) clarity.textContent = blueprint.clarityRule || 'One main silhouette, one face, one object, one tiny weird point.';
+  const marker = $('#blueMarkerMeaning');
+  if (marker) marker.textContent = blueprint.markerMeaning || 'Object is the thing you place. Weird is the spark area. Twist is the tiny joke pin.';
 }
 
 function guardrailFor(lane, spark, mutate) {
@@ -3107,16 +3090,19 @@ function blueprintFaceSvg(zone, card, colors) {
   return `${dot(x-18, y, 5)}${dot(x+18, y, 5)}${smile}`;
 }
 
-function blueprintMarkerSvg(zone, label, colors) {
+function blueprintMarkerSvg(zone, label, colors, kind = 'pin') {
   const point = blueprintPoint(zone);
+  const stroke = kind === 'object' ? colors.primary : kind === 'twist' ? colors.blue : colors.mint;
+  const fill = kind === 'object' ? 'rgba(255,127,115,.13)' : kind === 'twist' ? 'rgba(145,183,255,.13)' : 'rgba(120,224,194,.15)';
+  const dash = kind === 'object' ? '' : 'stroke-dasharray="4 4"';
   return `
     <g>
-      <circle cx="${point.x}" cy="${point.y}" r="13"
-        fill="rgba(120,224,194,.15)" stroke="${colors.mint}" stroke-width="2"/>
-      <path d="M${point.x - 5} ${point.y} H${point.x + 5} M${point.x} ${point.y - 5} V${point.y + 5}"
-        stroke="${colors.mint}" stroke-width="2" stroke-linecap="round"/>
-      <text x="${point.x}" y="${point.y + 28}" text-anchor="middle"
-        fill="${colors.primary}" font-size="8" font-weight="800">${label}</text>
+      <circle cx="${point.x}" cy="${point.y}" r="${kind === 'object' ? 18 : 13}"
+        fill="${fill}" stroke="${stroke}" stroke-width="2" ${dash}/>
+      ${kind === 'object' ? '' : `<path d="M${point.x - 5} ${point.y} H${point.x + 5} M${point.x} ${point.y - 5} V${point.y + 5}"
+        stroke="${stroke}" stroke-width="2" stroke-linecap="round"/>`}
+      <text x="${point.x}" y="${point.y + (kind === 'object' ? 34 : 28)}" text-anchor="middle"
+        fill="${stroke}" font-size="8" font-weight="900">${label}</text>
     </g>
   `;
 }
@@ -3197,15 +3183,16 @@ function renderBlueprint(card) {
   const speciesRules = card.blueprintSpecies || inferSpeciesBlueprint(card.species || card.mascot, card.lane);
   const visual = moodVisualFor(card);
   const tilt = visual.tilt || 0;
-  const faceZone = speciesRules.faceZone || 'lowerCenter';
-  const objectZone = littleObjectToBlueprintZone(card?.extra, speciesRules) || speciesRules.propAnchor || 'topRight';
+  const blueprint = card?.blueprint || buildBlueprintIntelligence(card);
+  const faceZone = (moodData[card?.moodKey] || {}).faceZone || speciesRules.faceZone || 'lowerCenter';
+  const objectZone = blueprint.objectZone || littleObjectToBlueprintZone(card?.extra, speciesRules) || speciesRules.propAnchor || 'topRight';
   const objectLabel = littleObjectMarkerLabel(card?.extra);
-  const weirdZone = sparkAdjustedWeirdZone(speciesRules, card);
+  const weirdZone = blueprint.weirdZone || sparkAdjustedWeirdZone(speciesRules, card);
   const twistRule = getTwistBlueprintRule(card?.twist);
-  const twistZone = twistRule.zone || weirdZone;
+  const twistZone = blueprint.twistZone || twistRule.zone || weirdZone;
   const moodLabel = escapeHtml(card?.mood || 'mood');
   const bodyLabel = escapeHtml(speciesRules.bodyLabel || 'blueprint body');
-  const moodRead = escapeHtml(card?.blueprint?.moodRead || moodData[card?.moodKey]?.moodRead || 'Face, tilt, and prop placement reveal the mood.');
+  const moodRead = escapeHtml(blueprint.moodRead || moodData[card?.moodKey]?.moodRead || 'Face, tilt, and placement reveal the mood.');
 
   svg.innerHTML = `
     <defs>
@@ -3224,15 +3211,16 @@ function renderBlueprint(card) {
       ${blueprintBodySvg(speciesRules.bodyShape, colors)}
       ${blueprintFaceSvg(faceZone, card, colors)}
       ${renderLittleObjectPreviewSvg(card?.extra, objectZone, colors)}
-      ${blueprintMarkerSvg(objectZone, objectLabel || 'object', colors)}
-      ${blueprintMarkerSvg(weirdZone, 'weird', colors)}
-      ${blueprintMarkerSvg(twistZone, twistRule.label || 'twist', colors)}
+      ${blueprintMarkerSvg(objectZone, objectLabel || 'object', colors, 'object')}
+      ${blueprintMarkerSvg(weirdZone, 'weird', colors, 'weird')}
+      ${blueprintMarkerSvg(twistZone, twistRule.label || 'twist', colors, 'twist')}
     </g>
     <g opacity="0.96">
       <rect x="20" y="18" width="280" height="42" rx="16" fill="rgba(17,20,38,.44)" />
       <text x="36" y="44" fill="${colors.blue}" font-size="15" font-weight="900">Moodprint: ${moodLabel}</text>
       <text x="160" y="216" text-anchor="middle" fill="${colors.mint}" font-size="10" font-weight="900">${bodyLabel}</text>
       <text x="36" y="232" fill="currentColor" font-size="10" opacity="0.66">${moodRead.slice(0, 82)}${moodRead.length > 82 ? '…' : ''}</text>
+      <text x="36" y="204" fill="${colors.primary}" font-size="9" font-weight="900">body → face → object → weird → twist</text>
     </g>
   `;
 }
@@ -3392,6 +3380,12 @@ Little object placement: ${littleObjectPlacementNote(card.extra, littleObjectToB
 Tiny twist: ${card.twist || 'surprise'}
 Tiny twist note: ${getTwistBlueprintRule(card.twist).note}
 
+Clear blueprint plan:
+${(card.blueprint || buildBlueprintIntelligence(card)).drawingOrder || 'Body → face → little object → weird detail → tiny twist.'}
+
+Clarity rule:
+${(card.blueprint || buildBlueprintIntelligence(card)).clarityRule || 'Keep one main body, one face, one object, one weird detail.'}
+
 Odd little thing: ${card.oddThing}
 
 Build it from:
@@ -3412,6 +3406,8 @@ Blueprint breakdown:
 - What not to add: ${blueprint.doNotAdd.join(', ')}
 - Mood read: ${blueprint.moodRead || 'The face, tilt, and prop placement reveal the mood.'}
 - Tiny twist note: ${getTwistBlueprintRule(card.twist).note}
+- Drawing order: ${blueprint.drawingOrder || 'Body → face → little object → weird detail → tiny twist.'}
+- Clarity rule: ${blueprint.clarityRule || 'Keep one main body, one face, one object, one weird detail.'}
 
 Palette placement: ${palette.family} (${paletteModeLabel(palette.mode)})
 - Main body: ${palette.body}
